@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">DeepCook</string>
+    <string name="discover">找菜</string>
+    <string name="favorites">收藏</string>
+    <string name="profile">我的</string>
+    <string name="back">返回</string>
+    <string name="add_favorite">收藏菜谱</string>
+    <string name="remove_favorite">取消收藏</string>
+    <string name="settings">设置</string>
+    <string name="search_hint">搜索菜名、食材</string>
+    <string name="search_recipes">搜索菜谱</string>
+    <string name="clear_search">清空关键词</string>
+    <string name="step_directory">步骤目录</string>
+    <string name="remove_recent">移除浏览记录</string>
+</resources>

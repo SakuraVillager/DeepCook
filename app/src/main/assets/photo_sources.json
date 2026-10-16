@@ -1,0 +1,102 @@
+{
+  "repository": "Anduin2017/HowToCook",
+  "commit": "743d7f46b7644c43673e0b2e255c745f6fa8ca5e",
+  "images": [
+    {
+      "recipeId": "braised-pork",
+      "path": "dishes/meat_dish/红烧肉/000.jpg",
+      "url": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E7%BA%A2%E7%83%A7%E8%82%89/000.jpg",
+      "bundled": "photos/braised-pork.jpg",
+      "license": "Unlicense",
+      "transformation": "EXIF orientation, resize to max 1200×1000, JPEG conversion"
+    },
+    {
+      "recipeId": "silky-eggs",
+      "path": "dishes/vegetable_dish/炒滑蛋/炒滑蛋.jpg",
+      "url": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/vegetable_dish/%E7%82%92%E6%BB%91%E8%9B%8B/%E7%82%92%E6%BB%91%E8%9B%8B.jpg",
+      "bundled": "photos/silky-eggs.jpg",
+      "license": "Unlicense",
+      "transformation": "EXIF orientation, resize to max 1200×1000, JPEG conversion"
+    },
+    {
+      "recipeId": "kung-pao",
+      "path": "dishes/meat_dish/宫保鸡丁/宫保鸡丁.jpg",
+      "url": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E5%AE%AB%E4%BF%9D%E9%B8%A1%E4%B8%81/%E5%AE%AB%E4%BF%9D%E9%B8%A1%E4%B8%81.jpg",
+      "bundled": "photos/kung-pao.jpg",
+      "license": "Unlicense",
+      "transformation": "EXIF orientation, resize to max 1200×1000, JPEG conversion"
+    },
+    {
+      "recipeId": "steamed-fish",
+      "path": "dishes/aquatic/清蒸鲈鱼/清蒸鲈鱼.jpg",
+      "url": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/aquatic/%E6%B8%85%E8%92%B8%E9%B2%88%E9%B1%BC/%E6%B8%85%E8%92%B8%E9%B2%88%E9%B1%BC.jpg",
+      "bundled": "photos/steamed-fish.jpg",
+      "license": "Unlicense",
+      "transformation": "EXIF orientation, resize to max 1200×1000, JPEG conversion"
+    },
+    {
+      "recipeId": "three-treasures",
+      "path": "dishes/vegetable_dish/地三鲜/地三鲜.jpg",
+      "url": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/vegetable_dish/%E5%9C%B0%E4%B8%89%E9%B2%9C/%E5%9C%B0%E4%B8%89%E9%B2%9C.jpg",
+      "bundled": "photos/three-treasures.jpg",
+      "license": "Unlicense",
+      "transformation": "EXIF orientation, resize to max 1200×1000, JPEG conversion"
+    },
+    {
+      "recipeId": "corn-soup",
+      "path": "dishes/soup/玉米排骨汤/玉米排骨汤.jpeg",
+      "url": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/soup/%E7%8E%89%E7%B1%B3%E6%8E%92%E9%AA%A8%E6%B1%A4/%E7%8E%89%E7%B1%B3%E6%8E%92%E9%AA%A8%E6%B1%A4.jpeg",
+      "bundled": "photos/corn-soup.jpg",
+      "license": "Unlicense",
+      "transformation": "EXIF orientation, resize to max 1200×1000, JPEG conversion"
+    },
+    {
+      "recipeId": "mapo-tofu",
+      "path": "dishes/meat_dish/麻婆豆腐/1.jpeg",
+      "url": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E9%BA%BB%E5%A9%86%E8%B1%86%E8%85%90/1.jpeg",
+      "bundled": "photos/mapo-tofu.jpg",
+      "license": "Unlicense",
+      "transformation": "EXIF orientation, resize to max 1200×1000, JPEG conversion"
+    },
+    {
+      "recipeId": "cauliflower",
+      "path": "dishes/vegetable_dish/干锅花菜/干锅花菜.jpg",
+      "url": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/vegetable_dish/%E5%B9%B2%E9%94%85%E8%8A%B1%E8%8F%9C/%E5%B9%B2%E9%94%85%E8%8A%B1%E8%8F%9C.jpg",
+      "bundled": "photos/cauliflower.jpg",
+      "license": "Unlicense",
+      "transformation": "EXIF orientation, resize to max 1200×1000, JPEG conversion"
+    },
+    {
+      "recipeId": "greens",
+      "path": "dishes/vegetable_dish/白灼菜心/白灼菜心.jpg",
+      "url": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/vegetable_dish/%E7%99%BD%E7%81%BC%E8%8F%9C%E5%BF%83/%E7%99%BD%E7%81%BC%E8%8F%9C%E5%BF%83.jpg",
+      "bundled": "photos/greens.jpg",
+      "license": "Unlicense",
+      "transformation": "EXIF orientation, resize to max 1200×1000, JPEG conversion"
+    },
+    {
+      "recipeId": "cabbage",
+      "path": "dishes/vegetable_dish/手撕包菜/4.jpeg",
+      "url": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/vegetable_dish/%E6%89%8B%E6%92%95%E5%8C%85%E8%8F%9C/4.jpeg",
+      "bundled": "photos/cabbage.jpg",
+      "license": "Unlicense",
+      "transformation": "EXIF orientation, resize to max 1200×1000, JPEG conversion"
+    },
+    {
+      "recipeId": "shrimp",
+      "path": "dishes/aquatic/油焖大虾/油焖大虾.jpg",
+      "url": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/aquatic/%E6%B2%B9%E7%84%96%E5%A4%A7%E8%99%BE/%E6%B2%B9%E7%84%96%E5%A4%A7%E8%99%BE.jpg",
+      "bundled": "photos/shrimp.jpg",
+      "license": "Unlicense",
+      "transformation": "EXIF orientation, resize to max 1200×1000, JPEG conversion"
+    },
+    {
+      "recipeId": "tomato-tofu",
+      "path": "dishes/vegetable_dish/西红柿豆腐汤羹/1.jpeg",
+      "url": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/vegetable_dish/%E8%A5%BF%E7%BA%A2%E6%9F%BF%E8%B1%86%E8%85%90%E6%B1%A4%E7%BE%B9/1.jpeg",
+      "bundled": "photos/tomato-tofu.jpg",
+      "license": "Unlicense",
+      "transformation": "EXIF orientation, resize to max 1200×1000, JPEG conversion"
+    }
+  ]
+}

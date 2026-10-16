@@ -1,0 +1,1128 @@
+[
+  {
+    "id": "braised-pork",
+    "version": 2,
+    "title": "红烧肉",
+    "description": "慢火煨出酱香，让平常的一餐也有值得期待的滋味。",
+    "categories": [
+      "家常菜",
+      "肉类"
+    ],
+    "minutes": 75,
+    "difficulty": 3,
+    "servings": "原始份量 · 3—4 人份",
+    "ingredients": [
+      {
+        "id": "i0",
+        "name": "五花肉",
+        "amount": "500 克"
+      },
+      {
+        "id": "i1",
+        "name": "生姜",
+        "amount": "4 片"
+      },
+      {
+        "id": "i2",
+        "name": "小葱",
+        "amount": "2 根"
+      },
+      {
+        "id": "i3",
+        "name": "冰糖",
+        "amount": "20 克"
+      },
+      {
+        "id": "i4",
+        "name": "生抽",
+        "amount": "2 汤匙"
+      },
+      {
+        "id": "i5",
+        "name": "老抽",
+        "amount": "1 茶匙"
+      },
+      {
+        "id": "i6",
+        "name": "料酒",
+        "amount": "1 汤匙"
+      },
+      {
+        "id": "i7",
+        "name": "八角",
+        "amount": "1 颗"
+      },
+      {
+        "id": "i8",
+        "name": "热水",
+        "amount": "适量"
+      }
+    ],
+    "preparation": [
+      "将生熟食材分开处理，准备有盖的炖锅。",
+      "五花肉切成约 3 厘米见方的块，姜切片，葱打结。"
+    ],
+    "steps": [
+      {
+        "id": "braised-pork-s1",
+        "order": 1,
+        "title": "焯洗肉块",
+        "text": "五花肉冷水入锅，加入一半姜片和料酒。煮出浮沫后捞出，用温水洗净并充分沥干。",
+        "cue": "表面浮沫已去除；焯水不代表肉块已熟透。",
+        "ingredientRefs": [
+          "i0"
+        ]
+      },
+      {
+        "id": "braised-pork-s2",
+        "order": 2,
+        "title": "煸出油脂",
+        "text": "锅中不额外放油，小火煸炒肉块，让各面略微上色。倒出多余油脂，保留少量底油。",
+        "cue": null
+      },
+      {
+        "id": "braised-pork-s3",
+        "order": 3,
+        "title": "调入酱汁",
+        "text": "加入冰糖，小火翻炒至融化，再放入剩余姜片、葱结、八角、生抽和老抽，翻炒均匀。",
+        "cue": null
+      },
+      {
+        "id": "braised-pork-s4",
+        "order": 4,
+        "title": "加水慢炖",
+        "text": "倒入没过肉块的热水，煮开后盖上锅盖转小火，炖约 50—60 分钟。过程中留意水量，必要时添加热水。",
+        "cue": "肉块逐渐变软，可用筷子检查软烂程度。"
+      },
+      {
+        "id": "braised-pork-s5",
+        "order": 5,
+        "title": "收汁装盘",
+        "text": "确认肉块已熟透且达到喜欢的软烂程度后，取出葱结，开盖转中火收汁。轻轻翻动，汤汁包裹肉块后关火。",
+        "cue": null,
+        "image": "photos/braised-pork.jpg"
+      }
+    ],
+    "notes": [
+      "糖融化时保持小火，避免焦苦。",
+      "炖煮时间随肉块大小和锅具变化，请结合实际状态判断。"
+    ],
+    "source": {
+      "author": "DeepCook 自编示例",
+      "license": "菜谱文字为自编演示内容，未经独立试做验证。配图来自 HowToCook，按仓库 Unlicense 声明使用。",
+      "imageSource": "https://github.com/Anduin2017/HowToCook/blob/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E7%BA%A2%E7%83%A7%E8%82%89/000.jpg"
+    },
+    "featured": true,
+    "cover": "photos/braised-pork.jpg"
+  },
+  {
+    "id": "silky-eggs",
+    "version": 2,
+    "title": "葱香滑蛋",
+    "description": "一口柔软的蛋香，给忙碌的日子留一道简单好菜。",
+    "categories": [
+      "家常菜",
+      "快手菜"
+    ],
+    "minutes": 10,
+    "difficulty": 1,
+    "servings": "原始份量 · 2 人份",
+    "ingredients": [
+      {
+        "id": "i0",
+        "name": "鸡蛋",
+        "amount": "4 个"
+      },
+      {
+        "id": "i1",
+        "name": "小葱",
+        "amount": "1 根"
+      },
+      {
+        "id": "i2",
+        "name": "温水",
+        "amount": "2 汤匙"
+      },
+      {
+        "id": "i3",
+        "name": "盐",
+        "amount": "少许"
+      },
+      {
+        "id": "i4",
+        "name": "食用油",
+        "amount": "1 汤匙"
+      }
+    ],
+    "preparation": [],
+    "steps": [
+      {
+        "id": "silky-eggs-s1",
+        "order": 1,
+        "title": "调好蛋液",
+        "text": "鸡蛋打入碗中，加入温水和盐，搅打至蛋白蛋黄充分融合。小葱洗净切成葱花。",
+        "cue": null,
+        "ingredientRefs": [
+          "i0"
+        ]
+      },
+      {
+        "id": "silky-eggs-s2",
+        "order": 2,
+        "title": "温油下锅",
+        "text": "不粘锅中加入食用油，以中小火加热。倒入蛋液，等待边缘开始凝固。",
+        "cue": null
+      },
+      {
+        "id": "silky-eggs-s3",
+        "order": 3,
+        "title": "轻推蛋液",
+        "text": "用锅铲从边缘向中间轻推，让未凝固的蛋液流向锅底。保持中小火，避免大幅翻炒。",
+        "cue": null
+      },
+      {
+        "id": "silky-eggs-s4",
+        "order": 4,
+        "title": "撒葱出锅",
+        "text": "撒入葱花，轻轻翻动，待蛋液全部凝固、没有流动的生蛋液后关火装盘。",
+        "cue": null
+      }
+    ],
+    "notes": [
+      "孕妇、老人、儿童及免疫力较弱者应食用充分熟制的蛋类。"
+    ],
+    "source": {
+      "author": "DeepCook 自编示例",
+      "license": "菜谱文字为自编演示内容，未经独立试做验证。配图来自 HowToCook，按仓库 Unlicense 声明使用。",
+      "imageSource": "https://github.com/Anduin2017/HowToCook/blob/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/vegetable_dish/%E7%82%92%E6%BB%91%E8%9B%8B/%E7%82%92%E6%BB%91%E8%9B%8B.jpg"
+    },
+    "featured": true,
+    "cover": "photos/silky-eggs.jpg"
+  },
+  {
+    "id": "kung-pao",
+    "version": 2,
+    "title": "宫保鸡丁",
+    "description": "鸡丁、花生与葱段，炒出一盘有层次的家常滋味。",
+    "categories": [
+      "家常菜",
+      "肉类"
+    ],
+    "minutes": 30,
+    "difficulty": 3,
+    "servings": "原始份量 · 2—3 人份",
+    "ingredients": [
+      {
+        "id": "i0",
+        "name": "鸡腿肉",
+        "amount": "300 克"
+      },
+      {
+        "id": "i1",
+        "name": "熟花生米",
+        "amount": "50 克"
+      },
+      {
+        "id": "i2",
+        "name": "大葱",
+        "amount": "1 根"
+      },
+      {
+        "id": "i3",
+        "name": "干辣椒",
+        "amount": "4 个"
+      },
+      {
+        "id": "i4",
+        "name": "生抽",
+        "amount": "2 汤匙"
+      },
+      {
+        "id": "i5",
+        "name": "香醋",
+        "amount": "1 汤匙"
+      },
+      {
+        "id": "i6",
+        "name": "白糖",
+        "amount": "1 茶匙"
+      },
+      {
+        "id": "i7",
+        "name": "淀粉",
+        "amount": "2 茶匙"
+      },
+      {
+        "id": "i8",
+        "name": "食用油",
+        "amount": "适量"
+      }
+    ],
+    "preparation": [
+      "鸡腿肉去骨切丁，用 1 汤匙生抽和 1 茶匙淀粉抓匀。",
+      "剩余生抽、淀粉与香醋、白糖、2 汤匙水混合成碗汁。"
+    ],
+    "steps": [
+      {
+        "id": "kung-pao-s1",
+        "order": 1,
+        "title": "切好配料",
+        "text": "大葱切成小段，干辣椒剪段并去除部分辣椒籽。备好熟花生米。",
+        "cue": null,
+        "ingredientRefs": [
+          "i0"
+        ]
+      },
+      {
+        "id": "kung-pao-s2",
+        "order": 2,
+        "title": "炒制鸡丁",
+        "text": "锅中放油，倒入鸡丁炒散。持续翻炒，直到鸡丁内部充分熟透，再盛出备用。",
+        "cue": null
+      },
+      {
+        "id": "kung-pao-s3",
+        "order": 3,
+        "title": "炒香葱椒",
+        "text": "用少量底油小火炒香干辣椒，放入葱段翻炒。避免将辣椒炒黑。",
+        "cue": null
+      },
+      {
+        "id": "kung-pao-s4",
+        "order": 4,
+        "title": "合炒收汁",
+        "text": "倒回鸡丁，碗汁重新搅匀后沿锅边加入。翻炒至酱汁包裹鸡丁，加入熟花生米炒匀出锅。",
+        "cue": null
+      }
+    ],
+    "notes": [
+      "含花生、大豆等过敏原。",
+      "处理生鸡肉的刀具和砧板应与即食食材分开。"
+    ],
+    "source": {
+      "author": "DeepCook 自编示例",
+      "license": "菜谱文字为自编演示内容，未经独立试做验证。配图来自 HowToCook，按仓库 Unlicense 声明使用。",
+      "imageSource": "https://github.com/Anduin2017/HowToCook/blob/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E5%AE%AB%E4%BF%9D%E9%B8%A1%E4%B8%81/%E5%AE%AB%E4%BF%9D%E9%B8%A1%E4%B8%81.jpg"
+    },
+    "featured": true,
+    "cover": "photos/kung-pao.jpg"
+  },
+  {
+    "id": "steamed-fish",
+    "version": 2,
+    "title": "清蒸鲈鱼",
+    "description": "姜葱衬出鱼肉本味，一道清爽的家常蒸菜。",
+    "categories": [
+      "家常菜",
+      "海鲜"
+    ],
+    "minutes": 25,
+    "difficulty": 3,
+    "servings": "原始份量 · 2—3 人份",
+    "ingredients": [
+      {
+        "id": "i0",
+        "name": "鲈鱼",
+        "amount": "1 条，约 500 克"
+      },
+      {
+        "id": "i1",
+        "name": "生姜",
+        "amount": "1 块"
+      },
+      {
+        "id": "i2",
+        "name": "小葱",
+        "amount": "3 根"
+      },
+      {
+        "id": "i3",
+        "name": "蒸鱼豉油",
+        "amount": "2 汤匙"
+      },
+      {
+        "id": "i4",
+        "name": "食用油",
+        "amount": "1 汤匙"
+      }
+    ],
+    "preparation": [
+      "请商家处理鱼鳞、鱼鳃和内脏，回家后冲洗干净并擦干。",
+      "姜切片与细丝，葱切段并留少量葱丝。"
+    ],
+    "steps": [
+      {
+        "id": "steamed-fish-s1",
+        "order": 1,
+        "title": "垫姜摆鱼",
+        "text": "蒸盘铺上姜片和葱段，放上鲈鱼。鱼身厚处浅划两刀，方便均匀受热。",
+        "cue": null,
+        "ingredientRefs": [
+          "i0"
+        ]
+      },
+      {
+        "id": "steamed-fish-s2",
+        "order": 2,
+        "title": "上锅清蒸",
+        "text": "蒸锅加足水，水开后放入鱼盘，盖好锅盖蒸制。约 10—15 分钟后开始检查，时间需随鱼的大小调整。",
+        "cue": null
+      },
+      {
+        "id": "steamed-fish-s3",
+        "order": 3,
+        "title": "检查并换料",
+        "text": "确认鱼肉充分熟制后取出。倒去盘中的蒸汁，移除葱段和姜片，铺上新鲜姜丝与葱丝。",
+        "cue": "厚处鱼肉应熟透；有疑问时继续加热，不能仅凭时间保证熟度。"
+      },
+      {
+        "id": "steamed-fish-s4",
+        "order": 4,
+        "title": "淋汁上桌",
+        "text": "沿盘边倒入蒸鱼豉油。将油加热后小心淋在姜葱丝上，注意防止热油飞溅。",
+        "cue": null,
+        "image": "photos/steamed-fish.jpg"
+      }
+    ],
+    "notes": [
+      "鱼刺需仔细挑除，尤其注意儿童进食。"
+    ],
+    "source": {
+      "author": "DeepCook 自编示例",
+      "license": "菜谱文字为自编演示内容，未经独立试做验证。配图来自 HowToCook，按仓库 Unlicense 声明使用。",
+      "imageSource": "https://github.com/Anduin2017/HowToCook/blob/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/aquatic/%E6%B8%85%E8%92%B8%E9%B2%88%E9%B1%BC/%E6%B8%85%E8%92%B8%E9%B2%88%E9%B1%BC.jpg"
+    },
+    "featured": true,
+    "cover": "photos/steamed-fish.jpg"
+  },
+  {
+    "id": "three-treasures",
+    "version": 2,
+    "title": "地三鲜",
+    "description": "土豆、茄子和青椒，把普通蔬菜做得有滋有味。",
+    "categories": [
+      "家常菜",
+      "素食"
+    ],
+    "minutes": 35,
+    "difficulty": 3,
+    "servings": "原始份量 · 2—3 人份",
+    "ingredients": [
+      {
+        "id": "i0",
+        "name": "土豆",
+        "amount": "1 个"
+      },
+      {
+        "id": "i1",
+        "name": "茄子",
+        "amount": "1 根"
+      },
+      {
+        "id": "i2",
+        "name": "青椒",
+        "amount": "1 个"
+      },
+      {
+        "id": "i3",
+        "name": "蒜",
+        "amount": "3 瓣"
+      },
+      {
+        "id": "i4",
+        "name": "生抽",
+        "amount": "1 汤匙"
+      },
+      {
+        "id": "i5",
+        "name": "老抽",
+        "amount": "半茶匙"
+      },
+      {
+        "id": "i6",
+        "name": "淀粉",
+        "amount": "1 茶匙"
+      },
+      {
+        "id": "i7",
+        "name": "食用油",
+        "amount": "适量"
+      }
+    ],
+    "preparation": [
+      "土豆和茄子切成滚刀块，青椒去籽切块。土豆冲去表面淀粉后擦干。"
+    ],
+    "steps": [
+      {
+        "id": "three-treasures-s1",
+        "order": 1,
+        "title": "煎熟土豆",
+        "text": "平底锅中放少量油，中小火煎土豆块，间歇翻面，煎至表面金黄、内部熟软后盛出。",
+        "cue": null,
+        "ingredientRefs": [
+          "i0"
+        ]
+      },
+      {
+        "id": "three-treasures-s2",
+        "order": 2,
+        "title": "煎软茄子",
+        "text": "锅中按需补油，放入茄子，保持中小火翻煎至熟软。不要一次加入过多油。",
+        "cue": null
+      },
+      {
+        "id": "three-treasures-s3",
+        "order": 3,
+        "title": "炒香青椒",
+        "text": "加入蒜末和青椒块，翻炒至青椒断生，再倒回土豆。",
+        "cue": null
+      },
+      {
+        "id": "three-treasures-s4",
+        "order": 4,
+        "title": "调汁合炒",
+        "text": "生抽、老抽、淀粉与半碗水调匀倒入，轻轻翻炒至三种蔬菜充分熟制、酱汁略稠后装盘。",
+        "cue": null
+      }
+    ],
+    "notes": [
+      "土豆发绿、发芽或明显变质时不要食用。"
+    ],
+    "source": {
+      "author": "DeepCook 自编示例",
+      "license": "菜谱文字为自编演示内容，未经独立试做验证。配图来自 HowToCook，按仓库 Unlicense 声明使用。",
+      "imageSource": "https://github.com/Anduin2017/HowToCook/blob/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/vegetable_dish/%E5%9C%B0%E4%B8%89%E9%B2%9C/%E5%9C%B0%E4%B8%89%E9%B2%9C.jpg"
+    },
+    "featured": true,
+    "cover": "photos/three-treasures.jpg"
+  },
+  {
+    "id": "corn-soup",
+    "version": 2,
+    "title": "玉米排骨汤",
+    "description": "一锅慢慢炖的清汤，有玉米的清甜，也有家的温度。",
+    "categories": [
+      "家常菜",
+      "肉类",
+      "汤羹"
+    ],
+    "minutes": 90,
+    "difficulty": 1,
+    "servings": "原始份量 · 3—4 人份",
+    "ingredients": [
+      {
+        "id": "i0",
+        "name": "猪排骨",
+        "amount": "500 克"
+      },
+      {
+        "id": "i1",
+        "name": "甜玉米",
+        "amount": "1 根"
+      },
+      {
+        "id": "i2",
+        "name": "胡萝卜",
+        "amount": "1 根"
+      },
+      {
+        "id": "i3",
+        "name": "姜",
+        "amount": "4 片"
+      },
+      {
+        "id": "i4",
+        "name": "盐",
+        "amount": "适量"
+      },
+      {
+        "id": "i5",
+        "name": "水",
+        "amount": "约 1.5 升"
+      }
+    ],
+    "preparation": [
+      "排骨切段，玉米切块，胡萝卜去皮切块。"
+    ],
+    "steps": [
+      {
+        "id": "corn-soup-s1",
+        "order": 1,
+        "title": "排骨焯水",
+        "text": "排骨冷水下锅，煮出浮沫后捞出，用温水洗净。",
+        "cue": null,
+        "ingredientRefs": [
+          "i0"
+        ]
+      },
+      {
+        "id": "corn-soup-s2",
+        "order": 2,
+        "title": "炖煮排骨",
+        "text": "排骨、姜片和水放入汤锅，大火煮开后转小火，盖上锅盖炖约 40 分钟。",
+        "cue": null
+      },
+      {
+        "id": "corn-soup-s3",
+        "order": 3,
+        "title": "加入蔬菜",
+        "text": "放入玉米和胡萝卜，继续小火炖约 25—30 分钟。留意水量，避免烧干。",
+        "cue": null
+      },
+      {
+        "id": "corn-soup-s4",
+        "order": 4,
+        "title": "调味盛汤",
+        "text": "检查排骨已经熟透、蔬菜软熟后，加盐调味，搅匀盛出。",
+        "cue": null,
+        "image": "photos/corn-soup.jpg"
+      }
+    ],
+    "notes": [
+      "热汤端取时注意防烫；骨头不能替代对熟度的检查。"
+    ],
+    "source": {
+      "author": "DeepCook 自编示例",
+      "license": "菜谱文字为自编演示内容，未经独立试做验证。配图来自 HowToCook，按仓库 Unlicense 声明使用。",
+      "imageSource": "https://github.com/Anduin2017/HowToCook/blob/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/soup/%E7%8E%89%E7%B1%B3%E6%8E%92%E9%AA%A8%E6%B1%A4/%E7%8E%89%E7%B1%B3%E6%8E%92%E9%AA%A8%E6%B1%A4.jpeg"
+    },
+    "featured": true,
+    "cover": "photos/corn-soup.jpg"
+  },
+  {
+    "id": "mapo-tofu",
+    "version": 2,
+    "title": "麻婆豆腐",
+    "description": "豆腐裹着微辣酱汁，拌一碗米饭就很满足。",
+    "categories": [
+      "家常菜",
+      "肉类"
+    ],
+    "minutes": null,
+    "difficulty": 3,
+    "servings": "原始份量 · 2 人份",
+    "ingredients": [
+      {
+        "id": "i0",
+        "name": "嫩豆腐",
+        "amount": "400 克"
+      },
+      {
+        "id": "i1",
+        "name": "猪肉末",
+        "amount": "100 克"
+      },
+      {
+        "id": "i2",
+        "name": "豆瓣酱",
+        "amount": "1 汤匙"
+      },
+      {
+        "id": "i3",
+        "name": "蒜",
+        "amount": "2 瓣"
+      },
+      {
+        "id": "i4",
+        "name": "生抽",
+        "amount": "1 茶匙"
+      },
+      {
+        "id": "i5",
+        "name": "淀粉",
+        "amount": "1 茶匙"
+      },
+      {
+        "id": "i6",
+        "name": "小葱",
+        "amount": "1 根"
+      }
+    ],
+    "preparation": [],
+    "steps": [
+      {
+        "id": "mapo-tofu-s1",
+        "order": 1,
+        "title": "准备豆腐",
+        "text": "豆腐切成方块，放入微沸的水中略煮，轻轻捞出沥水。",
+        "cue": null,
+        "ingredientRefs": [
+          "i0"
+        ]
+      },
+      {
+        "id": "mapo-tofu-s2",
+        "order": 2,
+        "title": "炒香肉末",
+        "text": "锅中放油，加入肉末炒散并炒至完全熟透。加入蒜末和豆瓣酱，小火炒香。",
+        "cue": null
+      },
+      {
+        "id": "mapo-tofu-s3",
+        "order": 3,
+        "title": "煨入滋味",
+        "text": "加一小碗热水，放入豆腐和生抽，小火煨煮，使豆腐充分加热并入味。",
+        "cue": null
+      },
+      {
+        "id": "mapo-tofu-s4",
+        "order": 4,
+        "title": "薄芡收汁",
+        "text": "淀粉加少量水调匀，分次加入，轻推豆腐至酱汁略稠。撒上葱花出锅。",
+        "cue": null
+      }
+    ],
+    "notes": [
+      "豆瓣酱含盐，调味前先尝咸淡。含大豆过敏原。"
+    ],
+    "source": {
+      "author": "DeepCook 自编示例",
+      "license": "菜谱文字为自编演示内容，未经独立试做验证。配图来自 HowToCook，按仓库 Unlicense 声明使用。",
+      "imageSource": "https://github.com/Anduin2017/HowToCook/blob/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E9%BA%BB%E5%A9%86%E8%B1%86%E8%85%90/1.jpeg"
+    },
+    "featured": false,
+    "cover": "photos/mapo-tofu.jpg"
+  },
+  {
+    "id": "cauliflower",
+    "version": 2,
+    "title": "干锅花菜",
+    "description": "脆嫩花菜与一点酱香，一盘好吃的下饭蔬菜。",
+    "categories": [
+      "家常菜",
+      "素食"
+    ],
+    "minutes": 25,
+    "difficulty": 3,
+    "servings": "原始份量 · 2 人份",
+    "ingredients": [
+      {
+        "id": "i0",
+        "name": "花菜",
+        "amount": "400 克"
+      },
+      {
+        "id": "i1",
+        "name": "青椒",
+        "amount": "1 个"
+      },
+      {
+        "id": "i2",
+        "name": "蒜",
+        "amount": "3 瓣"
+      },
+      {
+        "id": "i3",
+        "name": "干辣椒",
+        "amount": "2 个"
+      },
+      {
+        "id": "i4",
+        "name": "生抽",
+        "amount": "1 汤匙"
+      },
+      {
+        "id": "i5",
+        "name": "盐",
+        "amount": "少许"
+      },
+      {
+        "id": "i6",
+        "name": "食用油",
+        "amount": "适量"
+      }
+    ],
+    "preparation": [
+      "花菜分成小朵，充分清洗后沥干。青椒切块，蒜切片。"
+    ],
+    "steps": [
+      {
+        "id": "cauliflower-s1",
+        "order": 1,
+        "title": "焯好花菜",
+        "text": "烧开一锅水，放入花菜焯煮至接近熟制，捞出充分沥水。",
+        "cue": null,
+        "ingredientRefs": [
+          "i0"
+        ]
+      },
+      {
+        "id": "cauliflower-s2",
+        "order": 2,
+        "title": "炒香配料",
+        "text": "锅中热油，放入蒜片、干辣椒，以小火炒香。",
+        "cue": null
+      },
+      {
+        "id": "cauliflower-s3",
+        "order": 3,
+        "title": "翻炒调味",
+        "text": "放入花菜和青椒翻炒，加入生抽与少许盐。",
+        "cue": null
+      },
+      {
+        "id": "cauliflower-s4",
+        "order": 4,
+        "title": "炒熟装盘",
+        "text": "继续翻炒至蔬菜熟透，锅内水分收干一些后盛出。",
+        "cue": null
+      }
+    ],
+    "notes": [],
+    "source": {
+      "author": "DeepCook 自编示例",
+      "license": "菜谱文字为自编演示内容，未经独立试做验证。配图来自 HowToCook，按仓库 Unlicense 声明使用。",
+      "imageSource": "https://github.com/Anduin2017/HowToCook/blob/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/vegetable_dish/%E5%B9%B2%E9%94%85%E8%8A%B1%E8%8F%9C/%E5%B9%B2%E9%94%85%E8%8A%B1%E8%8F%9C.jpg"
+    },
+    "featured": false,
+    "cover": "photos/cauliflower.jpg"
+  },
+  {
+    "id": "greens",
+    "version": 2,
+    "title": "白灼菜心",
+    "description": "留住青菜的清爽，简单调味也很鲜。",
+    "categories": [
+      "家常菜",
+      "快手菜",
+      "素食"
+    ],
+    "minutes": 10,
+    "difficulty": 1,
+    "servings": "原始份量 · 2 人份",
+    "ingredients": [
+      {
+        "id": "i0",
+        "name": "菜心",
+        "amount": "300 克"
+      },
+      {
+        "id": "i1",
+        "name": "蒜",
+        "amount": "2 瓣"
+      },
+      {
+        "id": "i2",
+        "name": "生抽",
+        "amount": "1 汤匙"
+      },
+      {
+        "id": "i3",
+        "name": "食用油",
+        "amount": "1 汤匙"
+      },
+      {
+        "id": "i4",
+        "name": "水",
+        "amount": "适量"
+      }
+    ],
+    "preparation": [],
+    "steps": [
+      {
+        "id": "greens-s1",
+        "order": 1,
+        "title": "清洗菜心",
+        "text": "菜心去除老叶与较硬的根部，逐根清洗，蒜切末。",
+        "cue": null,
+        "ingredientRefs": [
+          "i0"
+        ]
+      },
+      {
+        "id": "greens-s2",
+        "order": 2,
+        "title": "焯熟沥水",
+        "text": "水烧开，加入少量食用油。先放菜梗，再放叶片，焯至熟制后捞出沥水。",
+        "cue": null
+      },
+      {
+        "id": "greens-s3",
+        "order": 3,
+        "title": "淋汁装盘",
+        "text": "锅中放油炒香蒜末，加入生抽和两汤匙水煮开，淋在菜心上。",
+        "cue": null
+      }
+    ],
+    "notes": [],
+    "source": {
+      "author": "DeepCook 自编示例",
+      "license": "菜谱文字为自编演示内容，未经独立试做验证。配图来自 HowToCook，按仓库 Unlicense 声明使用。",
+      "imageSource": "https://github.com/Anduin2017/HowToCook/blob/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/vegetable_dish/%E7%99%BD%E7%81%BC%E8%8F%9C%E5%BF%83/%E7%99%BD%E7%81%BC%E8%8F%9C%E5%BF%83.jpg"
+    },
+    "featured": false,
+    "cover": "photos/greens.jpg"
+  },
+  {
+    "id": "cabbage",
+    "version": 2,
+    "title": "手撕包菜",
+    "description": "手撕的叶片挂住酱汁，大火快炒的家常香气。",
+    "categories": [
+      "家常菜",
+      "快手菜",
+      "素食"
+    ],
+    "minutes": 15,
+    "difficulty": null,
+    "servings": "原始份量 · 2 人份",
+    "ingredients": [
+      {
+        "id": "i0",
+        "name": "包菜",
+        "amount": "半颗"
+      },
+      {
+        "id": "i1",
+        "name": "蒜",
+        "amount": "3 瓣"
+      },
+      {
+        "id": "i2",
+        "name": "干辣椒",
+        "amount": "2 个"
+      },
+      {
+        "id": "i3",
+        "name": "生抽",
+        "amount": "1 汤匙"
+      },
+      {
+        "id": "i4",
+        "name": "香醋",
+        "amount": "1 茶匙"
+      },
+      {
+        "id": "i5",
+        "name": "食用油",
+        "amount": "适量"
+      }
+    ],
+    "preparation": [
+      "包菜去掉硬梗，叶片手撕成块，洗净后充分沥水。"
+    ],
+    "steps": [
+      {
+        "id": "cabbage-s1",
+        "order": 1,
+        "title": "炒香蒜椒",
+        "text": "锅中放油，放入蒜片和干辣椒，小火炒出香味。",
+        "cue": null,
+        "ingredientRefs": [
+          "i0"
+        ]
+      },
+      {
+        "id": "cabbage-s2",
+        "order": 2,
+        "title": "翻炒包菜",
+        "text": "加入包菜转中大火，不断翻炒，让叶片均匀受热。",
+        "cue": null
+      },
+      {
+        "id": "cabbage-s3",
+        "order": 3,
+        "title": "调味出锅",
+        "text": "待包菜熟制后，加入生抽和香醋，快速翻炒均匀后出锅。",
+        "cue": null
+      }
+    ],
+    "notes": [
+      "叶片沥干后再入锅，避免热油飞溅。"
+    ],
+    "source": {
+      "author": "DeepCook 自编示例",
+      "license": "菜谱文字为自编演示内容，未经独立试做验证。配图来自 HowToCook，按仓库 Unlicense 声明使用。",
+      "imageSource": "https://github.com/Anduin2017/HowToCook/blob/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/vegetable_dish/%E6%89%8B%E6%92%95%E5%8C%85%E8%8F%9C/4.jpeg"
+    },
+    "featured": false,
+    "cover": "photos/cabbage.jpg"
+  },
+  {
+    "id": "shrimp",
+    "version": 2,
+    "title": "油焖大虾",
+    "description": "鲜虾与浓香酱汁，让一餐多一点小小的仪式感。",
+    "categories": [
+      "家常菜",
+      "海鲜"
+    ],
+    "minutes": 25,
+    "difficulty": 3,
+    "servings": "原始份量 · 2—3 人份",
+    "ingredients": [
+      {
+        "id": "i0",
+        "name": "鲜虾",
+        "amount": "400 克"
+      },
+      {
+        "id": "i1",
+        "name": "姜",
+        "amount": "3 片"
+      },
+      {
+        "id": "i2",
+        "name": "小葱",
+        "amount": "2 根"
+      },
+      {
+        "id": "i3",
+        "name": "生抽",
+        "amount": "1 汤匙"
+      },
+      {
+        "id": "i4",
+        "name": "料酒",
+        "amount": "1 汤匙"
+      },
+      {
+        "id": "i5",
+        "name": "白糖",
+        "amount": "半茶匙"
+      },
+      {
+        "id": "i6",
+        "name": "食用油",
+        "amount": "适量"
+      }
+    ],
+    "preparation": [
+      "鲜虾剪去长须，按需去虾线，清洗后擦干表面。"
+    ],
+    "steps": [
+      {
+        "id": "shrimp-s1",
+        "order": 1,
+        "title": "煎香鲜虾",
+        "text": "锅中热油，放入鲜虾平铺，翻面煎至虾壳变色。此时仍需继续充分加热。",
+        "cue": null,
+        "ingredientRefs": [
+          "i0"
+        ]
+      },
+      {
+        "id": "shrimp-s2",
+        "order": 2,
+        "title": "加入调料",
+        "text": "放入姜片葱段炒香，加入料酒、生抽、白糖和少量热水。",
+        "cue": null
+      },
+      {
+        "id": "shrimp-s3",
+        "order": 3,
+        "title": "焖煮入味",
+        "text": "盖上锅盖，中小火焖煮，期间翻动，让虾均匀加热。",
+        "cue": null
+      },
+      {
+        "id": "shrimp-s4",
+        "order": 4,
+        "title": "收汁装盘",
+        "text": "确认虾肉完全熟制后开盖收汁，轻翻使酱汁包裹虾身，再盛盘。",
+        "cue": null
+      }
+    ],
+    "notes": [
+      "含甲壳类过敏原。不能仅凭虾壳颜色判断内部熟度。"
+    ],
+    "source": {
+      "author": "DeepCook 自编示例",
+      "license": "菜谱文字为自编演示内容，未经独立试做验证。配图来自 HowToCook，按仓库 Unlicense 声明使用。",
+      "imageSource": "https://github.com/Anduin2017/HowToCook/blob/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/aquatic/%E6%B2%B9%E7%84%96%E5%A4%A7%E8%99%BE/%E6%B2%B9%E7%84%96%E5%A4%A7%E8%99%BE.jpg"
+    },
+    "featured": false,
+    "cover": "photos/shrimp.jpg"
+  },
+  {
+    "id": "tomato-tofu",
+    "version": 2,
+    "title": "番茄豆腐汤",
+    "description": "番茄的酸甜与豆腐的柔软，做一碗清爽热汤。",
+    "categories": [
+      "家常菜",
+      "快手菜",
+      "素食",
+      "汤羹"
+    ],
+    "minutes": 15,
+    "difficulty": 1,
+    "servings": "原始份量 · 2 人份",
+    "ingredients": [
+      {
+        "id": "i0",
+        "name": "番茄",
+        "amount": "2 个"
+      },
+      {
+        "id": "i1",
+        "name": "嫩豆腐",
+        "amount": "200 克"
+      },
+      {
+        "id": "i2",
+        "name": "小葱",
+        "amount": "1 根"
+      },
+      {
+        "id": "i3",
+        "name": "盐",
+        "amount": "适量"
+      },
+      {
+        "id": "i4",
+        "name": "食用油",
+        "amount": "少许"
+      },
+      {
+        "id": "i5",
+        "name": "水",
+        "amount": "600 毫升"
+      }
+    ],
+    "preparation": [],
+    "steps": [
+      {
+        "id": "tomato-tofu-s1",
+        "order": 1,
+        "title": "切好食材",
+        "text": "番茄洗净切块，豆腐切小块，小葱切葱花。",
+        "cue": null,
+        "ingredientRefs": [
+          "i0"
+        ]
+      },
+      {
+        "id": "tomato-tofu-s2",
+        "order": 2,
+        "title": "炒软番茄",
+        "text": "锅中加入少量油，放入番茄中火翻炒，直到番茄变软并出现汤汁。",
+        "cue": null
+      },
+      {
+        "id": "tomato-tofu-s3",
+        "order": 3,
+        "title": "煮好汤底",
+        "text": "加入水煮开，放入豆腐，转小火煮约 5 分钟，让食材充分受热。",
+        "cue": null
+      },
+      {
+        "id": "tomato-tofu-s4",
+        "order": 4,
+        "title": "调味盛出",
+        "text": "加盐调味，撒入葱花，轻推均匀后盛出。",
+        "cue": null
+      }
+    ],
+    "notes": [
+      "嫩豆腐容易碎，搅动时轻推即可。"
+    ],
+    "source": {
+      "author": "DeepCook 自编示例",
+      "license": "菜谱文字为自编演示内容，未经独立试做验证。配图来自 HowToCook，按仓库 Unlicense 声明使用。",
+      "imageSource": "https://github.com/Anduin2017/HowToCook/blob/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/vegetable_dish/%E8%A5%BF%E7%BA%A2%E6%9F%BF%E8%B1%86%E8%85%90%E6%B1%A4%E7%BE%B9/1.jpeg"
+    },
+    "featured": false,
+    "cover": "photos/tomato-tofu.jpg"
+  }
+]

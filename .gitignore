@@ -1,1 +1,9 @@
 .codex
+.gradle/
+.kotlin/
+**/build/
+local.properties
+.idea/
+*.iml
+artifacts/
+__pycache__/
