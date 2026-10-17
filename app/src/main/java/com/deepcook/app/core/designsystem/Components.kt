@@ -32,16 +32,26 @@ import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.deepcook.app.R
 import com.deepcook.app.core.model.Recipe
+import com.deepcook.app.core.model.isMine
 
 @Composable
 fun ChefMark(modifier: Modifier = Modifier) {
     Image(painterResource(R.drawable.ic_launcher), null, modifier.clip(RoundedCornerShape(20.dp)))
 }
 
+/**
+ * Cover art. Bundled recipes store an asset-relative path; a user recipe stores the `file:` URI
+ * of the copy in the app's own storage, so both forms arrive here as [Recipe.cover].
+ */
 @Composable
 fun RecipeImage(path: String?, modifier: Modifier = Modifier, description: String? = null) {
+    val model = when {
+        path == null -> null
+        path.startsWith("file:") || path.startsWith("content:") -> path
+        else -> "file:///android_asset/$path"
+    }
     AsyncImage(
-        model = path?.let { "file:///android_asset/$it" },
+        model = model,
         contentDescription = description,
         placeholder = painterResource(R.drawable.food_placeholder),
         error = painterResource(R.drawable.food_placeholder),
@@ -118,6 +128,26 @@ fun RegionBadge(region: String, modifier: Modifier = Modifier) {
     }
 }
 
+/**
+ * Marks a recipe the user wrote, so their own dishes stay recognisable inside the shared
+ * catalog. Same shape and weight as [RegionBadge] but on the opposite corner of a cover.
+ */
+@Composable
+fun MineBadge(modifier: Modifier = Modifier) {
+    Surface(
+        modifier = modifier.clearAndSetSemantics { contentDescription = "我添加的菜谱" },
+        shape = RoundedCornerShape(8.dp),
+        color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = .92f),
+    ) {
+        Text(
+            "我的",
+            Modifier.padding(horizontal = 8.dp, vertical = 3.dp),
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSecondaryContainer,
+        )
+    }
+}
+
 @Composable
 fun Metadata(
     icon: ImageVector,
@@ -168,6 +198,7 @@ fun RecipeCard(recipe: Recipe, favorite: Boolean, onOpen: () -> Unit, onFavorite
                 ),
             )
             RegionBadge(recipe.region, Modifier.align(Alignment.TopStart).padding(8.dp))
+            if (recipe.isMine) MineBadge(Modifier.align(Alignment.TopEnd).padding(8.dp))
             RecipeMetadata(
                 recipe,
                 Modifier.align(Alignment.BottomCenter).fillMaxWidth().padding(horizontal = 10.dp, vertical = 8.dp),
@@ -218,7 +249,13 @@ fun RecipeRow(
         ) {
             RecipeImage(recipe.cover, Modifier.size(80.dp).clip(RoundedCornerShape(12.dp)))
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                Text(recipe.title, style = MaterialTheme.typography.titleMedium)
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    Text(recipe.title, Modifier.weight(1f, fill = false), style = MaterialTheme.typography.titleMedium)
+                    if (recipe.isMine) MineBadge()
+                }
                 RecipeMetadata(recipe)
             }
             if (trailing != null) trailing() else FavoriteButton(favorite, onFavorite)

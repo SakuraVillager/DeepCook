@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalWindowInfo
@@ -251,12 +252,15 @@ fun ProfileScreen(
     onSettings: () -> Unit,
     onFavorites: () -> Unit,
     onRecent: () -> Unit,
+    onMyRecipes: () -> Unit,
+    onAddRecipe: () -> Unit,
     onOpen: (String) -> Unit,
     onFavorite: (String) -> Unit,
     onFind: () -> Unit,
 ) {
     val favorites = state.user.favorites.mapNotNull { saved -> state.recipes.find { it.id == saved.recipeId } }
     val recent = state.user.recent.mapNotNull { saved -> state.recipes.find { it.id == saved.recipeId } }.take(3)
+    val mine = state.myRecipes
     Scaffold(topBar = {
         PageTitle("我的", actions = {
             IconButton(onClick = onSettings) { Icon(Icons.Rounded.Settings, stringResource(R.string.settings)) }
@@ -322,6 +326,70 @@ fun ProfileScreen(
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                             )
+                        }
+                    }
+                }
+            }
+            item {
+                Surface(
+                    shape = RoundedCornerShape(24.dp),
+                    color = MaterialTheme.colorScheme.secondaryContainer,
+                ) {
+                    Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                Icons.Rounded.EditNote,
+                                null,
+                                Modifier.size(28.dp),
+                                tint = MaterialTheme.colorScheme.onSecondaryContainer,
+                            )
+                            Spacer(Modifier.width(12.dp))
+                            Surface(
+                                onClick = onMyRecipes,
+                                modifier = Modifier.weight(1f),
+                                color = Color.Transparent,
+                            ) {
+                                Column {
+                                    Text(
+                                        "我的菜谱",
+                                        style = MaterialTheme.typography.titleLarge,
+                                        color = MaterialTheme.colorScheme.onSecondaryContainer,
+                                    )
+                                    Text(
+                                        if (mine.isEmpty()) {
+                                            "写一道自己的菜，下次照着做"
+                                        } else {
+                                            "${mine.size} 道自己写的菜"
+                                        },
+                                        color = MaterialTheme.colorScheme.onSecondaryContainer,
+                                    )
+                                }
+                            }
+                            Icon(
+                                Icons.AutoMirrored.Rounded.ArrowForward,
+                                null,
+                                tint = MaterialTheme.colorScheme.onSecondaryContainer,
+                            )
+                        }
+                        if (mine.isNotEmpty()) {
+                            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                                repeat(3) { index ->
+                                    val recipe = mine.getOrNull(index)
+                                    if (recipe != null) {
+                                        RecipeImage(
+                                            recipe.cover,
+                                            Modifier.weight(1f).aspectRatio(4f / 3).clip(RoundedCornerShape(12.dp)),
+                                        )
+                                    } else {
+                                        Spacer(Modifier.weight(1f))
+                                    }
+                                }
+                            }
+                        }
+                        FilledTonalButton(onClick = onAddRecipe, modifier = Modifier.fillMaxWidth()) {
+                            Icon(Icons.Rounded.Add, null, Modifier.size(18.dp))
+                            Spacer(Modifier.width(8.dp))
+                            Text("添加菜谱")
                         }
                     }
                 }

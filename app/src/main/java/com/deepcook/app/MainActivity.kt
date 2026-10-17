@@ -23,12 +23,14 @@ class MainActivity : ComponentActivity() {
             val vm: AppViewModel =
                 viewModel(
                     factory = viewModelFactory {
-                        initializer { AppViewModel(container.recipes, container.userData) }
+                        initializer {
+                            AppViewModel(container.recipes, container.userData, container.userRecipes, container.covers)
+                        }
                     },
                 )
             val state by vm.state.collectAsStateWithLifecycle()
             DeepCookTheme(state.user.preferences) {
-                Surface { DeepCookApp(vm, state) }
+                Surface { DeepCookApp(vm, state, container) }
             }
         }
     }

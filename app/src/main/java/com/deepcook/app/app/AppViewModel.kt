@@ -5,8 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.deepcook.app.core.model.Recipe
 import com.deepcook.app.core.model.UserData
 import com.deepcook.app.core.model.UserPreferences
+import com.deepcook.app.data.CoverStore
 import com.deepcook.app.data.RecipeRepository
 import com.deepcook.app.data.UserDataRepository
+import com.deepcook.app.data.UserRecipeStore
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,27 +22,42 @@ import kotlinx.coroutines.sync.withLock
 import java.util.concurrent.CancellationException
 
 data class AppUiState(
+    /** The bundled catalog plus the user's own recipes, in that order. */
     val recipes: List<Recipe> = emptyList(),
+    /** Just the user's own recipes, newest first, for the profile page. */
+    val myRecipes: List<Recipe> = emptyList(),
     val user: UserData = UserData(),
     val loading: Boolean = true,
     val contentError: String? = null,
     val userError: String? = null,
+    val userRecipeError: String? = null,
 )
 
 data class AppMessage(val text: String, val undo: (suspend () -> Unit)? = null)
 
-class AppViewModel(private val recipes: RecipeRepository, private val userData: UserDataRepository) : ViewModel() {
+class AppViewModel(
+    private val recipes: RecipeRepository,
+    private val userData: UserDataRepository,
+    private val userRecipes: UserRecipeStore,
+    private val covers: CoverStore,
+) : ViewModel() {
     private val mutableState = MutableStateFlow(AppUiState())
     val state = mutableState.asStateFlow()
     private val messageChannel = Channel<AppMessage>(Channel.BUFFERED)
     val messages = messageChannel.receiveAsFlow()
     private var userJob: Job? = null
     private var recipeJob: Job? = null
+    private var userRecipeJob: Job? = null
     private val favoriteMutex = Mutex()
+
+    /** Kept apart from the state so a change in either source can rebuild the merged list. */
+    private var bundled: List<Recipe> = emptyList()
+    private var mine: List<Recipe> = emptyList()
 
     init {
         loadRecipes()
         observeUserData()
+        observeUserRecipes()
     }
 
     fun loadRecipes() {
@@ -48,8 +65,9 @@ class AppViewModel(private val recipes: RecipeRepository, private val userData: 
         recipeJob = viewModelScope.launch {
             mutableState.value = mutableState.value.copy(loading = true, contentError = null)
             try {
-                val loaded = recipes.recipes()
-                mutableState.value = mutableState.value.copy(recipes = loaded, loading = false)
+                bundled = recipes.recipes()
+                publish()
+                mutableState.value = mutableState.value.copy(loading = false)
             } catch (error: Exception) {
                 if (error is CancellationException) throw error
                 mutableState.value = mutableState.value.copy(loading = false, contentError = "菜谱暂时无法读取，请重试。")
@@ -65,6 +83,31 @@ class AppViewModel(private val recipes: RecipeRepository, private val userData: 
                 mutableState.value = mutableState.value.copy(userError = "本地收藏与设置暂时无法读取，原数据未被清除。")
             }.collect { data -> mutableState.value = mutableState.value.copy(user = data, userError = null) }
         }
+    }
+
+    fun observeUserRecipes() {
+        userRecipeJob?.cancel()
+        userRecipeJob = viewModelScope.launch {
+            userRecipes.recipes.catch { error ->
+                if (error is CancellationException) throw error
+                // The file is left untouched; the bundled catalog stays usable.
+                mutableState.value = mutableState.value.copy(
+                    userRecipeError = "我的菜谱暂时无法读取，文件没有被清除。",
+                )
+            }.collect { loaded ->
+                mine = loaded
+                publish()
+                mutableState.value = mutableState.value.copy(userRecipeError = null)
+            }
+        }
+    }
+
+    /** Rebuilds the merged catalog from both sources without touching unrelated state. */
+    private fun publish() {
+        mutableState.value = mutableState.value.copy(
+            recipes = bundled + mine,
+            myRecipes = mine.reversed(),
+        )
     }
 
     fun favorite(id: String) {
@@ -97,6 +140,21 @@ class AppViewModel(private val recipes: RecipeRepository, private val userData: 
         messageChannel.send(AppMessage("已恢复默认设置"))
     }
     fun undo(action: suspend () -> Unit) = mutate(action)
+
+    /** Creates or replaces one of the user's own recipes. */
+    fun saveRecipe(recipe: Recipe) = mutate {
+        userRecipes.save(recipe)
+        messageChannel.send(AppMessage(if (mine.any { it.id == recipe.id }) "已更新这道菜谱" else "已保存到我的菜谱"))
+    }
+
+    /** Deletes a user recipe, its cover file, and its traces in favourites and history. */
+    fun deleteRecipe(id: String) = mutate {
+        val cover = mine.find { it.id == id }?.cover
+        userRecipes.delete(id)
+        userData.forget(id)
+        covers.delete(cover)
+        messageChannel.send(AppMessage("已删除这道菜谱"))
+    }
 
     private fun mutate(action: suspend () -> Unit) {
         viewModelScope.launch {

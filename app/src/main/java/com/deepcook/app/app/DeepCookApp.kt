@@ -30,10 +30,16 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.deepcook.app.R
 import com.deepcook.app.core.designsystem.*
+import com.deepcook.app.core.model.USER_RECIPE_ID_PREFIX
+import com.deepcook.app.data.AppContainer
+import com.deepcook.app.feature.authoring.MyRecipesScreen
+import com.deepcook.app.feature.authoring.RecipeEditorScreen
+import com.deepcook.app.feature.authoring.RecipeEditorViewModel
 import com.deepcook.app.feature.browse.*
 import com.deepcook.app.feature.recipe.*
 import com.deepcook.app.feature.search.SearchViewModel
 import com.deepcook.app.feature.settings.SettingsScreen
+import java.util.UUID
 import kotlinx.serialization.Serializable
 import soup.compose.material.motion.animation.materialSharedAxisXIn
 import soup.compose.material.motion.animation.materialSharedAxisXOut
@@ -55,10 +61,15 @@ import soup.compose.material.motion.animation.rememberSlideDistance
 
 @Serializable data object Recent
 
+@Serializable data object MyRecipes
+
+/** [recipeId] null means "a new recipe"; an id means "edit that one". */
+@Serializable data class RecipeEditor(val recipeId: String? = null)
+
 @Serializable data class Settings(val section: String = "main")
 
 @Composable
-fun DeepCookApp(vm: AppViewModel, state: AppUiState) {
+fun DeepCookApp(vm: AppViewModel, state: AppUiState, container: AppContainer) {
     // The previous version used a flat root graph. Do not restore its transient
     // navigation bundle into this new home-container graph on an APK upgrade.
     val nav = key("root-navigation-v2") { rememberNavController() }
@@ -142,6 +153,8 @@ fun DeepCookApp(vm: AppViewModel, state: AppUiState) {
                             onOpen = { openPage(RecipeDetail(it)) },
                             onSettings = { openPage(Settings()) },
                             onRecent = { openPage(Recent) },
+                            onMyRecipes = { openPage(MyRecipes) },
+                            onAddRecipe = { openPage(RecipeEditor()) },
                         )
                     }
                     composable<Recent> {
@@ -187,6 +200,44 @@ fun DeepCookApp(vm: AppViewModel, state: AppUiState) {
                             vm::preferences, vm::clearRecent, vm::clearFavorites, vm::resetPreferences,
                         )
                     }
+                    composable<MyRecipes> {
+                        MyRecipesScreen(
+                            state,
+                            onBack = { nav.popBackStack() },
+                            onAdd = { openPage(RecipeEditor()) },
+                            onEdit = { openPage(RecipeEditor(it)) },
+                            onOpen = { openPage(RecipeDetail(it)) },
+                            onFavorite = vm::favorite,
+                            onDelete = vm::deleteRecipe,
+                        )
+                    }
+                    composable<RecipeEditor> { editorEntry ->
+                        val args = editorEntry.toRoute<RecipeEditor>()
+                        val existing = args.recipeId?.let { id -> state.recipes.find { it.id == id } }
+                        val editor: RecipeEditorViewModel = viewModel(
+                            factory = viewModelFactory {
+                                initializer {
+                                    // The id is decided once per editor session, so an edit keeps
+                                    // it and a new recipe gets a stable one before its cover is
+                                    // written.
+                                    val saved = createSavedStateHandle()
+                                    val id = args.recipeId
+                                        ?: saved.get<String>("newRecipeId")
+                                        ?: (USER_RECIPE_ID_PREFIX + UUID.randomUUID().toString().take(8))
+                                            .also { generated -> saved["newRecipeId"] = generated }
+                                    RecipeEditorViewModel(container.lookup, container.covers, id, existing)
+                                }
+                            },
+                        )
+                        RecipeEditorScreen(
+                            editor,
+                            onBack = { nav.popBackStack() },
+                            onSave = { recipe ->
+                                vm.saveRecipe(recipe)
+                                nav.popBackStack()
+                            },
+                        )
+                    }
                 }
             }
         }
@@ -202,6 +253,8 @@ private fun HomeScreen(
     onOpen: (String) -> Unit,
     onSettings: () -> Unit,
     onRecent: () -> Unit,
+    onMyRecipes: () -> Unit,
+    onAddRecipe: () -> Unit,
 ) {
     val nav = rememberNavController()
     val entry by nav.currentBackStackEntryAsState()
@@ -308,9 +361,10 @@ private fun HomeScreen(
                         FavoritesScreen(state, { selectTab(0) }, onOpen, vm::favorite)
                     }
                     composable<Profile> {
-                        ProfileScreen(state, onSettings, {
-                            selectTab(1)
-                        }, onRecent, onOpen, vm::favorite, { selectTab(0) })
+                        ProfileScreen(
+                            state, onSettings, { selectTab(1) }, onRecent, onMyRecipes, onAddRecipe,
+                            onOpen, vm::favorite, { selectTab(0) },
+                        )
                     }
                 }
             }
