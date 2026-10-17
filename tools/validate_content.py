@@ -130,6 +130,21 @@ def main():
     seabass = [r["id"] for r in recipes if "鲈鱼" in json.dumps(r, ensure_ascii=False)]
     check(len(seabass) == 1, f"exactly one 鲈鱼 recipe is expected (UI test), found {seabass}")
 
+    # Every bundled cover must be attributed in photo_sources.json, and no manifest
+    # entry may point at a file that is not actually shipped.
+    manifest_path = ASSETS / "photo_sources.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    credited = {entry["bundled"] for entry in manifest["images"]}
+    credited |= {entry["bundled"] for entry in manifest.get("cc0Expansion", {}).get("images", [])}
+    for recipe in recipes:
+        cover = recipe.get("cover")
+        if cover is not None:
+            check(cover in credited, f"[{recipe['id']}] cover {cover} is missing from photo_sources.json")
+    shipped = {f"photos/{path.name}" for path in (ASSETS / "photos").iterdir()}
+    for entry in credited:
+        check(entry in shipped, f"photo_sources.json lists {entry} but the file is not bundled")
+        check(any(r.get("cover") == entry for r in recipes), f"photo_sources.json lists unused image {entry}")
+
     if errors:
         print(f"{len(errors)} content problem(s):")
         for message in errors:

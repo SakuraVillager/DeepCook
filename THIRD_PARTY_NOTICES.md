@@ -43,6 +43,24 @@ Recipe prose is original DeepCook demonstration content, not a transcription of
 the repository's recipe instructions. Sample content has not been independently
 kitchen-tested, and the UI identifies it as sample content.
 
+Reader submissions in that repository occasionally carry third-party watermarks;
+those files are not bundled. Two such candidates were rejected during review.
+
+## FoodiesFeed photographs — CC0
+
+Source: https://www.foodiesfeed.com · License: https://www.foodiesfeed.com/license
+
+Twenty-two expansion recipes use FoodiesFeed photographs. FoodiesFeed releases its
+photos under a license equivalent to Creative Commons Zero (CC0): they may be
+copied, modified and redistributed, including commercially, and attribution is not
+required. DeepCook records the source page for each image in
+`app/src/main/assets/photo_sources.json` anyway (`cc0Expansion`), and crops each
+photo to 4:3, resizes it to 1200×900 and re-encodes it as JPEG.
+
+Only original photography from the site's legacy library is used. Files served
+from FoodiesFeed's `/generated/` path are AI output and are deliberately excluded,
+so no generated image ships in this app.
+
 ## Expansion recipe content
 
 The expansion catalog (100 recipes: Chinese, Japanese, Korean, American, European,
@@ -51,8 +69,9 @@ African and Turkish) is original DeepCook demonstration prose written after ligh
 verification against public recipe references found with web search. No recipe text
 is copied from those references. Where a single authoritative page was confirmed, its
 URL is stored in that recipe's `source.url` field and linked from the detail page;
-unconfirmed references are omitted rather than guessed. Expansion recipes ship
-without photographs and display the bundled placeholder image.
+unconfirmed references are omitted rather than guessed. Expansion recipes either
+ship with a bundled photograph (see the two sections above) or display the bundled
+placeholder image when no clearly licensed, dish-accurate photograph was available.
 
 ## Software dependencies
 

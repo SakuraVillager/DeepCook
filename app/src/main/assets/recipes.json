@@ -1311,7 +1311,7 @@
       "license": "菜谱文字为自编演示内容，未经独立试做验证。"
     },
     "featured": false,
-    "cover": null
+    "cover": "photos/cn-shangtang-wawacai.jpg"
   },
   {
     "id": "cn-jingjiang-rousi",
@@ -1851,7 +1851,7 @@
       "license": "菜谱文字为自编演示内容，未经独立试做验证。"
     },
     "featured": false,
-    "cover": null
+    "cover": "photos/cn-pijiu-ya.jpg"
   },
   {
     "id": "cn-huiguo-rou",
@@ -1995,7 +1995,7 @@
       "license": "菜谱文字为自编演示内容，未经独立试做验证。"
     },
     "featured": false,
-    "cover": null
+    "cover": "photos/cn-huiguo-rou.jpg"
   },
   {
     "id": "cn-ziran-yangrou",
@@ -2438,7 +2438,7 @@
       "license": "菜谱文字为自编演示内容，未经独立试做验证。"
     },
     "featured": false,
-    "cover": null
+    "cover": "photos/cn-xiaolongbao.jpg"
   },
   {
     "id": "cn-shanyao-paigu-tang",
@@ -4753,7 +4753,7 @@
       "license": "菜谱文字为自编演示内容，未经独立试做验证。"
     },
     "featured": false,
-    "cover": null
+    "cover": "photos/cn-dan-chaofan.jpg"
   },
   {
     "id": "cn-xihu-niurou-geng",
@@ -7953,7 +7953,7 @@
       "license": "菜谱文字为自编演示内容，未经独立试做验证。"
     },
     "featured": false,
-    "cover": null
+    "cover": "photos/jp-curry-rice.jpg"
   },
   {
     "id": "jp-nikujaga",
@@ -9691,7 +9691,7 @@
       "license": "菜谱文字为自编演示内容，未经独立试做验证。"
     },
     "featured": false,
-    "cover": null
+    "cover": "photos/kr-bibimbap.jpg"
   },
   {
     "id": "kr-gimbap",
@@ -9853,7 +9853,7 @@
       "license": "菜谱文字为自编演示内容，未经独立试做验证。"
     },
     "featured": false,
-    "cover": null
+    "cover": "photos/kr-gimbap.jpg"
   },
   {
     "id": "kr-tteokbokki",
@@ -10598,7 +10598,7 @@
       "license": "菜谱文字为自编演示内容，未经独立试做验证。"
     },
     "featured": false,
-    "cover": null
+    "cover": "photos/kr-grilled-pork-belly.jpg"
   },
   {
     "id": "us-club-sandwich",
@@ -10865,7 +10865,7 @@
       "license": "菜谱文字为自编演示内容，未经独立试做验证。"
     },
     "featured": false,
-    "cover": null
+    "cover": "photos/us-buffalo-wings.jpg"
   },
   {
     "id": "us-bbq-ribs",
@@ -10997,7 +10997,7 @@
       "license": "菜谱文字为自编演示内容，未经独立试做验证。"
     },
     "featured": false,
-    "cover": null
+    "cover": "photos/us-bbq-ribs.jpg"
   },
   {
     "id": "us-corn-chowder",
@@ -11141,7 +11141,7 @@
       "license": "菜谱文字为自编演示内容，未经独立试做验证。"
     },
     "featured": false,
-    "cover": null
+    "cover": "photos/us-corn-chowder.jpg"
   },
   {
     "id": "us-cobb-salad",
@@ -11578,7 +11578,7 @@
       "license": "菜谱文字为自编演示内容，未经独立试做验证。"
     },
     "featured": false,
-    "cover": null
+    "cover": "photos/us-classic-burger.jpg"
   },
   {
     "id": "us-buttermilk-pancakes",
@@ -11703,7 +11703,7 @@
       "license": "菜谱文字为自编演示内容，未经独立试做验证。"
     },
     "featured": false,
-    "cover": null
+    "cover": "photos/us-buttermilk-pancakes.jpg"
   },
   {
     "id": "us-mac-and-cheese",
@@ -12501,7 +12501,7 @@
       "license": "菜谱文字为自编演示内容，未经独立试做验证。"
     },
     "featured": false,
-    "cover": null
+    "cover": "photos/eu-tiramisu.jpg"
   },
   {
     "id": "eu-crepe",
@@ -12856,7 +12856,7 @@
       "license": "菜谱文字为自编演示内容，未经独立试做验证。"
     },
     "featured": false,
-    "cover": null
+    "cover": "photos/eu-fish-and-chips.jpg"
   },
   {
     "id": "eu-margherita",
@@ -12977,7 +12977,7 @@
       "license": "菜谱文字为自编演示内容，未经独立试做验证。"
     },
     "featured": false,
-    "cover": null
+    "cover": "photos/eu-margherita.jpg"
   },
   {
     "id": "eu-beef-bourguignon",
@@ -13113,7 +13113,7 @@
       "license": "菜谱文字为自编演示内容，未经独立试做验证。"
     },
     "featured": false,
-    "cover": null
+    "cover": "photos/eu-beef-bourguignon.jpg"
   },
   {
     "id": "eu-paella",
@@ -13265,7 +13265,7 @@
       "license": "菜谱文字为自编演示内容，未经独立试做验证。"
     },
     "featured": false,
-    "cover": null
+    "cover": "photos/eu-paella.jpg"
   },
   {
     "id": "sea-laksa",
@@ -13730,7 +13730,7 @@
       "license": "菜谱文字为自编演示内容，未经独立试做验证。"
     },
     "featured": false,
-    "cover": null
+    "cover": "photos/sea-green-curry.jpg"
   },
   {
     "id": "sea-pineapple-rice",
@@ -14364,7 +14364,7 @@
       "license": "菜谱文字为自编演示内容，未经独立试做验证。"
     },
     "featured": false,
-    "cover": null
+    "cover": "photos/sea-spring-rolls.jpg"
   },
   {
     "id": "sea-pho",
@@ -14535,7 +14535,7 @@
       "license": "菜谱文字为自编演示内容，未经独立试做验证。"
     },
     "featured": false,
-    "cover": null
+    "cover": "photos/sea-pho.jpg"
   },
   {
     "id": "other-hummus",
@@ -14673,7 +14673,7 @@
       "license": "菜谱文字为自编演示内容，未经独立试做验证。"
     },
     "featured": false,
-    "cover": null
+    "cover": "photos/other-hummus.jpg"
   },
   {
     "id": "other-butter-chicken",
@@ -14834,7 +14834,7 @@
       "license": "菜谱文字为自编演示内容，未经独立试做验证。"
     },
     "featured": false,
-    "cover": null
+    "cover": "photos/other-butter-chicken.jpg"
   },
   {
     "id": "other-lamb-kebab",
@@ -15149,7 +15149,7 @@
       "license": "菜谱文字为自编演示内容，未经独立试做验证。"
     },
     "featured": false,
-    "cover": null
+    "cover": "photos/other-beef-tacos.jpg"
   },
   {
     "id": "other-chicken-tagine",
@@ -15307,6 +15307,6 @@
       "license": "菜谱文字为自编演示内容，未经独立试做验证。"
     },
     "featured": false,
-    "cover": null
+    "cover": "photos/other-chicken-tagine.jpg"
   }
 ]

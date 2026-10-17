@@ -162,8 +162,9 @@ fun SettingsScreen(
                         )
                         PreferenceRow(
                             "图片与来源",
-                            "最初 12 道示例菜谱的配图来自 Anduin2017/HowToCook 开源仓库，按其 Unlicense 声明使用。" +
-                                "扩充菜谱暂未配图，界面显示占位图。具体固定版本与来源保存在随包清单中。",
+                            "最初 12 道与 4 道扩充菜谱的配图来自 Anduin2017/HowToCook 固定版本，按其 Unlicense 声明使用；" +
+                                "另有 22 道扩充菜谱使用 FoodiesFeed 的 CC0 照片，可商用、免署名。" +
+                                "其余菜谱没有找到授权明确且对应该菜品的照片，界面显示占位图；具体来源保存在随包清单中。",
                             Icons.Rounded.PhotoLibrary,
                         )
                         PreferenceRow("原始份量", "材料用量仅展示菜谱原始份量。本版不进行人数换算，也不修改配方。", Icons.Rounded.Restaurant)
