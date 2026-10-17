@@ -17,6 +17,8 @@ Kotlin 原生 Android 菜谱应用：暖黄 Material 3 主题，112 道菜谱按
 
 最后一项需要授权的 Android 设备或已启动的模拟器。多个设备同时连接时，可设置 `ANDROID_SERIAL`。
 
+本机工程位于含中文的路径（`D:\项目\deepcook`），AGP 默认拒绝这种路径；`gradle.properties` 已设置 `android.overridePathCheck=true`，可直接构建 Debug 与 Preview 包。同一路径下 `:app:testDebugUnitTest` 的测试进程在 Windows 上无法启动（路径编码问题，与代码无关）；需要跑 JVM 测试时，把工程复制到纯 ASCII 路径（例如 `D:\deepcook-build`）再执行，14 项测试即可通过。
+
 Debug APK：`app/build/outputs/apk/debug/app-debug.apk`。最低系统 Android 8.0（API 26），目标与编译 SDK 36。
 
 日常体验与性能检查使用 `app/build/outputs/apk/preview/app-preview.apk`：关闭调试、开启 R8 与资源缩减，使用本机 Debug 密钥签名，方便直接安装覆盖开发版。正式 `release` 的发布签名另行配置。Compose 与 AndroidX 附带的基线配置会合并进入优化构建；Debug 构建保留调试工具，仅用于开发与自动测试。
