@@ -53,7 +53,7 @@ fun SettingsScreen(
                         entry.jsonObject.let { row ->
                             listOf(
                                 "recipeId", "repository", "commit", "path", "license", "url",
-                                "imagePath", "imageUrl", "originalSha256",
+                                "imagePath", "imageUrl", "imageLicense", "originalSha256",
                             )
                                 .joinToString("\n") { key -> "$key: ${row[key]?.jsonPrimitive?.contentOrNull ?: "无"}" }
                         }
@@ -175,12 +175,14 @@ fun SettingsScreen(
                         PreferenceGroupHeader("收录内容")
                         PreferenceRow(
                             "${recipes.size} 道菜谱 · ${recipes.count { it.id.startsWith("world-") }} 道国际菜中文译文",
-                            "中文内容来自 HowToCook；国际菜来自 Based Cooking，材料与步骤已翻译为中文。未经团队逐道试做。用时与难度沿用来源明确标注的值，缺失或口径冲突时显示“无”。难度以 5 分制显示，不根据步骤数猜测。",
+                            "HowToCook 中文原文、Based Cooking 中文译文，以及 ${recipes.count {
+                                it.collection == "DeepCook 自编示例"
+                            }} 道项目自编示例。示例已单独标识。未经团队逐道试做；缺失、未核实或口径冲突的用时和难度显示“无”，不根据步骤数猜测。",
                             Icons.AutoMirrored.Rounded.MenuBook,
                         )
                         PreferenceRow(
                             "图片与来源",
-                            "菜谱与配图来自 HowToCook 和 Based Cooking，均按仓库的 Unlicense 声明使用。配图经过方向校正、缩放和 JPEG 转换；未找到对应配图时显示餐具占位。原始路径、固定版本和内容校验值保存在随包清单中。",
+                            "来源菜谱按 HowToCook、Based Cooking 的 Unlicense 声明使用。项目示例的新增配图来自 FoodiesFeed（CC0 等效许可）和 HowToCook。所有配图随包提供；未找到图片时使用餐具占位。具体授权、固定版本与校验值见清单。",
                             Icons.Rounded.PhotoLibrary,
                         )
                         PreferenceRow("原始份量", "材料用量仅展示菜谱原始份量。本版不进行人数换算，也不修改配方。", Icons.Rounded.Restaurant)
@@ -369,6 +371,12 @@ private fun LicenseContent() {
     AssetText("HOWTOCOOK-LICENSE.txt")
     PreferenceGroupHeader("Based Cooking 菜谱与图片 · Unlicense")
     AssetText("BASED-COOKING-LICENSE.txt")
+    PreferenceGroupHeader("FoodiesFeed 示例配图")
+    PreferenceRow(
+        "CC0 等效许可",
+        "允许复制、修改和随应用分发；不将图片作为图库或独立素材售卖。授权：https://www.foodiesfeed.com/license",
+        Icons.Rounded.PhotoLibrary,
+    )
     PreferenceGroupHeader("第三方软件")
     PreferenceRow(
         "AndroidX / Kotlin / Coroutines / Serialization / Coil / Material Motion Compose",

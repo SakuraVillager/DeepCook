@@ -12,4 +12,10 @@
     <string name="clear_search">清空关键词</string>
     <string name="step_directory">步骤目录</string>
     <string name="remove_recent">移除浏览记录</string>
+    <string name="edit_recipe">编辑菜谱</string>
+    <string name="delete_recipe">删除菜谱</string>
+    <string name="add_recipe">添加菜谱</string>
+    <string name="my_recipes">我的菜谱</string>
+    <string name="pick_cover">从相册选择封面</string>
+    <string name="remove_cover">移除封面</string>
 </resources>

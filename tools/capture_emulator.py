@@ -23,6 +23,7 @@ def main():
     parser.add_argument("--detail-only", action="store_true", help="Capture home, detail, reader and large-font home")
     parser.add_argument("--home-only", action="store_true", help="Capture home, favorite selection and large-font home")
     parser.add_argument("--catalog-only", action="store_true", help="Capture imported catalog, missing metadata and translated recipe")
+    parser.add_argument("--authoring-only", action="store_true", help="Capture kitchen and local prefill without saving a personal recipe")
     args = parser.parse_args()
     if not args.serial.startswith("emulator-"):
         parser.error("This tool only operates on a dedicated Android emulator")
@@ -61,6 +62,21 @@ def main():
         shell("am", "force-stop", "com.deepcook.app")
         shell("am", "start", "-W", "-n", "com.deepcook.app/.MainActivity")
         capture("home-412")
+        if args.authoring_only:
+            tap("我的")
+            capture("merge-kitchen")
+            tap("我的菜谱")
+            capture("merge-my-recipes")
+            tap("添加菜谱")
+            shell("input", "text", "miso")
+            shell("input", "keyevent", "66")
+            time.sleep(1)
+            capture("merge-editor-prefill")
+            shell("settings", "put", "system", "font_scale", "2.0")
+            capture("merge-editor-font-200")
+            back()
+            tap("放弃")
+            return
         if args.catalog_only:
             tap("搜索菜谱")
             capture("catalog-all")

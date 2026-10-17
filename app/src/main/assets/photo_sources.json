@@ -97,6 +97,249 @@
       "bundled": "photos/tomato-tofu.jpg",
       "license": "Unlicense",
       "transformation": "EXIF orientation, resize to max 1200×1000, JPEG conversion"
+    },
+    {
+      "recipeId": "cn-shangtang-wawacai",
+      "path": "dishes/vegetable_dish/上汤娃娃菜/上汤娃娃菜.png",
+      "url": "https://github.com/Anduin2017/HowToCook/blob/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/vegetable_dish/%E4%B8%8A%E6%B1%A4%E5%A8%83%E5%A8%83%E8%8F%9C/%E4%B8%8A%E6%B1%A4%E5%A8%83%E5%A8%83%E8%8F%9C.png",
+      "bundled": "photos/cn-shangtang-wawacai.jpg",
+      "license": "Unlicense",
+      "transformation": "centre cropped to 4:3, resized to 1200x900, JPEG q82",
+      "bytes": 153405
+    },
+    {
+      "recipeId": "cn-pijiu-ya",
+      "path": "dishes/meat_dish/啤酒鸭/啤酒鸭.jpg",
+      "url": "https://github.com/Anduin2017/HowToCook/blob/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E5%95%A4%E9%85%92%E9%B8%AD/%E5%95%A4%E9%85%92%E9%B8%AD.jpg",
+      "bundled": "photos/cn-pijiu-ya.jpg",
+      "license": "Unlicense",
+      "transformation": "centre cropped to 4:3, resized to 1200x900, JPEG q82",
+      "bytes": 150523
+    },
+    {
+      "recipeId": "cn-huiguo-rou",
+      "path": "dishes/meat_dish/回锅肉/2.jpeg",
+      "url": "https://github.com/Anduin2017/HowToCook/blob/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E5%9B%9E%E9%94%85%E8%82%89/2.jpeg",
+      "bundled": "photos/cn-huiguo-rou.jpg",
+      "license": "Unlicense",
+      "transformation": "centre cropped to 4:3, resized to 1200x900, JPEG q82",
+      "bytes": 144606
+    },
+    {
+      "recipeId": "jp-curry-rice",
+      "path": "dishes/staple/日式咖喱饭/成品.jpg",
+      "url": "https://github.com/Anduin2017/HowToCook/blob/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/staple/%E6%97%A5%E5%BC%8F%E5%92%96%E5%96%B1%E9%A5%AD/%E6%88%90%E5%93%81.jpg",
+      "bundled": "photos/jp-curry-rice.jpg",
+      "license": "Unlicense",
+      "transformation": "centre cropped to 4:3, resized to 1200x900, JPEG q82",
+      "bytes": 130853
     }
-  ]
+  ],
+  "cc0Expansion": {
+    "source": "FoodiesFeed",
+    "license": "CC0-equivalent: free to copy, modify and distribute, commercial use allowed, attribution not required",
+    "licenseUrl": "https://www.foodiesfeed.com/license",
+    "note": "Only original photography from the site's legacy library is used; AI-generated files are excluded.",
+    "renderedAt": "2026-10-17",
+    "images": [
+      {
+        "recipeId": "cn-xiaolongbao",
+        "title": "小笼包",
+        "bundled": "photos/cn-xiaolongbao.jpg",
+        "page": "https://www.foodiesfeed.com/free-food-photo/xiaolongbao-dumplings",
+        "license": "CC0 / public domain (FoodiesFeed)",
+        "transformation": "centre cropped to 4:3, resized to 1200x900, JPEG q82",
+        "bytes": 130051
+      },
+      {
+        "recipeId": "cn-dan-chaofan",
+        "title": "蛋炒饭",
+        "bundled": "photos/cn-dan-chaofan.jpg",
+        "page": "https://www.foodiesfeed.com/free-food-photo/egg-fried-rice",
+        "license": "CC0 / public domain (FoodiesFeed)",
+        "transformation": "centre cropped to 4:3, resized to 1200x900, JPEG q82",
+        "bytes": 112813
+      },
+      {
+        "recipeId": "kr-bibimbap",
+        "title": "石锅拌饭",
+        "bundled": "photos/kr-bibimbap.jpg",
+        "page": "https://www.foodiesfeed.com/free-food-photo/korean-bibimbap-in-yamyam-berlin",
+        "license": "CC0 / public domain (FoodiesFeed)",
+        "transformation": "centre cropped to 4:3, resized to 1200x900, JPEG q82",
+        "bytes": 167380
+      },
+      {
+        "recipeId": "kr-gimbap",
+        "title": "紫菜包饭",
+        "bundled": "photos/kr-gimbap.jpg",
+        "page": "https://www.foodiesfeed.com/free-food-photo/man-eating-traditional-korean-gimbap-rice-rolls-with-chopsticks",
+        "license": "CC0 / public domain (FoodiesFeed)",
+        "transformation": "centre cropped to 4:3, resized to 1200x900, JPEG q82",
+        "bytes": 127969
+      },
+      {
+        "recipeId": "kr-grilled-pork-belly",
+        "title": "韩式烤五花肉",
+        "bundled": "photos/kr-grilled-pork-belly.jpg",
+        "page": "https://www.foodiesfeed.com/free-food-photo/roasted-pork-belly",
+        "license": "CC0 / public domain (FoodiesFeed)",
+        "transformation": "centre cropped to 4:3, resized to 1200x900, JPEG q82",
+        "bytes": 233933
+      },
+      {
+        "recipeId": "us-classic-burger",
+        "title": "经典汉堡",
+        "bundled": "photos/us-classic-burger.jpg",
+        "page": "https://www.foodiesfeed.com/free-food-photo/cheeseburger",
+        "license": "CC0 / public domain (FoodiesFeed)",
+        "transformation": "centre cropped to 4:3, resized to 1200x900, JPEG q82",
+        "bytes": 114395
+      },
+      {
+        "recipeId": "us-buttermilk-pancakes",
+        "title": "美式煎饼",
+        "bundled": "photos/us-buttermilk-pancakes.jpg",
+        "page": "https://www.foodiesfeed.com/free-food-photo/blueberry-pancakes",
+        "license": "CC0 / public domain (FoodiesFeed)",
+        "transformation": "centre cropped to 4:3, resized to 1200x900, JPEG q82",
+        "bytes": 108012
+      },
+      {
+        "recipeId": "us-buffalo-wings",
+        "title": "水牛城鸡翅",
+        "bundled": "photos/us-buffalo-wings.jpg",
+        "page": "https://www.foodiesfeed.com/free-food-photo/crispy-spicy-chicken-wings",
+        "license": "CC0 / public domain (FoodiesFeed)",
+        "transformation": "centre cropped to 4:3, resized to 1200x900, JPEG q82",
+        "bytes": 243311
+      },
+      {
+        "recipeId": "us-bbq-ribs",
+        "title": "烤肋排",
+        "bundled": "photos/us-bbq-ribs.jpg",
+        "page": "https://www.foodiesfeed.com/free-food-photo/pork-ribs",
+        "license": "CC0 / public domain (FoodiesFeed)",
+        "transformation": "centre cropped to 4:3, resized to 1200x900, JPEG q82",
+        "bytes": 114908
+      },
+      {
+        "recipeId": "us-corn-chowder",
+        "title": "玉米浓汤",
+        "bundled": "photos/us-corn-chowder.jpg",
+        "page": "https://www.foodiesfeed.com/free-food-photo/creamy-corn-soup-with-fresh-ingredients",
+        "license": "CC0 / public domain (FoodiesFeed)",
+        "transformation": "centre cropped to 4:3, resized to 1200x900, JPEG q82",
+        "bytes": 111287
+      },
+      {
+        "recipeId": "eu-fish-and-chips",
+        "title": "炸鱼薯条",
+        "bundled": "photos/eu-fish-and-chips.jpg",
+        "page": "https://www.foodiesfeed.com/free-food-photo/fish-and-chips-with-broccoli",
+        "license": "CC0 / public domain (FoodiesFeed)",
+        "transformation": "centre cropped to 4:3, resized to 1200x900, JPEG q82",
+        "bytes": 123207
+      },
+      {
+        "recipeId": "eu-margherita",
+        "title": "玛格丽特披萨",
+        "bundled": "photos/eu-margherita.jpg",
+        "page": "https://www.foodiesfeed.com/free-food-photo/neapolitan-pizza-margherita",
+        "license": "CC0 / public domain (FoodiesFeed)",
+        "transformation": "centre cropped to 4:3, resized to 1200x900, JPEG q82",
+        "bytes": 218177
+      },
+      {
+        "recipeId": "eu-beef-bourguignon",
+        "title": "红酒炖牛肉",
+        "bundled": "photos/eu-beef-bourguignon.jpg",
+        "page": "https://www.foodiesfeed.com/free-food-photo/hearty-beef-stew-with-root-vegetables",
+        "license": "CC0 / public domain (FoodiesFeed)",
+        "transformation": "centre cropped to 4:3, resized to 1200x900, JPEG q82",
+        "bytes": 142484
+      },
+      {
+        "recipeId": "eu-paella",
+        "title": "西班牙海鲜饭",
+        "bundled": "photos/eu-paella.jpg",
+        "page": "https://www.foodiesfeed.com/free-food-photo/shrimps-paella",
+        "license": "CC0 / public domain (FoodiesFeed)",
+        "transformation": "centre cropped to 4:3, resized to 1200x900, JPEG q82",
+        "bytes": 129662
+      },
+      {
+        "recipeId": "eu-tiramisu",
+        "title": "提拉米苏",
+        "bundled": "photos/eu-tiramisu.jpg",
+        "page": "https://www.foodiesfeed.com/free-food-photo/delicious-tiramisu-dessert-slice-on-elegant-plate",
+        "license": "CC0 / public domain (FoodiesFeed)",
+        "transformation": "centre cropped to 4:3, resized to 1200x900, JPEG q82",
+        "bytes": 60032
+      },
+      {
+        "recipeId": "sea-green-curry",
+        "title": "泰式绿咖喱鸡",
+        "bundled": "photos/sea-green-curry.jpg",
+        "page": "https://www.foodiesfeed.com/free-food-photo/green-curry-with-beans-sprouts",
+        "license": "CC0 / public domain (FoodiesFeed)",
+        "transformation": "centre cropped to 4:3, resized to 1200x900, JPEG q82",
+        "bytes": 132985
+      },
+      {
+        "recipeId": "sea-spring-rolls",
+        "title": "越南春卷",
+        "bundled": "photos/sea-spring-rolls.jpg",
+        "page": "https://www.foodiesfeed.com/free-food-photo/fresh-spring-rolls-with-dipping-sauces-on-wooden-table",
+        "license": "CC0 / public domain (FoodiesFeed)",
+        "transformation": "centre cropped to 4:3, resized to 1200x900, JPEG q82",
+        "bytes": 167200
+      },
+      {
+        "recipeId": "sea-pho",
+        "title": "越南河粉",
+        "bundled": "photos/sea-pho.jpg",
+        "page": "https://www.foodiesfeed.com/free-food-photo/pho-bo-and-pho-ga-in-a-restaurant",
+        "license": "CC0 / public domain (FoodiesFeed)",
+        "transformation": "centre cropped to 4:3, resized to 1200x900, JPEG q82",
+        "bytes": 173877
+      },
+      {
+        "recipeId": "other-hummus",
+        "title": "中东鹰嘴豆泥",
+        "bundled": "photos/other-hummus.jpg",
+        "page": "https://www.foodiesfeed.com/free-food-photo/hummus-close-up",
+        "license": "CC0 / public domain (FoodiesFeed)",
+        "transformation": "centre cropped to 4:3, resized to 1200x900, JPEG q82",
+        "bytes": 149778
+      },
+      {
+        "recipeId": "other-butter-chicken",
+        "title": "印度黄油鸡",
+        "bundled": "photos/other-butter-chicken.jpg",
+        "page": "https://www.foodiesfeed.com/free-food-photo/butter-chicken-in-a-pan",
+        "license": "CC0 / public domain (FoodiesFeed)",
+        "transformation": "centre cropped to 4:3, resized to 1200x900, JPEG q82",
+        "bytes": 233126
+      },
+      {
+        "recipeId": "other-beef-tacos",
+        "title": "墨西哥牛肉塔可",
+        "bundled": "photos/other-beef-tacos.jpg",
+        "page": "https://www.foodiesfeed.com/free-food-photo/tacos",
+        "license": "CC0 / public domain (FoodiesFeed)",
+        "transformation": "centre cropped to 4:3, resized to 1200x900, JPEG q82",
+        "bytes": 155238
+      },
+      {
+        "recipeId": "other-chicken-tagine",
+        "title": "摩洛哥鸡肉塔吉锅",
+        "bundled": "photos/other-chicken-tagine.jpg",
+        "page": "https://www.foodiesfeed.com/free-food-photo/flavorful-moroccan-chicken-tagine-with-vegetables",
+        "license": "CC0 / public domain (FoodiesFeed)",
+        "transformation": "centre cropped to 4:3, resized to 1200x900, JPEG q82",
+        "bytes": 165956
+      }
+    ]
+  }
 }

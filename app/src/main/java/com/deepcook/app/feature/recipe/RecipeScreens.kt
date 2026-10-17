@@ -84,25 +84,26 @@ fun DetailScreen(
             }
         }
     }
+    // Cover, introduction and the sticky section bar are always the first three lazy items.
+    val headerItems = 3
     val sections = remember(recipe.id) {
         buildList {
             add("材料")
-            if (recipe.preparation.isNotEmpty()) add("准备")
+            if (recipe.preparationItems.isNotEmpty()) add("准备")
             add("步骤")
-            if (recipe.notes.isNotEmpty()) add("注意")
+            if (recipe.noteItems.isNotEmpty()) add("注意")
             add("来源")
         }
     }
-    // Each step has a lazy item, so a reader can return to that exact step.
+    // Each step has a lazy item, so a reader can return to that exact step. Walking the
+    // visible sections keeps this mapping correct when 准备 or 注意 is hidden.
     val sectionIndices = remember(recipe.id) {
         buildMap {
-            var index = 3
-            put("材料", index++)
-            if (recipe.preparation.isNotEmpty()) put("准备", index++)
-            put("步骤", index++)
-            index += recipe.steps.size
-            if (recipe.notes.isNotEmpty()) put("注意", index++)
-            put("来源", index)
+            var index = headerItems
+            sections.forEach { section ->
+                put(section, index)
+                index += if (section == "步骤") recipe.steps.size + 1 else 1
+            }
         }
     }
     val sectionPinned by remember { derivedStateOf { listState.firstVisibleItemIndex >= 2 } }
@@ -190,15 +191,21 @@ fun DetailScreen(
                         Text(recipe.title, style = MaterialTheme.typography.headlineLarge)
                         RecipeMetadata(recipe)
                         Text(
-                            recipe.servings,
+                            recipe.servings.ifBlank { NO_CONTENT },
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             style = MaterialTheme.typography.bodyMedium,
                         )
                         Text(recipe.description, style = textStyle)
                         Text(
-                            "${recipe.collection.ifBlank {
-                                "菜谱"
-                            }} · ${if (recipe.id.startsWith("world-")) "中文译文" else "原文整理"} · 原始份量",
+                            if (recipe.isMine) {
+                                "我的菜谱 · 原始份量"
+                            } else if (recipe.collection == "DeepCook 自编示例") {
+                                "自编示例 · 未经试做验证"
+                            } else {
+                                "${recipe.collection.ifBlank {
+                                    "菜谱"
+                                }} · ${if (recipe.id.startsWith("world-")) "中文译文" else "原文整理"} · 原始份量"
+                            },
                             color = MaterialTheme.colorScheme.primary,
                             style = MaterialTheme.typography.labelLarge,
                         )
@@ -241,7 +248,7 @@ fun DetailScreen(
                                 ) {
                                     Text(ingredient.name, Modifier.weight(1f), style = textStyle)
                                     Text(
-                                        ingredient.amount,
+                                        ingredient.amount.ifBlank { NO_CONTENT },
                                         Modifier.weight(.75f),
                                         style = textStyle,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -257,10 +264,10 @@ fun DetailScreen(
                         }
                     }
                 }
-                if (recipe.preparation.isNotEmpty()) {
+                if (recipe.preparationItems.isNotEmpty()) {
                     item(key = "准备") {
                         DetailSection("准备事项") {
-                            recipe.preparation.forEach { Text("•  $it", style = textStyle) }
+                            recipe.preparationItems.forEach { Text("•  $it", style = textStyle) }
                         }
                     }
                 }
@@ -301,7 +308,7 @@ fun DetailScreen(
                                 )
                             }
                             Text(step.text, style = textStyle)
-                            step.cue?.let { InfoCard("观察提示", it) }
+                            step.visibleCue?.let { InfoCard("观察提示", it) }
                             TextButton(onClick = { onRead(step.id) }) {
                                 Icon(Icons.Rounded.OpenInFull, null, Modifier.size(18.dp))
                                 Spacer(Modifier.width(8.dp))
@@ -311,9 +318,9 @@ fun DetailScreen(
                     }
                     if (index < recipe.steps.lastIndex) HorizontalDivider(Modifier.padding(vertical = 12.dp))
                 }
-                if (recipe.notes.isNotEmpty()) {
+                if (recipe.noteItems.isNotEmpty()) {
                     item(key = "注意") {
-                        DetailSection("注意事项") { recipe.notes.forEach { Text("•  $it", style = textStyle) } }
+                        DetailSection("注意事项") { recipe.noteItems.forEach { Text("•  $it", style = textStyle) } }
                     }
                 }
                 item(key = "来源") {
@@ -490,7 +497,7 @@ fun ReaderScreen(recipe: Recipe, initialStep: String?, preferences: UserPreferen
                             }
                         }
                         val ingredients = recipe.ingredients.filter { it.id in step.ingredientRefs }
-                        if (ingredients.isNotEmpty() || step.cue != null) {
+                        if (ingredients.isNotEmpty() || step.visibleCue != null) {
                             Column(
                                 Modifier.padding(horizontal = 4.dp),
                                 verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -507,7 +514,7 @@ fun ReaderScreen(recipe: Recipe, initialStep: String?, preferences: UserPreferen
                                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                                     )
                                 }
-                                step.cue?.let { ObservationNote(it) }
+                                step.visibleCue?.let { ObservationNote(it) }
                             }
                         }
                     }

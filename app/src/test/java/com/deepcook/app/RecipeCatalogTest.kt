@@ -28,7 +28,9 @@ class RecipeCatalogTest {
             assertEquals((1..recipe.steps.size).toList(), recipe.steps.map { it.order })
             assertTrue(recipe.steps.all { it.text.isNotBlank() })
             assertTrue(recipe.minutes == null || recipe.minutes > 0)
-            assertTrue(recipe.source.url?.startsWith("https://github.com/") == true)
+            if (recipe.collection != "DeepCook 自编示例") {
+                assertTrue(recipe.source.url?.startsWith("https://github.com/") == true)
+            }
             recipe.cover?.let { assertTrue("Missing image: $it", File(assets, it).isFile) }
         }
     }
@@ -59,7 +61,7 @@ class RecipeCatalogTest {
         rows.forEach { row ->
             assertTrue(row.getValue("commit").jsonPrimitive.content.matches(Regex("[0-9a-f]{40}")))
             assertTrue(row.getValue("originalSha256").jsonPrimitive.content.matches(Regex("[0-9a-f]{64}")))
-            assertEquals("Unlicense", row.getValue("license").jsonPrimitive.content)
+            assertTrue(row.getValue("license").jsonPrimitive.content in listOf("Unlicense", "项目自编示例"))
         }
         val original =
             setOf(
@@ -67,5 +69,10 @@ class RecipeCatalogTest {
                 "mapo-tofu", "cauliflower", "greens", "cabbage", "shrimp", "tomato-tofu",
             )
         assertTrue(recipes.map { it.id }.containsAll(original))
+        val cloudInput = Json.parseToJsonElement(File("../tools/cloud_recipes.json").readText()).jsonObject
+        val cloudIds = cloudInput.getValue("recipes").jsonArray.map {
+            it.jsonObject.getValue("id").jsonPrimitive.content
+        }
+        assertTrue("Cloud favorite IDs must survive merging", recipes.map { it.id }.containsAll(cloudIds))
     }
 }

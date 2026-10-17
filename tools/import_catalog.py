@@ -22,6 +22,7 @@ ROOT = Path(__file__).resolve().parents[1]
 CACHE = ROOT / 'artifacts/content-import'
 ASSETS = ROOT / 'app/src/main/assets'
 TRANSLATIONS = ROOT / 'tools/world_recipes_zh.json'
+CLOUD_RECIPES = ROOT / 'tools/cloud_recipes.json'
 PINNED = {
     'howtocook': ('Anduin2017/HowToCook', '743d7f46b7644c43673e0b2e255c745f6fa8ca5e'),
     'based': ('LukeSmithxyz/based.cooking', '9d4a31a040eedd61e4fb608cb0c114ff9a7c4dd2'),
@@ -235,6 +236,20 @@ def total_minutes(intro):
     return round(result) if result > 0 else None
 
 
+def explicit_region(text):
+    # Use only explicit cuisine words, never assume every HowToCook dish is Chinese.
+    for pattern, region in [
+        (r'日式|日本', '日式'), (r'韩式|韩国', '韩式'), (r'美式|美国', '美式'),
+        (r'泰式|泰国|越南|越式|东南亚|马来西亚|新加坡|印尼', '东南亚'),
+        (r'法式|法国|意大利|西班牙|希腊|芬兰|瑞典|丹麦|爱尔兰|乌克兰|奥地利', '欧式'),
+        (r'印度|北非|突尼斯|黎巴嫩|墨西哥|巴西|中东|土耳其|摩洛哥', '其他'),
+        (r'中式|中国|中华|家常中餐|粤式|粤菜|川菜|川味|鲁菜|湘菜|湘味|徽式|徽菜|闽菜|淮扬|浙江|福建|四川|广东|山东|湖南|湖北|东北|云南|贵州|广西|新疆', '中式'),
+    ]:
+        if re.search(pattern, text):
+            return region
+    return '无'
+
+
 def chinese_recipe(tree, path):
     if path.startswith('dishes/template/'):
         raise ValueError('仓库格式模板，不是真实菜谱')
@@ -292,7 +307,7 @@ def chinese_recipe(tree, path):
                     ingredients.append((name, amount))
     notes = list_items(parts.get('附加内容', []))
     notes = [n for n in notes if not any(x in n for x in ['遵循本指南', 'Issue', 'Pull request', '其他内容请通过'])]
-    recipe = dict(id=recipe_id, version=3, title=title, aliases=[original_title] if original_title != title else [], description='收录自 HowToCook，按中文原文整理。',
+    recipe = dict(id=recipe_id, version=3, title=title, region=explicit_region(title + '\n' + intro), aliases=[original_title] if original_title != title else [], description='收录自 HowToCook，按中文原文整理。',
                   cover=None, categories=categories, minutes=minutes, difficulty=len(stars.group(1)) if stars else None,
                   servings=servings_match.group(1)+' 人份' if servings_match else '无',
                   ingredients=[dict(id=f'i{n}', name=name, amount=amount) for n, (name, amount) in enumerate(ingredients)],
@@ -344,6 +359,7 @@ def build():
         path = f'content/{slug}.md'
         recipe_id = 'world-' + slug
         entry.update(id=recipe_id, version=1, cover=None, difficulty=None, featured=False, collection='Based Cooking')
+        entry['region'] = explicit_region(' '.join(entry['categories']))
         entry['ingredients'] = [dict(id=f'i{n}', name=i[0], amount=i[1] or '无') for n, i in enumerate(entry['ingredients'])]
         entry['steps'] = [dict(id=f'{recipe_id}-s{n+1}', order=n+1, title=f'步骤 {n+1}', text=text) for n,text in enumerate(entry['steps'])]
         entry.setdefault('preparation',[])
@@ -391,9 +407,30 @@ def build():
     featured=['braised-pork','silky-eggs','kung-pao','world-spanish-tortilla','world-pasta-arrabbiata','world-brigadeiro']
     for r in catalog:
         r['featured']=r['id'] in featured
+    # Preserve the remote branch's independently authored examples and their stable IDs.
+    # They are labeled separately and are not passed off as sourced translations.
+    if CLOUD_RECIPES.exists():
+        cloud = read_json(CLOUD_RECIPES)
+        credits = read_json(ASSETS/'photo_sources.json')
+        images = credits.get('images', []) + credits.get('cc0Expansion', {}).get('images', [])
+        image_by_asset = {i['bundled']: i for i in images}
+        existing_ids = {r['id'] for r in catalog}
+        for original in cloud['recipes']:
+            r = dict(original)
+            if r['id'] in existing_ids:
+                continue
+            r.update(collection='DeepCook 自编示例', featured=False, minutes=None, difficulty=None)
+            r['notes'] = [n for n in r.get('notes', []) if n != '无'] + ['项目自编示例，未经逐道试做；总用时与难度未核实，显示“无”。']
+            source_url = f"https://github.com/{cloud['repository']}/blob/{cloud['commit']}/app/src/main/assets/recipes.json"
+            r['source'] = dict(r['source'], license='项目自编演示配方，未经独立试做验证；外部链接仅作参考。')
+            catalog.append(r)
+            photo = image_by_asset.get(r.get('cover'), {})
+            provenance.append(dict(recipeId=r['id'], repository=cloud['repository'], commit=cloud['commit'], path='app/src/main/assets/recipes.json',
+                url=source_url, license='项目自编示例', originalSha256=hashlib.sha256(json.dumps(original, ensure_ascii=False, sort_keys=True).encode()).hexdigest(),
+                imagePath=photo.get('path') or photo.get('page'), bundled=r.get('cover'), imageUrl=photo.get('url') or photo.get('download') or photo.get('page'), imageLicense=photo.get('license')))
     write_json(ASSETS/'recipes.json',catalog)
     write_json(ASSETS/'catalog_sources.json',dict(sources=[{k:t[k] for k in ['repository','commit']} for t in [htc,based]],recipes=provenance))
-    write_json(CACHE/'import-report.json',dict(total=len(catalog),chinese=sum(r['collection']=='HowToCook' for r in catalog),international=sum(r['collection']=='Based Cooking' for r in catalog),withPhotos=sum(bool(r['cover']) for r in catalog),missingTime=sum(r['minutes'] is None for r in catalog),missingDifficulty=sum(r['difficulty'] is None for r in catalog),excluded=excluded,photoErrors=photo_errors,legacyMissing=sorted(set(order)-{r['id'] for r in catalog})))
+    write_json(CACHE/'import-report.json',dict(total=len(catalog),chinese=sum(r['collection']=='HowToCook' for r in catalog),international=sum(r['collection']=='Based Cooking' for r in catalog),cloudExamples=sum(r['collection']=='DeepCook 自编示例' for r in catalog),withPhotos=sum(bool(r['cover']) for r in catalog),missingTime=sum(r['minutes'] is None for r in catalog),missingDifficulty=sum(r['difficulty'] is None for r in catalog),excluded=excluded,photoErrors=photo_errors,legacyMissing=sorted(set(order)-{r['id'] for r in catalog})))
     print(json.dumps({k:v for k,v in read_json(CACHE/'import-report.json').items() if k not in ['excluded','photoErrors']},ensure_ascii=False),flush=True)
 
 

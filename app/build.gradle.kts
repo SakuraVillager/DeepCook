@@ -11,8 +11,8 @@ android {
         applicationId = "com.deepcook.app"
         minSdk = 26
         targetSdk = 36
-        versionCode = 7
-        versionName = "0.2.0"
+        versionCode = 10
+        versionName = "0.3.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     buildFeatures {
@@ -56,6 +56,7 @@ dependencies {
     implementation(libs.serialization)
     implementation(libs.coroutines)
     implementation(libs.coil)
+    implementation(libs.exifinterface)
     implementation(libs.material.motion)
     debugImplementation(libs.compose.tooling)
     debugImplementation(libs.compose.test.manifest)

@@ -5,6 +5,7 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.deepcook.app.core.model.Recipe
 import com.deepcook.app.data.AssetRecipeRepository
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
@@ -19,6 +20,8 @@ class BrowserFlowTest {
     @Before fun resetUserData() {
         val repo = (compose.activity.application as DeepCookApplication).container.userData
         runBlocking {
+            val mine = (compose.activity.application as DeepCookApplication).container.userRecipes
+            mine.recipes.first().forEach { mine.delete(it.id) }
             repo.clearFavorites()
             repo.clearRecent()
             repo.resetPreferences()
@@ -169,6 +172,7 @@ class BrowserFlowTest {
         compose.onNodeWithText("红烧肉").performClick()
         compose.onNodeWithContentDescription("返回").performClick()
         compose.onNodeWithText("我的", useUnmergedTree = true).performClick()
+        compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("查看全部"))
         compose.onNodeWithText("查看全部").performClick()
         compose.onNodeWithContentDescription("移除浏览记录").performClick()
         compose.onNodeWithText("去找菜").performClick()
@@ -254,6 +258,46 @@ class BrowserFlowTest {
         compose.onAllNodesWithText("清除筛选")[0].performClick()
         compose.waitUntil(5_000) {
             compose.onAllNodesWithText("找到 ${recipes.size} 道菜谱").fetchSemanticsNodes().isNotEmpty()
+        }
+    }
+
+    @Test fun authoredRecipePrefillPreservesEditsThenSavesEditsAndDeletes() {
+        compose.onNodeWithText("我的", useUnmergedTree = true).performClick()
+        compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("添加菜谱"))
+        compose.onNodeWithText("添加菜谱").performClick()
+        compose.onNode(hasSetTextAction() and hasText("菜名")).performTextInput("日式味噌汤")
+        compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasSetTextAction() and hasText("简介"))
+        compose.onNode(hasSetTextAction() and hasText("简介")).performTextInput("这是我的手写做法")
+        compose.onNode(hasScrollToIndexAction()).performScrollToIndex(0)
+        compose.onNodeWithText("补全资料").performClick()
+        compose.waitUntil(10_000) {
+            compose.onAllNodesWithText("已按「日式味噌汤」", substring = true).fetchSemanticsNodes().isNotEmpty()
+        }
+        compose.activityRule.scenario.recreate()
+        compose.onNodeWithText("保存", substring = false).performClick()
+        compose.waitUntil(10_000) { compose.onAllNodesWithText("1 道自己写的菜").fetchSemanticsNodes().isNotEmpty() }
+        compose.onNodeWithText("我的菜谱", substring = false).performClick()
+        compose.onNodeWithText("日式味噌汤").assertIsDisplayed()
+        compose.onNodeWithContentDescription("管理菜谱").performClick()
+        compose.onNodeWithText("编辑菜谱").performClick()
+        compose.onNode(hasSetTextAction() and hasText("菜名")).performTextReplacement("测试味噌汤")
+        compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasSetTextAction() and hasText("简介"))
+        compose.onNode(hasSetTextAction() and hasText("简介")).assertTextContains("这是我的手写做法")
+        compose.onNodeWithText("保存", substring = false).performClick()
+        compose.waitUntil(10_000) { compose.onAllNodesWithText("测试味噌汤").fetchSemanticsNodes().isNotEmpty() }
+        compose.onNodeWithText("测试味噌汤").performClick()
+        compose.onNodeWithText("我的菜谱 · 原始份量").assertIsDisplayed()
+        compose.onNodeWithContentDescription("收藏菜谱").performClick()
+        compose.onNodeWithContentDescription("返回").performClick()
+        compose.onNodeWithContentDescription("管理菜谱").performClick()
+        compose.onNodeWithText("删除菜谱").performClick()
+        compose.onNodeWithText("删除", substring = false).performClick()
+        compose.waitUntil(10_000) { compose.onAllNodesWithText("还没有自己的菜谱").fetchSemanticsNodes().isNotEmpty() }
+        val container = (compose.activity.application as DeepCookApplication).container
+        runBlocking {
+            org.junit.Assert.assertTrue(container.userRecipes.recipes.first().isEmpty())
+            org.junit.Assert.assertTrue(container.userData.data.first().favorites.isEmpty())
+            org.junit.Assert.assertTrue(container.userData.data.first().recent.isEmpty())
         }
     }
 

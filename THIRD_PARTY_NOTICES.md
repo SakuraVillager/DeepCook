@@ -65,6 +65,36 @@ raw-meat washing instruction is adapted to cleaning and patting dry, explicitly
 noted in that recipe. Both collections have not been independently kitchen-tested
 by the DeepCook team; source and translation status are visible in the app.
 
+## FoodiesFeed photographs — CC0
+
+Source: https://www.foodiesfeed.com · License: https://www.foodiesfeed.com/license
+
+Twenty-two expansion recipes use FoodiesFeed photographs. FoodiesFeed releases its
+photos under a license equivalent to Creative Commons Zero (CC0): they may be
+copied, modified and redistributed, including commercially, and attribution is not
+required. DeepCook records the source page for each image in
+`app/src/main/assets/photo_sources.json` anyway (`cc0Expansion`), and crops each
+photo to 4:3, resizes it to 1200×900 and re-encodes it as JPEG.
+
+Only original photography from the site's legacy library is used. Files served
+from FoodiesFeed's `/generated/` path are AI output and are deliberately excluded,
+so no generated image ships in this app.
+
+## Expansion recipe content
+
+The expansion catalog (100 recipes: Chinese, Japanese, Korean, American, European,
+Southeast Asian, and other cuisines such as Indian, Mexican, Middle Eastern, North
+African and Turkish) is original DeepCook demonstration prose written after light
+verification against public recipe references found with web search. No recipe text
+is copied from those references. Where a single authoritative page was confirmed, its
+URL is stored in that recipe's `source.url` field and linked from the detail page;
+unconfirmed references are omitted rather than guessed. These 100 entries remain
+separately labeled as project-authored demonstrations after the merge; their
+unverified total-time and difficulty estimates are not retained as verified data.
+The pinned input is preserved in `tools/cloud_recipes.json`. Expansion recipes either
+ship with a bundled photograph (see the two sections above) or display the bundled
+placeholder image when no clearly licensed, dish-accurate photograph was available.
+
 ## Software dependencies
 
 AndroidX (including Compose, Activity, Lifecycle, Navigation and DataStore), Kotlin,
@@ -72,4 +102,6 @@ kotlinx.coroutines, kotlinx.serialization, Coil, Material icons and the Gradle
 wrapper use Apache License 2.0. Dependency versions are fixed in
 `gradle/libs.versions.toml`. JUnit 4, used only in tests, uses Eclipse Public
 License 1.0. The app does not bundle network image-loading components or request
-Internet, microphone or notification permissions.
+microphone or notification permissions. Internet and network-state permissions are
+used only for optional public-page fallback when bundled lookup cannot fill a recipe.
+Gallery covers use Android's photo picker without broad media storage permissions.
