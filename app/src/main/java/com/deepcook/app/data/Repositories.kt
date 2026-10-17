@@ -11,6 +11,8 @@ import com.deepcook.app.core.model.RecipeFilter
 import com.deepcook.app.core.model.UserData
 import com.deepcook.app.core.model.UserPreferences
 import com.deepcook.app.core.model.filteredBy
+import com.deepcook.app.data.lookup.HowToCookLookup
+import com.deepcook.app.data.lookup.RecipeLookup
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
@@ -19,7 +21,7 @@ import kotlinx.serialization.json.Json
 import java.io.InputStream
 import java.io.OutputStream
 
-private val json = Json {
+internal val json = Json {
     ignoreUnknownKeys = true
     encodeDefaults = true
 }
@@ -53,6 +55,9 @@ interface UserDataRepository {
     suspend fun clearRecent()
     suspend fun clearFavorites()
     suspend fun resetPreferences()
+
+    /** Drops [id] from both collections; used when a user recipe is deleted. */
+    suspend fun forget(id: String)
 }
 
 object UserDataSerializer : Serializer<UserData> {
@@ -99,6 +104,15 @@ class LocalUserDataRepository(private val store: DataStore<UserData>) : UserData
     override suspend fun resetPreferences() {
         store.updateData { it.copy(preferences = UserPreferences()) }
     }
+
+    override suspend fun forget(id: String) {
+        store.updateData {
+            it.copy(
+                favorites = it.favorites.filterNot { saved -> saved.recipeId == id },
+                recent = it.recent.filterNot { saved -> saved.recipeId == id },
+            )
+        }
+    }
 }
 
 class AppContainer(context: Context) {
@@ -106,4 +120,11 @@ class AppContainer(context: Context) {
     val userData: UserDataRepository = LocalUserDataRepository(
         DataStoreFactory.create(serializer = UserDataSerializer) { context.dataStoreFile("user_data.json") },
     )
+    val userRecipes: UserRecipeStore = LocalUserRecipeStore(
+        DataStoreFactory.create(serializer = UserRecipeBookSerializer) {
+            context.dataStoreFile("user_recipes.json")
+        },
+    )
+    val lookup: RecipeLookup = HowToCookLookup(context)
+    val covers = CoverStore(context)
 }

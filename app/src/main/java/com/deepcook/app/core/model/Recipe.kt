@@ -34,6 +34,17 @@ data class RecipeSource(
  */
 const val NO_CONTENT = "无"
 
+/**
+ * Recipes the user writes themselves live alongside the bundled catalog. Their ids all start
+ * with this prefix, which is how the app tells "my recipe" from "shipped content" without a
+ * second field in the content format: it survives storage, needs no migration, and cannot
+ * collide with the hand-written ids in `assets/recipes.json`.
+ */
+const val USER_RECIPE_ID_PREFIX = "user-"
+
+/** True for a recipe the user created or edited on this device. */
+val Recipe.isMine: Boolean get() = id.startsWith(USER_RECIPE_ID_PREFIX)
+
 /** Region labels: the content, the card/detail tag and the category picker all use this list. */
 val RecipeRegions = listOf("中式", "日式", "韩式", "美式", "欧式", "东南亚", "其他")
 
