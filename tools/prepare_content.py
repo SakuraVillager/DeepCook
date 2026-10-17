@@ -1,10 +1,16 @@
 """Prepare original demo recipes and pinned, attributed HowToCook photographs.
 
 Run only when intentionally updating the bundled demo content. No runtime network is used.
+
+The committed `app/src/main/assets/recipes.json` is the single source of truth: it also holds
+the expansion catalog (see docs/菜谱扩展1.md). This script rebuilds ONLY the twelve original
+recipes, so it would drop the expansions — it therefore refuses to run unless
+DEEPCOOK_REBUILD_CONTENT=1 is set, and the expansions must be re-merged afterwards.
 """
 import concurrent.futures
 import io
 import json
+import os
 from pathlib import Path
 import urllib.parse
 import urllib.request
@@ -16,16 +22,19 @@ ASSETS = ROOT / "app/src/main/assets"
 ASSETS.mkdir(parents=True, exist_ok=True)
 (ASSETS / "photos").mkdir(exist_ok=True)
 
+# Content convention: every displayable text element is present, missing ones use "无".
+NO_CONTENT = "无"
+
 def recipe(slug, title, description, categories, minutes, difficulty, servings, ingredients, prep, steps, notes, photo):
     return dict(
-        id=slug, version=2, title=title, description=description,
+        id=slug, version=3, region="中式", title=title, description=description,
         categories=categories.split("/"), minutes=minutes,
         difficulty={"简单": 1, "中等": 3, "较难": 5}.get(difficulty, difficulty), servings=servings,
         ingredients=[dict(id=f"i{n}", name=name, amount=amount) for n, (name, amount) in enumerate(ingredients)],
-        preparation=prep,
-        steps=[dict(id=f"{slug}-s{n+1}", order=n+1, title=s[0], text=s[1], cue=s[2] if len(s)>2 else None)
+        preparation=prep or [NO_CONTENT],
+        steps=[dict(id=f"{slug}-s{n+1}", order=n+1, title=s[0], text=s[1], cue=s[2] if len(s) > 2 and s[2] else NO_CONTENT)
                for n, s in enumerate(steps)],
-        notes=notes, source=dict(author="DeepCook 自编示例", license="菜谱文字为自编演示内容，未经独立试做验证。配图来自 HowToCook，按仓库 Unlicense 声明使用。", imageSource=photo),
+        notes=notes or [NO_CONTENT], source=dict(author="DeepCook 自编示例", license="菜谱文字为自编演示内容，未经独立试做验证。配图来自 HowToCook，按仓库 Unlicense 声明使用。", imageSource=photo),
         featured=False, _photo=photo,
     )
 
@@ -122,6 +131,11 @@ RECIPES = [
 ]
 
 def main():
+    if os.environ.get("DEEPCOOK_REBUILD_CONTENT") != "1":
+        print("Refusing to run: this script rebuilds only the twelve original recipes and would")
+        print("drop the expansion catalog. Set DEEPCOOK_REBUILD_CONTENT=1 to confirm, then")
+        print("re-merge the expansions (see docs/菜谱扩展1.md).")
+        return
     api = "https://api.github.com/repos/Anduin2017/HowToCook/commits/master"
     commit = json.load(urllib.request.urlopen(api))["sha"]
     raw = f"https://raw.githubusercontent.com/Anduin2017/HowToCook/{commit}/"

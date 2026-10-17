@@ -70,7 +70,9 @@ fun DiscoverScreen(
                         }
                     }
                     LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        items(RecipeCategories) { category ->
+                        // Regions first, then dish styles; both are picker values the
+                        // search screen understands (a region filters by Recipe.region).
+                        items(RecipeCategoryOptions) { category ->
                             FilterChip(selected = category == "全部", onClick = {
                                 onSearch(category)
                             }, label = { Text(category) })
@@ -146,7 +148,7 @@ fun SearchScreen(
                                 it == "全部"
                             } ?: "分类",
                             filter.category != "全部",
-                            RecipeCategories,
+                            RecipeCategoryOptions,
                             onCategory,
                         )
                     }

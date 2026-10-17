@@ -43,6 +43,17 @@ Recipe prose is original DeepCook demonstration content, not a transcription of
 the repository's recipe instructions. Sample content has not been independently
 kitchen-tested, and the UI identifies it as sample content.
 
+## Expansion recipe content
+
+The expansion catalog (100 recipes: Chinese, Japanese, Korean, American, European,
+Southeast Asian, and other cuisines such as Indian, Mexican, Middle Eastern, North
+African and Turkish) is original DeepCook demonstration prose written after light
+verification against public recipe references found with web search. No recipe text
+is copied from those references. Where a single authoritative page was confirmed, its
+URL is stored in that recipe's `source.url` field and linked from the detail page;
+unconfirmed references are omitted rather than guessed. Expansion recipes ship
+without photographs and display the bundled placeholder image.
+
 ## Software dependencies
 
 AndroidX (including Compose, Activity, Lifecycle, Navigation and DataStore), Kotlin,

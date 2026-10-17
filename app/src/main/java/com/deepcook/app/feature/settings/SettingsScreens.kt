@@ -153,16 +153,25 @@ fun SettingsScreen(
                     "sources" -> item {
                         PreferenceGroupHeader("示例内容")
                         PreferenceRow(
-                            "12 道家常菜",
-                            "菜谱文字为 DeepCook 自编的演示内容，未经独立试做验证。用时为内容中的参考值，请结合食材大小、锅具和实际状态判断。",
+                            "112 道菜谱 · 7 个地域",
+                            "按中式、日式、韩式、美式、欧式、东南亚与其他 7 个地域分类，" +
+                                "首页与搜索页的分类入口都支持按地域浏览。" +
+                                "菜谱文字为 DeepCook 自编的演示内容，参考公开菜谱资料整理，未经独立试做验证。" +
+                                "用时为内容中的参考值，请结合食材大小、锅具和实际状态判断。",
                             Icons.AutoMirrored.Rounded.MenuBook,
                         )
                         PreferenceRow(
                             "图片与来源",
-                            "配图来自 Anduin2017/HowToCook 开源仓库，按其 Unlicense 声明使用。图片经过方向校正、缩放和 JPEG 转换；具体固定版本与来源保存在随包清单中。",
+                            "最初 12 道示例菜谱的配图来自 Anduin2017/HowToCook 开源仓库，按其 Unlicense 声明使用。" +
+                                "扩充菜谱暂未配图，界面显示占位图。具体固定版本与来源保存在随包清单中。",
                             Icons.Rounded.PhotoLibrary,
                         )
                         PreferenceRow("原始份量", "材料用量仅展示菜谱原始份量。本版不进行人数换算，也不修改配方。", Icons.Rounded.Restaurant)
+                        PreferenceRow(
+                            "地域标签",
+                            "卡片与详情显示菜品地域；分类入口把地域列在菜式分类之前，选中即按地域筛选。",
+                            Icons.Rounded.Public,
+                        )
                         PreferenceRow("配图授权清单", "查看每张图片的来源路径与固定版本。", Icons.Rounded.Description, onClick = {
                             onNavigate("photo_sources")
                         })

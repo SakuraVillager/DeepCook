@@ -93,7 +93,28 @@ fun RecipeMetadata(recipe: Recipe, modifier: Modifier = Modifier, compact: Boole
         ) {
             Metadata(Icons.Rounded.Schedule, time, compact, color, timeDescription)
             Metadata(Icons.Rounded.Restaurant, difficulty, compact, color, difficultyDescription)
+            Metadata(Icons.Rounded.Public, recipe.region, compact, color, "地域 ${recipe.region}")
         }
+    }
+}
+
+/**
+ * Region tag shown on top of a card cover, where the metadata row has no space for a third item.
+ * The visible label is the region itself; screen readers get the "地域" prefix.
+ */
+@Composable
+fun RegionBadge(region: String, modifier: Modifier = Modifier) {
+    Surface(
+        modifier = modifier.clearAndSetSemantics { contentDescription = "地域 $region" },
+        shape = RoundedCornerShape(8.dp),
+        color = MaterialTheme.colorScheme.surface.copy(alpha = .88f),
+    ) {
+        Text(
+            region,
+            Modifier.padding(horizontal = 8.dp, vertical = 3.dp),
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurface,
+        )
     }
 }
 
@@ -146,6 +167,7 @@ fun RecipeCard(recipe: Recipe, favorite: Boolean, onOpen: () -> Unit, onFavorite
                     ),
                 ),
             )
+            RegionBadge(recipe.region, Modifier.align(Alignment.TopStart).padding(8.dp))
             RecipeMetadata(
                 recipe,
                 Modifier.align(Alignment.BottomCenter).fillMaxWidth().padding(horizontal = 10.dp, vertical = 8.dp),

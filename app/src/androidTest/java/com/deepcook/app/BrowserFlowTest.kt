@@ -219,14 +219,37 @@ class BrowserFlowTest {
         compose.onNodeWithContentDescription("搜索菜谱").performClick()
         compose.onNodeWithText("难度", substring = false).performClick()
         compose.onNodeWithText("1/5", substring = false).performClick()
-        compose.waitUntil(5_000) { compose.onAllNodesWithText("找到 4 道菜谱").fetchSemanticsNodes().isNotEmpty() }
+        compose.waitUntil(5_000) { compose.onAllNodesWithText("找到 18 道菜谱").fetchSemanticsNodes().isNotEmpty() }
         compose.onNodeWithText("1/5", substring = false).performClick()
         compose.onNodeWithText("3/5", substring = false).performClick()
-        compose.waitUntil(5_000) { compose.onAllNodesWithText("找到 7 道菜谱").fetchSemanticsNodes().isNotEmpty() }
+        compose.waitUntil(5_000) { compose.onAllNodesWithText("找到 42 道菜谱").fetchSemanticsNodes().isNotEmpty() }
         compose.onNodeWithText("3/5", substring = false).performClick()
         compose.onNodeWithText("5/5", substring = false).performClick()
-        compose.waitUntil(5_000) { compose.onAllNodesWithText("找到 0 道菜谱").fetchSemanticsNodes().isNotEmpty() }
+        compose.waitUntil(5_000) { compose.onAllNodesWithText("找到 1 道菜谱").fetchSemanticsNodes().isNotEmpty() }
         compose.onAllNodesWithText("清除筛选")[0].performClick()
+        compose.waitUntil(5_000) { compose.onAllNodesWithText("找到 112 道菜谱").fetchSemanticsNodes().isNotEmpty() }
+    }
+
+    @Test fun categoryPickerFiltersByRegionAndKeepsDishStylesSeparate() {
+        compose.onNodeWithContentDescription("搜索菜谱").performClick()
+        // Regions are listed before dish styles, so the first entries stay on screen.
+        compose.onNodeWithText("分类", substring = false).performClick()
+        compose.onNodeWithText("中式", substring = false).performClick()
+        compose.waitUntil(5_000) { compose.onAllNodesWithText("找到 52 道菜谱").fetchSemanticsNodes().isNotEmpty() }
+        compose.onNodeWithText("中式", substring = false).performClick()
+        compose.onNodeWithText("韩式", substring = false).performClick()
         compose.waitUntil(5_000) { compose.onAllNodesWithText("找到 12 道菜谱").fetchSemanticsNodes().isNotEmpty() }
+        compose.onNodeWithText("韩式", substring = false).performClick()
+        compose.onNodeWithText("全部", substring = false).performClick()
+        compose.waitUntil(5_000) { compose.onAllNodesWithText("找到 112 道菜谱").fetchSemanticsNodes().isNotEmpty() }
+    }
+
+    @Test fun cardsAndDetailShowTheRegionTag() {
+        compose.waitUntil(5_000) {
+            compose.onAllNodesWithContentDescription("地域 中式", useUnmergedTree = true)
+                .fetchSemanticsNodes().isNotEmpty()
+        }
+        compose.onNodeWithText("红烧肉").performClick()
+        compose.onNode(hasContentDescription("地域 中式"), useUnmergedTree = true).assertExists()
     }
 }
