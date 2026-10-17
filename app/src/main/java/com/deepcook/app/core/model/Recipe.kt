@@ -18,8 +18,8 @@ data class RecipeStep(
 
 @Serializable
 data class RecipeSource(
-    val author: String = "DeepCook 示例内容",
-    val license: String = "自编演示菜谱，未经独立试做验证；图片来自 HowToCook（Unlicense）。",
+    val author: String = "无",
+    val license: String = "无",
     val url: String? = null,
     val imageSource: String? = null,
 )
@@ -41,13 +41,15 @@ data class Recipe(
     val notes: List<String> = emptyList(),
     val source: RecipeSource = RecipeSource(),
     val featured: Boolean = false,
+    val aliases: List<String> = emptyList(),
+    val collection: String = "",
 ) {
     init {
         require(difficulty == null || difficulty in 1..5) { "菜谱难度必须为 1–5 分" }
     }
 }
 
-val RecipeCategories = listOf("全部", "家常菜", "快手菜", "素食", "肉类", "海鲜", "汤羹")
+val RecipeCategories = listOf("全部", "家常菜", "快手菜", "素食", "肉类", "海鲜", "汤羹", "主食", "早餐", "甜点", "饮品", "酱料", "半成品", "国际菜")
 
 enum class TimeFilter(val label: String) {
     ANY("不限用时"),
@@ -78,7 +80,8 @@ data class RecipeFilter(
 fun List<Recipe>.filteredBy(filter: RecipeFilter): List<Recipe> {
     val terms = filter.query.trim().split(Regex("\\s+")).filter(String::isNotBlank)
     return filter { recipe ->
-        val searchable = listOf(recipe.title) + recipe.ingredients.map(Ingredient::name)
+        val searchable =
+            listOf(recipe.title) + recipe.aliases + recipe.categories + recipe.ingredients.map(Ingredient::name)
         terms.all { term -> searchable.any { it.contains(term, ignoreCase = true) } } &&
             (filter.category == "全部" || filter.category in recipe.categories) &&
             filter.time.matches(recipe.minutes) &&

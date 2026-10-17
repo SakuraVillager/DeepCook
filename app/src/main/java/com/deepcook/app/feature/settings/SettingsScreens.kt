@@ -27,6 +27,7 @@ import com.deepcook.app.core.designsystem.*
 import com.deepcook.app.core.model.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.json.*
 
 @Composable
 fun SettingsScreen(
@@ -34,6 +35,7 @@ fun SettingsScreen(
     preferences: UserPreferences,
     favorites: Int,
     recent: Int,
+    recipes: List<Recipe>,
     onNavigate: (String) -> Unit,
     onBack: () -> Unit,
     onPreferences: ((UserPreferences) -> UserPreferences) -> Unit,
@@ -41,6 +43,25 @@ fun SettingsScreen(
     onClearFavorites: () -> Unit,
     onReset: () -> Unit,
 ) {
+    val context = LocalContext.current
+    val sourceEntries by produceState<List<String>>(emptyList(), section) {
+        if (section == "photo_sources") {
+            value = withContext(Dispatchers.IO) {
+                runCatching {
+                    val manifest = context.assets.open("catalog_sources.json").bufferedReader().use { it.readText() }
+                    Json.parseToJsonElement(manifest).jsonObject.getValue("recipes").jsonArray.map { entry ->
+                        entry.jsonObject.let { row ->
+                            listOf(
+                                "recipeId", "repository", "commit", "path", "license", "url",
+                                "imagePath", "imageUrl", "originalSha256",
+                            )
+                                .joinToString("\n") { key -> "$key: ${row[key]?.jsonPrimitive?.contentOrNull ?: "无"}" }
+                        }
+                    }
+                }.getOrElse { listOf("暂时无法读取来源清单，请返回重试。") }
+            }
+        }
+    }
     val title = when (section) {
         "appearance" -> "外观"
         "reading" -> "阅读"
@@ -48,7 +69,7 @@ fun SettingsScreen(
         "sources" -> "内容与来源"
         "about" -> "关于 DeepCook"
         "licenses" -> "开源许可"
-        "photo_sources" -> "图片来源清单"
+        "photo_sources" -> "菜谱与图片来源清单"
         else -> "设置"
     }
     Scaffold(topBar = { PageTitle(title, onBack) }) { padding ->
@@ -151,19 +172,19 @@ fun SettingsScreen(
                         DataPreferences(favorites, recent, onClearRecent, onClearFavorites, onReset)
                     }
                     "sources" -> item {
-                        PreferenceGroupHeader("示例内容")
+                        PreferenceGroupHeader("收录内容")
                         PreferenceRow(
-                            "12 道家常菜",
-                            "菜谱文字为 DeepCook 自编的演示内容，未经独立试做验证。用时为内容中的参考值，请结合食材大小、锅具和实际状态判断。",
+                            "${recipes.size} 道菜谱 · ${recipes.count { it.id.startsWith("world-") }} 道国际菜中文译文",
+                            "中文内容来自 HowToCook；国际菜来自 Based Cooking，材料与步骤已翻译为中文。未经团队逐道试做。用时与难度沿用来源明确标注的值，缺失或口径冲突时显示“无”。难度以 5 分制显示，不根据步骤数猜测。",
                             Icons.AutoMirrored.Rounded.MenuBook,
                         )
                         PreferenceRow(
                             "图片与来源",
-                            "配图来自 Anduin2017/HowToCook 开源仓库，按其 Unlicense 声明使用。图片经过方向校正、缩放和 JPEG 转换；具体固定版本与来源保存在随包清单中。",
+                            "菜谱与配图来自 HowToCook 和 Based Cooking，均按仓库的 Unlicense 声明使用。配图经过方向校正、缩放和 JPEG 转换；未找到对应配图时显示餐具占位。原始路径、固定版本和内容校验值保存在随包清单中。",
                             Icons.Rounded.PhotoLibrary,
                         )
                         PreferenceRow("原始份量", "材料用量仅展示菜谱原始份量。本版不进行人数换算，也不修改配方。", Icons.Rounded.Restaurant)
-                        PreferenceRow("配图授权清单", "查看每张图片的来源路径与固定版本。", Icons.Rounded.Description, onClick = {
+                        PreferenceRow("菜谱与配图来源清单", "查看每道菜谱、图片的来源路径与固定版本。", Icons.Rounded.Description, onClick = {
                             onNavigate("photo_sources")
                         })
                     }
@@ -180,10 +201,22 @@ fun SettingsScreen(
                         }
                         PreferenceRow("属于日常的小厨房", "离线浏览菜谱、收藏喜欢的味道，以更舒适的方式阅读每一个步骤。", Icons.Rounded.SoupKitchen)
                         PreferenceRow("开源许可", "组件来源与第三方软件说明", Icons.Rounded.Code, onClick = { onNavigate("licenses") })
-                        PreferenceRow("内容与来源", "示例菜谱及图片使用说明", Icons.Rounded.Info, onClick = { onNavigate("sources") })
+                        PreferenceRow("内容与来源", "收录菜谱及图片使用说明", Icons.Rounded.Info, onClick = { onNavigate("sources") })
                     }
                     "licenses" -> item { LicenseContent() }
-                    "photo_sources" -> item { AssetText("photo_sources.json") }
+                    "photo_sources" -> {
+                        if (sourceEntries.isEmpty()) item { Text("正在读取…", Modifier.padding(16.dp)) }
+                        items(sourceEntries.size) { index ->
+                            SelectionContainer {
+                                Text(
+                                    sourceEntries[index],
+                                    Modifier.padding(16.dp),
+                                    style = MaterialTheme.typography.bodySmall,
+                                )
+                            }
+                            HorizontalDivider()
+                        }
+                    }
                     else -> item {
                         PreferenceGroupHeader("使用偏好")
                         PreferenceRow(
@@ -202,7 +235,7 @@ fun SettingsScreen(
                         PreferenceRow("本地数据", "$favorites 道收藏 · $recent 条浏览记录", Icons.Rounded.Storage, onClick = {
                             onNavigate("data")
                         })
-                        PreferenceRow("内容与来源", "示例菜谱、图片与授权说明", Icons.Rounded.Description, onClick = {
+                        PreferenceRow("内容与来源", "收录菜谱、图片与授权说明", Icons.Rounded.Description, onClick = {
                             onNavigate("sources")
                         })
                         PreferenceRow(
@@ -332,8 +365,10 @@ private fun LicenseContent() {
     PreferenceGroupHeader("界面组件")
     PreferenceRow("Mihon · Apache License 2.0", "设置行布局与主题预览参考 Mihon 组件，已为 DeepCook 修改。", Icons.Rounded.Code)
     AssetText("MIHON-LICENSE.txt")
-    PreferenceGroupHeader("图片")
+    PreferenceGroupHeader("HowToCook 菜谱与图片 · Unlicense")
     AssetText("HOWTOCOOK-LICENSE.txt")
+    PreferenceGroupHeader("Based Cooking 菜谱与图片 · Unlicense")
+    AssetText("BASED-COOKING-LICENSE.txt")
     PreferenceGroupHeader("第三方软件")
     PreferenceRow(
         "AndroidX / Kotlin / Coroutines / Serialization / Coil / Material Motion Compose",

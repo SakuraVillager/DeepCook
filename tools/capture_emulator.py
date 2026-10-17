@@ -22,6 +22,7 @@ def main():
     parser.add_argument("--reset-user-data", action="store_true", help="Reset DeepCook data on the dedicated emulator first")
     parser.add_argument("--detail-only", action="store_true", help="Capture home, detail, reader and large-font home")
     parser.add_argument("--home-only", action="store_true", help="Capture home, favorite selection and large-font home")
+    parser.add_argument("--catalog-only", action="store_true", help="Capture imported catalog, missing metadata and translated recipe")
     args = parser.parse_args()
     if not args.serial.startswith("emulator-"):
         parser.error("This tool only operates on a dedicated Android emulator")
@@ -60,6 +61,24 @@ def main():
         shell("am", "force-stop", "com.deepcook.app")
         shell("am", "start", "-W", "-n", "com.deepcook.app/.MainActivity")
         capture("home-412")
+        if args.catalog_only:
+            tap("搜索菜谱")
+            capture("catalog-all")
+            root = hierarchy()
+            field = next(node for node in root.iter("node") if node.get("class") == "android.widget.EditText")
+            x1, y1, x2, y2 = map(int, re.findall(r"\d+", field.get("bounds")))
+            shell("input", "tap", (x1+x2)//2, (y1+y2)//2)
+            shell("input", "text", "miso")
+            time.sleep(1)
+            shell("input", "keyevent", "66")
+            capture("catalog-international-search")
+            tap("日式味噌汤")
+            capture("catalog-missing-parameters")
+            tap("材料")
+            capture("catalog-chinese-ingredients")
+            tap("分步阅读")
+            capture("catalog-chinese-reader")
+            return
         if args.home_only:
             tap("收藏菜谱")
             capture("home-favorite-selected")

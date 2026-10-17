@@ -72,10 +72,10 @@ fun FavoriteButton(
 @Composable
 fun RecipeMetadata(recipe: Recipe, modifier: Modifier = Modifier, compact: Boolean = false, onImage: Boolean = false) {
     val color = if (onImage) Color.White else MaterialTheme.colorScheme.onSurfaceVariant
-    val time = recipe.minutes?.toString() ?: "—"
-    val difficulty = recipe.difficulty?.let { "$it/5" } ?: "—"
-    val timeDescription = recipe.minutes?.let { "用时 $it 分钟" } ?: "用时未标注"
-    val difficultyDescription = recipe.difficulty?.let { "难度 $it/5" } ?: "难度未标注"
+    val time = recipe.minutes?.toString() ?: "无"
+    val difficulty = recipe.difficulty?.let { "$it/5" } ?: "无"
+    val timeDescription = recipe.minutes?.let { "用时 $it 分钟" } ?: "用时无"
+    val difficultyDescription = recipe.difficulty?.let { "难度 $it/5" } ?: "难度无"
     if (onImage) {
         Row(
             modifier,

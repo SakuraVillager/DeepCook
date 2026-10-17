@@ -196,7 +196,9 @@ fun DetailScreen(
                         )
                         Text(recipe.description, style = textStyle)
                         Text(
-                            "示例菜谱 · 仅展示原始份量",
+                            "${recipe.collection.ifBlank {
+                                "菜谱"
+                            }} · ${if (recipe.id.startsWith("world-")) "中文译文" else "原文整理"} · 原始份量",
                             color = MaterialTheme.colorScheme.primary,
                             style = MaterialTheme.typography.labelLarge,
                         )
@@ -374,11 +376,11 @@ private fun ObservationNote(text: String) {
 
 @Composable
 fun ReaderScreen(recipe: Recipe, initialStep: String?, preferences: UserPreferences, onBack: (String) -> Unit) {
-    var index by rememberSaveable(recipe.id) {
+    var index by rememberSaveable(recipe.id, recipe.version) {
         mutableIntStateOf(recipe.steps.indexOfFirst { it.id == initialStep }.coerceAtLeast(0))
     }
     var showDirectory by remember { mutableStateOf(false) }
-    val step = recipe.steps[index]
+    val step = recipe.steps[index.coerceIn(recipe.steps.indices)]
     androidx.activity.compose.BackHandler { onBack(step.id) }
     KeepAwake(preferences.keepScreenOn)
     Scaffold(

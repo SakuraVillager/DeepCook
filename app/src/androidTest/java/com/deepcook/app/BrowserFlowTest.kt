@@ -3,6 +3,8 @@ package com.deepcook.app
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.deepcook.app.core.model.Recipe
+import com.deepcook.app.data.AssetRecipeRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
@@ -12,6 +14,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class BrowserFlowTest {
     @get:Rule val compose = createAndroidComposeRule<MainActivity>()
+    private fun catalog(): List<Recipe> = runBlocking { AssetRecipeRepository(compose.activity).recipes() }
 
     @Before fun resetUserData() {
         val repo = (compose.activity.application as DeepCookApplication).container.userData
@@ -24,22 +27,24 @@ class BrowserFlowTest {
     }
 
     @Test fun searchByIngredientOpensRecipeAndReader() {
+        val stepCount = catalog().first { it.id == "steamed-fish" }.steps.size
         compose.onNodeWithText("搜索菜名、食材").assertDoesNotExist()
         compose.onNodeWithContentDescription("搜索菜谱").assertIsDisplayed().performClick()
         compose.onNode(hasSetTextAction()).performTextInput("鲈鱼")
         compose.waitUntil(5_000) { compose.onAllNodesWithText("找到 1 道菜谱").fetchSemanticsNodes().isNotEmpty() }
         compose.onNodeWithText("清蒸鲈鱼").performClick()
         compose.onNodeWithText("分步阅读").performClick()
-        compose.onNodeWithText("第 1 / 4 步").assertIsDisplayed()
+        compose.onNodeWithText("第 1 / $stepCount 步").assertIsDisplayed()
         compose.onNodeWithText("上一步").assertIsNotEnabled()
         compose.onNodeWithText("下一步").performClick()
-        compose.onNodeWithText("第 2 / 4 步").assertIsDisplayed()
+        compose.onNodeWithText("第 2 / $stepCount 步").assertIsDisplayed()
         compose.activityRule.scenario.recreate()
-        compose.onNodeWithText("第 2 / 4 步").assertIsDisplayed()
+        compose.onNodeWithText("第 2 / $stepCount 步").assertIsDisplayed()
         compose.onNodeWithContentDescription("步骤目录").performClick()
-        compose.onNodeWithText("淋汁上桌").performClick()
+        compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("步骤 $stepCount"))
+        compose.onNodeWithText("步骤 $stepCount").performClick()
         compose.onNodeWithText("返回菜谱").performClick()
-        compose.onNodeWithText("放大阅读 · 第 4 步").assertIsDisplayed()
+        compose.onNodeWithText("放大阅读 · 第 $stepCount 步").assertIsDisplayed()
         compose.activityRule.scenario.onActivity { it.onBackPressedDispatcher.onBackPressed() }
         compose.onNodeWithText("找到 1 道菜谱").assertIsDisplayed()
         compose.onNode(hasSetTextAction()).assertTextContains("鲈鱼")
@@ -184,17 +189,18 @@ class BrowserFlowTest {
     }
 
     @Test fun stepCardsOpenTheSelectedStepAndKeepItsPlaceOnReturn() {
+        val stepCount = catalog().first { it.id == "braised-pork" }.steps.size
         compose.onNodeWithText("红烧肉").performClick()
         compose.onNodeWithText("步骤", substring = false).performClick()
         val tabs = compose.onNode(hasText("步骤", substring = false) and hasClickAction()).getUnclippedBoundsInRoot()
-        val heading = compose.onNodeWithText("烹饪步骤 · 共 5 步").getUnclippedBoundsInRoot()
+        val heading = compose.onNodeWithText("烹饪步骤 · 共 $stepCount 步").getUnclippedBoundsInRoot()
         org.junit.Assert.assertTrue("The pinned tabs must not cover the section heading", heading.top >= tabs.bottom)
         compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("放大阅读 · 第 2 步"))
         compose.onNodeWithText("放大阅读 · 第 2 步").performClick()
-        compose.onNodeWithText("第 2 / 5 步").assertIsDisplayed()
-        compose.onNodeWithText("煸出油脂").assertIsDisplayed()
+        compose.onNodeWithText("第 2 / $stepCount 步").assertIsDisplayed()
+        compose.onNodeWithText("步骤 2").assertIsDisplayed()
         compose.onNodeWithText("上一步").performClick()
-        compose.onNodeWithText("第 1 / 5 步").assertIsDisplayed()
+        compose.onNodeWithText("第 1 / $stepCount 步").assertIsDisplayed()
         compose.onNodeWithText("上一步").assertIsNotEnabled()
         compose.onNodeWithContentDescription("返回").performClick()
         compose.onNodeWithText("放大阅读 · 第 1 步").assertIsDisplayed()
@@ -216,17 +222,50 @@ class BrowserFlowTest {
     }
 
     @Test fun fivePointDifficultyFilterUsesScoresAndCanBeCleared() {
+        val recipes = catalog()
         compose.onNodeWithContentDescription("搜索菜谱").performClick()
         compose.onNodeWithText("难度", substring = false).performClick()
         compose.onNodeWithText("1/5", substring = false).performClick()
-        compose.waitUntil(5_000) { compose.onAllNodesWithText("找到 4 道菜谱").fetchSemanticsNodes().isNotEmpty() }
+        compose.waitUntil(5_000) {
+            compose.onAllNodesWithText(
+                "找到 ${recipes.count {
+                    it.difficulty == 1
+                }} 道菜谱",
+            ).fetchSemanticsNodes().isNotEmpty()
+        }
         compose.onNodeWithText("1/5", substring = false).performClick()
         compose.onNodeWithText("3/5", substring = false).performClick()
-        compose.waitUntil(5_000) { compose.onAllNodesWithText("找到 7 道菜谱").fetchSemanticsNodes().isNotEmpty() }
+        compose.waitUntil(5_000) {
+            compose.onAllNodesWithText(
+                "找到 ${recipes.count {
+                    it.difficulty == 3
+                }} 道菜谱",
+            ).fetchSemanticsNodes().isNotEmpty()
+        }
         compose.onNodeWithText("3/5", substring = false).performClick()
         compose.onNodeWithText("5/5", substring = false).performClick()
-        compose.waitUntil(5_000) { compose.onAllNodesWithText("找到 0 道菜谱").fetchSemanticsNodes().isNotEmpty() }
+        compose.waitUntil(5_000) {
+            compose.onAllNodesWithText(
+                "找到 ${recipes.count {
+                    it.difficulty == 5
+                }} 道菜谱",
+            ).fetchSemanticsNodes().isNotEmpty()
+        }
         compose.onAllNodesWithText("清除筛选")[0].performClick()
-        compose.waitUntil(5_000) { compose.onAllNodesWithText("找到 12 道菜谱").fetchSemanticsNodes().isNotEmpty() }
+        compose.waitUntil(5_000) {
+            compose.onAllNodesWithText("找到 ${recipes.size} 道菜谱").fetchSemanticsNodes().isNotEmpty()
+        }
+    }
+
+    @Test fun internationalAliasOpensChineseRecipeWithMissingParameters() {
+        compose.onNodeWithContentDescription("搜索菜谱").performClick()
+        compose.onNode(hasSetTextAction()).performTextInput("miso")
+        compose.waitUntil(5_000) { compose.onAllNodesWithText("日式味噌汤").fetchSemanticsNodes().isNotEmpty() }
+        compose.onNodeWithContentDescription("难度无", substring = true).assertExists()
+        compose.onNodeWithText("日式味噌汤").performClick()
+        compose.onNodeWithText("Based Cooking · 中文译文 · 原始份量").assertIsDisplayed()
+        compose.onNodeWithContentDescription("用时无", substring = true).assertExists()
+        compose.onNodeWithText("分步阅读").performClick()
+        compose.onNodeWithText("锅中加水至约半锅，煮沸。").assertIsDisplayed()
     }
 }

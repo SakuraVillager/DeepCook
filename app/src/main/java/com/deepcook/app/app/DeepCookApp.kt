@@ -183,6 +183,7 @@ fun DeepCookApp(vm: AppViewModel, state: AppUiState) {
                         SettingsScreen(
                             settingsEntry.toRoute<Settings>().section, state.user.preferences,
                             state.user.favorites.size, state.user.recent.size,
+                            state.recipes,
                             { openPage(Settings(it)) }, { nav.popBackStack() },
                             vm::preferences, vm::clearRecent, vm::clearFavorites, vm::resetPreferences,
                         )

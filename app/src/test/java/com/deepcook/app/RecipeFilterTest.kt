@@ -61,4 +61,14 @@ class RecipeFilterTest {
         assertThrows(IllegalArgumentException::class.java) { recipes.first().copy(difficulty = 0) }
         assertThrows(IllegalArgumentException::class.java) { recipes.first().copy(difficulty = 6) }
     }
+
+    @Test fun internationalRecipesMatchChineseEnglishAliasesAndCuisine() {
+        val world = recipes.first().copy(
+            title = "希腊酸奶黄瓜酱",
+            aliases = listOf("Tzatziki"),
+            categories = listOf("国际菜", "希腊风味"),
+        )
+        assertEquals(listOf(world), listOf(world).filteredBy(RecipeFilter(query = "tzatziki 希腊")))
+        assertTrue(listOf(world).filteredBy(RecipeFilter(query = "法国")).isEmpty())
+    }
 }
