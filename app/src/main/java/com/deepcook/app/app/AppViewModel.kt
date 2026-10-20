@@ -1,10 +1,13 @@
 package com.deepcook.app.app
 
+import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.deepcook.app.core.model.Recipe
 import com.deepcook.app.core.model.UserData
 import com.deepcook.app.core.model.UserPreferences
+import com.deepcook.app.core.model.UserProfile
+import com.deepcook.app.data.AvatarStore
 import com.deepcook.app.data.CoverStore
 import com.deepcook.app.data.RecipeRepository
 import com.deepcook.app.data.UserDataRepository
@@ -19,6 +22,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import java.io.IOException
 import java.util.concurrent.CancellationException
 
 data class AppUiState(
@@ -40,6 +44,7 @@ class AppViewModel(
     private val userData: UserDataRepository,
     private val userRecipes: UserRecipeStore,
     private val covers: CoverStore,
+    private val avatars: AvatarStore,
 ) : ViewModel() {
     private val mutableState = MutableStateFlow(AppUiState())
     val state = mutableState.asStateFlow()
@@ -127,6 +132,38 @@ class AppViewModel(
     fun visit(id: String) = mutate { userData.recordVisit(id) }
     fun removeVisit(id: String) = mutate { userData.removeVisit(id) }
     fun preferences(transform: (UserPreferences) -> UserPreferences) = mutate { userData.updatePreferences(transform) }
+    fun updateProfile(transform: (UserProfile) -> UserProfile) = mutate { userData.updateProfile(transform) }
+
+    /** Decodes the picked photo for the cropper; null when the file cannot be read. */
+    suspend fun avatarSource(uri: String): Bitmap? = avatars.decode(uri)
+
+    /** Stores the cropped square and points the profile at it, replacing the old file. */
+    fun saveAvatar(bitmap: Bitmap) = viewModelScope.launch {
+        val previous = mutableState.value.user.profile.avatar
+        try {
+            val saved = avatars.save(bitmap, previous) ?: throw IOException("头像文件写入失败")
+            try {
+                userData.updateProfile { it.copy(avatar = saved) }
+            } catch (error: Exception) {
+                runCatching { avatars.delete(saved) }
+                throw error
+            }
+            messageChannel.send(AppMessage("头像已更新"))
+        } catch (error: Exception) {
+            if (error is CancellationException) throw error
+            messageChannel.send(AppMessage("头像没能保存，请换一张试试。"))
+        }
+    }
+
+    fun removeAvatar() {
+        val previous = mutableState.value.user.profile.avatar
+        mutate {
+            userData.updateProfile { it.copy(avatar = null) }
+            runCatching { avatars.delete(previous) }
+            messageChannel.send(AppMessage("已移除头像"))
+        }
+    }
+
     fun clearRecent() = mutate {
         userData.clearRecent()
         messageChannel.send(AppMessage("已清除最近浏览"))

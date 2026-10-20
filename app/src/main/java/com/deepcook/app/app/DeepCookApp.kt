@@ -36,6 +36,7 @@ import com.deepcook.app.feature.authoring.MyRecipesScreen
 import com.deepcook.app.feature.authoring.RecipeEditorScreen
 import com.deepcook.app.feature.authoring.RecipeEditorViewModel
 import com.deepcook.app.feature.browse.*
+import com.deepcook.app.feature.profile.ProfileInfoScreen
 import com.deepcook.app.feature.recipe.*
 import com.deepcook.app.feature.search.SearchViewModel
 import com.deepcook.app.feature.settings.SettingsScreen
@@ -62,6 +63,9 @@ import java.util.UUID
 @Serializable data object Recent
 
 @Serializable data object MyRecipes
+
+/** Name, picture, and taste tags; reached by tapping the heading on the profile page. */
+@Serializable data object ProfileInfo
 
 /** [recipeId] null means "a new recipe"; an id means "edit that one". */
 @Serializable data class RecipeEditor(val recipeId: String? = null)
@@ -164,6 +168,21 @@ fun DeepCookApp(vm: AppViewModel, state: AppUiState, container: AppContainer) {
                             onRecent = { openPage(Recent) },
                             onMyRecipes = { openPage(MyRecipes) },
                             onAddRecipe = { openPage(RecipeEditor()) },
+                            onProfile = { openPage(ProfileInfo) },
+                        )
+                    }
+                    composable<ProfileInfo> {
+                        ProfileInfoScreen(
+                            profile = state.user.profile,
+                            onBack = { nav.popBackStack() },
+                            onName = { name -> vm.updateProfile { it.copy(displayName = name) } },
+                            onToggleLike = { tag, on -> vm.updateProfile { it.withLike(tag, on) } },
+                            onToggleAvoid = { tag, on -> vm.updateProfile { it.withAvoid(tag, on) } },
+                            onClearLikes = { vm.updateProfile { it.copy(likes = emptySet()) } },
+                            onClearAvoids = { vm.updateProfile { it.copy(avoids = emptySet()) } },
+                            loadPhoto = vm::avatarSource,
+                            onSaveAvatar = vm::saveAvatar,
+                            onRemoveAvatar = vm::removeAvatar,
                         )
                     }
                     composable<Recent> {
@@ -268,6 +287,7 @@ private fun HomeScreen(
     onRecent: () -> Unit,
     onMyRecipes: () -> Unit,
     onAddRecipe: () -> Unit,
+    onProfile: () -> Unit,
 ) {
     val nav = rememberNavController()
     val entry by nav.currentBackStackEntryAsState()
@@ -376,7 +396,7 @@ private fun HomeScreen(
                     composable<Profile> {
                         ProfileScreen(
                             state, onSettings, { selectTab(1) }, onRecent, onMyRecipes, onAddRecipe,
-                            onOpen, vm::favorite, { selectTab(0) },
+                            onOpen, vm::favorite, { selectTab(0) }, onProfile,
                         )
                     }
                 }

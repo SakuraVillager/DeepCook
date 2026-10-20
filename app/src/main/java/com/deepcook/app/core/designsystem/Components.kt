@@ -40,6 +40,32 @@ fun ChefMark(modifier: Modifier = Modifier) {
 }
 
 /**
+ * The profile picture. A chosen photo fills a circle; without one the chef mark stands in, so the
+ * heading looks intentional before the user picks anything.
+ */
+@Composable
+fun ProfileAvatar(avatar: String?, modifier: Modifier = Modifier) {
+    if (avatar == null) {
+        Image(
+            painterResource(R.drawable.ic_launcher),
+            null,
+            modifier.clip(CircleShape).background(MaterialTheme.colorScheme.secondaryContainer),
+            contentScale = ContentScale.Crop,
+        )
+    } else {
+        AsyncImage(
+            model = avatar,
+            contentDescription = "头像",
+            placeholder = painterResource(R.drawable.ic_launcher),
+            error = painterResource(R.drawable.ic_launcher),
+            fallback = painterResource(R.drawable.ic_launcher),
+            contentScale = ContentScale.Crop,
+            modifier = modifier.clip(CircleShape),
+        )
+    }
+}
+
+/**
  * Cover art. Bundled recipes store an asset-relative path; a user recipe stores the `file:` URI
  * of the copy in the app's own storage, so both forms arrive here as [Recipe.cover].
  */

@@ -24,7 +24,13 @@ class MainActivity : ComponentActivity() {
                 viewModel(
                     factory = viewModelFactory {
                         initializer {
-                            AppViewModel(container.recipes, container.userData, container.userRecipes, container.covers)
+                            AppViewModel(
+                                container.recipes,
+                                container.userData,
+                                container.userRecipes,
+                                container.covers,
+                                container.avatars,
+                            )
                         }
                     },
                 )

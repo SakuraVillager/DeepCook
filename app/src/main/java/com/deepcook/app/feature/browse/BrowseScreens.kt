@@ -257,6 +257,7 @@ fun ProfileScreen(
     onOpen: (String) -> Unit,
     onFavorite: (String) -> Unit,
     onFind: () -> Unit,
+    onProfile: () -> Unit,
 ) {
     val favorites = state.user.favorites.mapNotNull { saved -> state.recipes.find { it.id == saved.recipeId } }
     val recent = state.user.recent.mapNotNull { saved -> state.recipes.find { it.id == saved.recipeId } }.take(3)
@@ -273,15 +274,23 @@ fun ProfileScreen(
         ) {
             item {
                 Row(
-                    Modifier.padding(vertical = 8.dp),
+                    Modifier
+                        .clip(RoundedCornerShape(20.dp))
+                        .clickable(onClickLabel = "编辑用户信息", onClick = onProfile)
+                        .padding(vertical = 8.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
                 ) {
-                    ChefMark(Modifier.size(72.dp))
-                    Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                        Text("我的厨房", style = MaterialTheme.typography.headlineMedium)
+                    ProfileAvatar(state.user.profile.avatar, Modifier.size(72.dp))
+                    Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                        Text(state.user.profile.name, style = MaterialTheme.typography.headlineMedium)
                         Text("收藏好菜，慢慢下厨。", color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
+                    Icon(
+                        Icons.AutoMirrored.Rounded.ArrowForward,
+                        null,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
                 }
             }
             item {

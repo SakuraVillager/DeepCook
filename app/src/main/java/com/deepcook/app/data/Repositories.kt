@@ -10,6 +10,7 @@ import com.deepcook.app.core.model.Recipe
 import com.deepcook.app.core.model.RecipeFilter
 import com.deepcook.app.core.model.UserData
 import com.deepcook.app.core.model.UserPreferences
+import com.deepcook.app.core.model.UserProfile
 import com.deepcook.app.core.model.filteredBy
 import com.deepcook.app.data.lookup.CatalogFirstLookup
 import com.deepcook.app.data.lookup.HowToCookLookup
@@ -53,6 +54,7 @@ interface UserDataRepository {
     suspend fun recordVisit(id: String)
     suspend fun removeVisit(id: String)
     suspend fun updatePreferences(transform: (UserPreferences) -> UserPreferences)
+    suspend fun updateProfile(transform: (UserProfile) -> UserProfile)
     suspend fun clearRecent()
     suspend fun clearFavorites()
     suspend fun resetPreferences()
@@ -96,6 +98,11 @@ class LocalUserDataRepository(private val store: DataStore<UserData>) : UserData
     override suspend fun updatePreferences(transform: (UserPreferences) -> UserPreferences) {
         store.updateData { it.copy(preferences = transform(it.preferences)) }
     }
+    override suspend fun updateProfile(transform: (UserProfile) -> UserProfile) {
+        // Sanitised on the way in: a stored tag this build no longer offers is dropped only when
+        // the profile is written, so reading an older file never loses data silently.
+        store.updateData { it.copy(profile = transform(it.profile).sanitized()) }
+    }
     override suspend fun clearRecent() {
         store.updateData { it.copy(recent = emptyList()) }
     }
@@ -128,4 +135,5 @@ class AppContainer(context: Context) {
     )
     val lookup: RecipeLookup = CatalogFirstLookup(recipes, HowToCookLookup(context))
     val covers = CoverStore(context)
+    val avatars = AvatarStore(context)
 }
