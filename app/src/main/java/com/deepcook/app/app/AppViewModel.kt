@@ -27,19 +27,25 @@ data class AppUiState(
     /** Just the user's own recipes, newest first, for the profile page. */
     val myRecipes: List<Recipe> = emptyList(),
     val user: UserData = UserData(),
+    val userLoaded: Boolean = false,
     val loading: Boolean = true,
     val contentError: String? = null,
     val userError: String? = null,
     val userRecipeError: String? = null,
+    val favoriteExamples: Map<String, Int> = emptyMap(),
 )
 
 data class AppMessage(val text: String, val undo: (suspend () -> Unit)? = null)
+
+fun AppUiState.favoriteCount(id: String): Int =
+    (favoriteExamples[id] ?: 0) + if (user.favorites.any { it.recipeId == id }) 1 else 0
 
 class AppViewModel(
     private val recipes: RecipeRepository,
     private val userData: UserDataRepository,
     private val userRecipes: UserRecipeStore,
     private val covers: CoverStore,
+    private val kitchen: com.deepcook.app.data.KitchenStore? = null,
 ) : ViewModel() {
     private val mutableState = MutableStateFlow(AppUiState())
     val state = mutableState.asStateFlow()
@@ -58,6 +64,12 @@ class AppViewModel(
         loadRecipes()
         observeUserData()
         observeUserRecipes()
+        viewModelScope.launch {
+            kitchen?.favoriteExamples?.catch { error ->
+                if (error is CancellationException) throw error
+                messageChannel.send(AppMessage("互动示例数据库暂时无法读取，原数据未被清除。"))
+            }?.collect { counts -> mutableState.value = mutableState.value.copy(favoriteExamples = counts) }
+        }
     }
 
     fun loadRecipes() {
@@ -81,7 +93,7 @@ class AppViewModel(
             userData.data.catch { error ->
                 if (error is CancellationException) throw error
                 mutableState.value = mutableState.value.copy(userError = "本地收藏与设置暂时无法读取，原数据未被清除。")
-            }.collect { data -> mutableState.value = mutableState.value.copy(user = data, userError = null) }
+            }.collect { data -> mutableState.value = mutableState.value.copy(user = data, userLoaded = true, userError = null) }
         }
     }
 

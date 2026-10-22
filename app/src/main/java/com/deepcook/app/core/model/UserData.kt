@@ -32,6 +32,7 @@ data class UserData(
     val favorites: List<SavedRecipe> = emptyList(),
     val recent: List<SavedRecipe> = emptyList(),
     val preferences: UserPreferences = UserPreferences(),
+    val foodSetup: FoodSetup = FoodSetup(),
 ) {
     fun withFavorite(id: String, favorite: Boolean, now: Long): UserData = copy(
         favorites = if (favorite) {

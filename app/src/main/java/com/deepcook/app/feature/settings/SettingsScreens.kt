@@ -110,7 +110,7 @@ fun SettingsScreen(
                             }
                             PreferenceRow(
                                 "即时预览",
-                                "暖黄厨房使用奶油底色与焦糖金棕。系统动态色会跟随壁纸配色，支持 Android 12 及以上系统。",
+                                "暖黄厨房使用淡黄色底色与焦糖金棕强调色。系统动态色跟随壁纸配色，支持 Android 12 及以上系统。",
                                 Icons.Rounded.Palette,
                             )
                         }
@@ -150,7 +150,7 @@ fun SettingsScreen(
                             }
                             SwitchPreference(
                                 "显示步骤图片",
-                                "在菜谱详情与分步阅读中显示步骤配图。",
+                                "在菜谱详情与烹饪模式中显示步骤配图。",
                                 Icons.Rounded.Image,
                                 preferences.showStepImages,
                             ) { value ->
@@ -159,7 +159,7 @@ fun SettingsScreen(
                             PreferenceGroupHeader("专注阅读")
                             SwitchPreference(
                                 "阅读时保持亮屏",
-                                "仅在分步阅读页处于前台时生效。",
+                                "仅在烹饪模式页处于前台时生效。",
                                 Icons.Rounded.LightMode,
                                 preferences.keepScreenOn,
                             ) { value ->

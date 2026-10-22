@@ -39,6 +39,8 @@ import com.deepcook.app.feature.browse.*
 import com.deepcook.app.feature.recipe.*
 import com.deepcook.app.feature.search.SearchViewModel
 import com.deepcook.app.feature.settings.SettingsScreen
+import com.deepcook.app.feature.onboarding.FoodProfileScreen
+import com.deepcook.app.feature.onboarding.FoodProfileViewModel
 import kotlinx.serialization.Serializable
 import soup.compose.material.motion.animation.materialSharedAxisXIn
 import soup.compose.material.motion.animation.materialSharedAxisXOut
@@ -57,11 +59,14 @@ import java.util.UUID
 
 @Serializable data class RecipeDetail(val recipeId: String)
 
-@Serializable data class Reader(val recipeId: String, val initialStepId: String? = null)
+@Serializable
+data class Reader(val recipeId: String, val initialStepId: String? = null, val showTimers: Boolean = false)
 
 @Serializable data object Recent
 
 @Serializable data object MyRecipes
+
+@Serializable data object FoodPreferences
 
 /** [recipeId] null means "a new recipe"; an id means "edit that one". */
 @Serializable data class RecipeEditor(val recipeId: String? = null)
@@ -69,10 +74,26 @@ import java.util.UUID
 @Serializable data class Settings(val section: String = "main")
 
 @Composable
-fun DeepCookApp(vm: AppViewModel, state: AppUiState, container: AppContainer) {
+fun DeepCookApp(
+    vm: AppViewModel,
+    state: AppUiState,
+    container: AppContainer,
+    timerRecipe: String? = null,
+    onTimerHandled: () -> Unit = {},
+) {
     // The previous version used a flat root graph. Do not restore its transient
     // navigation bundle into this new home-container graph on an APK upgrade.
     val nav = key("root-navigation-v2") { rememberNavController() }
+    LaunchedEffect(timerRecipe, state.loading, state.recipes, state.userLoaded, state.user.foodSetup.completed) {
+        if (timerRecipe != null && !state.loading && state.userLoaded && state.user.foodSetup.completed && state.recipes.isNotEmpty()) {
+            if (state.recipes.any { it.id == timerRecipe }) {
+                nav.navigate(Reader(timerRecipe, showTimers = true)) {
+                    launchSingleTop = true
+                }
+            }
+            onTimerHandled()
+        }
+    }
     val entry by nav.currentBackStackEntryAsState()
     val activity = LocalActivity.current
     val light = MaterialTheme.colorScheme.background.luminance() > .5
@@ -94,6 +115,7 @@ fun DeepCookApp(vm: AppViewModel, state: AppUiState, container: AppContainer) {
                 message.text,
                 actionLabel = if (message.undo != null) "撤销" else null,
                 withDismissAction = true,
+                duration = SnackbarDuration.Short,
             )
             if (result == SnackbarResult.ActionPerformed) message.undo?.let(vm::undo)
         }
@@ -133,8 +155,10 @@ fun DeepCookApp(vm: AppViewModel, state: AppUiState, container: AppContainer) {
                     }
                 }
             }
-            if (state.loading) {
+            if (state.loading || (!state.userLoaded && state.userError == null)) {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
+            } else if (state.userLoaded && !state.user.foodSetup.completed) {
+                FoodSetupHost(container, editing = false)
             } else if (state.contentError != null) {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     EmptyState("菜谱暂不可用", state.contentError, "重试", vm::loadRecipes)
@@ -163,7 +187,7 @@ fun DeepCookApp(vm: AppViewModel, state: AppUiState, container: AppContainer) {
                             onSettings = { openPage(Settings()) },
                             onRecent = { openPage(Recent) },
                             onMyRecipes = { openPage(MyRecipes) },
-                            onAddRecipe = { openPage(RecipeEditor()) },
+                            onFoodPreferences = { openPage(FoodPreferences) },
                         )
                     }
                     composable<Recent> {
@@ -171,6 +195,9 @@ fun DeepCookApp(vm: AppViewModel, state: AppUiState, container: AppContainer) {
                             nav.getBackStackEntry<Home>().savedStateHandle["findRequest"] = System.nanoTime()
                             nav.popBackStack<Home>(inclusive = false)
                         }, { openPage(RecipeDetail(it)) }, vm::removeVisit)
+                    }
+                    composable<FoodPreferences> {
+                        FoodSetupHost(container, editing = true, onCancel = { nav.popBackStack() })
                     }
                     composable<RecipeDetail> { detailEntry ->
                         val args = detailEntry.toRoute<RecipeDetail>()
@@ -180,20 +207,47 @@ fun DeepCookApp(vm: AppViewModel, state: AppUiState, container: AppContainer) {
                         if (recipe == null) {
                             EmptyState("没有找到这道菜", "内容可能已更新，请返回重新选择。", "返回", { nav.popBackStack() })
                         } else {
+                            val community: CommunityViewModel = viewModel(
+                                key = "community-${recipe.id}",
+                                factory = viewModelFactory {
+                                    initializer {
+                                        CommunityViewModel(
+                                            recipe.id,
+                                            createSavedStateHandle(),
+                                            container.kitchen,
+                                            container.covers,
+                                        )
+                                    }
+                                },
+                            )
+                            val communityState by community.state.collectAsStateWithLifecycle()
                             DetailScreen(
                                 recipe, state.user.favorites.any { it.recipeId == recipe.id },
                                 state.user.preferences, restored,
                                 { vm.favorite(recipe.id) }, { nav.popBackStack() },
                                 { openPage(Reader(recipe.id, it)) }, { vm.visit(recipe.id) },
                                 { detailPhotoVisible = it },
+                                favoriteCount =
+                                (state.favoriteExamples[recipe.id] ?: 0) +
+                                    if (state.user.favorites.any { it.recipeId == recipe.id }) 1 else 0,
+                                ratingContent = { RatingSummary(communityState) { community.open("rating") } },
+                                nutritionContent = { NutritionSection(communityState) { community.open("nutrition") } },
+                                communityContent = { CommunitySection(communityState, community) },
                             )
+                            CommunityDialogs(communityState, community)
                         }
                     }
                     composable<Reader> { readerEntry ->
                         val args = readerEntry.toRoute<Reader>()
                         val recipe = state.recipes.find { it.id == args.recipeId }
                         if (recipe != null) {
-                            ReaderScreen(recipe, args.initialStepId, state.user.preferences) { step ->
+                            ReaderScreen(
+                                recipe,
+                                args.initialStepId,
+                                state.user.preferences,
+                                container.timers,
+                                args.showTimers,
+                            ) { step ->
                                 nav.previousBackStackEntry?.savedStateHandle?.set("readStep", step)
                                 nav.popBackStack()
                             }
@@ -267,7 +321,7 @@ private fun HomeScreen(
     onSettings: () -> Unit,
     onRecent: () -> Unit,
     onMyRecipes: () -> Unit,
-    onAddRecipe: () -> Unit,
+    onFoodPreferences: () -> Unit,
 ) {
     val nav = rememberNavController()
     val entry by nav.currentBackStackEntryAsState()
@@ -322,7 +376,7 @@ private fun HomeScreen(
         ) { padding ->
             Row(Modifier.fillMaxSize().padding(padding).consumeWindowInsets(padding)) {
                 if (rail) {
-                    NavigationRail {
+                    NavigationRail(containerColor = MaterialTheme.colorScheme.surfaceContainer) {
                         labels.forEachIndexed { index, label ->
                             NavigationRailItem(
                                 selected = selected == index,
@@ -375,12 +429,31 @@ private fun HomeScreen(
                     }
                     composable<Profile> {
                         ProfileScreen(
-                            state, onSettings, { selectTab(1) }, onRecent, onMyRecipes, onAddRecipe,
-                            onOpen, vm::favorite, { selectTab(0) },
+                            state,
+                            onSettings,
+                            onRecent,
+                            onMyRecipes,
+                            onFoodPreferences,
+                            onOpen,
+                            vm::favorite,
+                            { selectTab(0) },
                         )
                     }
                 }
             }
         }
     }
+}
+
+@Composable
+private fun FoodSetupHost(container: AppContainer, editing: Boolean, onCancel: () -> Unit = {}) {
+    val setup: FoodProfileViewModel = viewModel(
+        key = if (editing) "edit-food-preferences" else "first-food-preferences",
+        factory = viewModelFactory {
+            initializer { FoodProfileViewModel(container.userData, createSavedStateHandle(), editing) }
+        },
+    )
+    val state by setup.state.collectAsStateWithLifecycle()
+    LaunchedEffect(state.done) { if (state.done && editing) onCancel() }
+    FoodProfileScreen(setup, state, onCancel)
 }

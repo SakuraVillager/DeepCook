@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowForward
@@ -28,6 +29,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.deepcook.app.R
 import com.deepcook.app.app.AppUiState
+import com.deepcook.app.app.favoriteCount
 import com.deepcook.app.core.designsystem.*
 import com.deepcook.app.core.model.*
 import androidx.compose.foundation.lazy.grid.items as gridItems
@@ -40,9 +42,18 @@ fun DiscoverScreen(
     onFavorite: (String) -> Unit,
 ) {
     val wide = LocalWindowInfo.current.containerSize.width / LocalDensity.current.density >= 600f
+    val foodProfile = state.user.foodSetup.profile
+    val personalized = foodProfile.hasAnswers
+    val recommendations = remember(state.recipes, foodProfile) { state.recipes.forFoodProfile(foodProfile) }
     Scaffold(topBar = {
         TopAppBar(
-            title = { Text(stringResource(R.string.app_name), color = MaterialTheme.colorScheme.primary) },
+            title = {
+                Text(
+                    stringResource(R.string.app_name),
+                    style = MaterialTheme.typography.headlineSmall,
+                    color = MaterialTheme.colorScheme.primary,
+                )
+            },
             actions = {
                 IconButton(onClick = { onSearch("全部") }) {
                     Icon(Icons.Rounded.Search, stringResource(R.string.search_recipes))
@@ -61,14 +72,7 @@ fun DiscoverScreen(
             item(span = { GridItemSpan(maxLineSpan) }) {
                 Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
                     if (!wide) {
-                        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                            Text("今天，想做点什么？", style = MaterialTheme.typography.headlineSmall)
-                            Text(
-                                "从一道家常菜开始，好好吃饭。",
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            )
-                        }
+                        Text("今天，想做点什么？", style = MaterialTheme.typography.headlineSmall)
                     }
                     LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         // Regions first, then dish styles; both are picker values the
@@ -79,10 +83,15 @@ fun DiscoverScreen(
                             }, label = { Text(category) })
                         }
                     }
-                    SectionTitle("精选菜谱", "查看全部", { onSearch("全部") })
+                    SectionTitle(if (personalized) "合你口味" else "精选菜谱", "查看全部", { onSearch("全部") })
                 }
             }
-            gridItems(state.recipes.filter { it.featured }.take(6), key = { it.id }) { recipe ->
+            if (recommendations.isEmpty()) {
+                item(span = { GridItemSpan(maxLineSpan) }) {
+                    EmptyState("暂时没有合适的推荐", "试试搜索其他菜谱，或在饮食偏好中调整选择。", "去搜索", { onSearch("全部") })
+                }
+            }
+            gridItems(recommendations, key = { it.id }) { recipe ->
                 RecipeCard(
                     recipe,
                     state.user.favorites.any {
@@ -90,11 +99,12 @@ fun DiscoverScreen(
                     },
                     { onOpen(recipe.id) },
                     { onFavorite(recipe.id) },
+                    favoriteCount = state.favoriteCount(recipe.id),
                 )
             }
             item(span = { GridItemSpan(maxLineSpan) }) {
                 Text(
-                    "为日常的一餐，多留一点期待。",
+                    "收藏数为本地示例，新增收藏会在本机同步。",
                     Modifier.padding(vertical = 16.dp),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -122,18 +132,21 @@ fun SearchScreen(
     val focusRequester = remember { FocusRequester() }
     val recipes = remember(state.recipes, filter) { state.recipes.filteredBy(filter) }
     Scaffold(topBar = {
-        Row(
-            Modifier.statusBarsPadding().padding(end = 16.dp, top = 8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            BackButton(onBack)
-            CompactSearchField(
-                query = query,
-                onQuery = onQuery,
-                focusRequester = focusRequester,
-                onSearch = { focus.clearFocus() },
-                modifier = Modifier.weight(1f),
-            )
+        Column {
+            Row(
+                Modifier.statusBarsPadding().fillMaxWidth().heightIn(min = 56.dp).padding(horizontal = 4.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                BackButton(onBack)
+                InlineSearchField(
+                    query = query,
+                    onQuery = onQuery,
+                    focusRequester = focusRequester,
+                    onSearch = { focus.clearFocus() },
+                    modifier = Modifier.weight(1f),
+                )
+            }
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = .5f))
         }
     }) { padding ->
         LazyColumn(
@@ -199,7 +212,7 @@ fun SearchScreen(
                 RecipeRow(recipe, state.user.favorites.any { it.recipeId == recipe.id }, {
                     focus.clearFocus()
                     onOpen(recipe.id)
-                }, { onFavorite(recipe.id) })
+                }, { onFavorite(recipe.id) }, favoriteCount = state.favoriteCount(recipe.id))
             }
         }
     }
@@ -240,7 +253,11 @@ fun FavoritesScreen(state: AppUiState, onFind: () -> Unit, onOpen: (String) -> U
             ) {
                 items(favorites, key = {
                     it.id
-                }) { recipe -> RecipeRow(recipe, true, { onOpen(recipe.id) }, { onFavorite(recipe.id) }) }
+                }) { recipe ->
+                    RecipeRow(recipe, true, {
+                        onOpen(recipe.id)
+                    }, { onFavorite(recipe.id) }, favoriteCount = state.favoriteCount(recipe.id))
+                }
             }
         }
     }
@@ -250,17 +267,15 @@ fun FavoritesScreen(state: AppUiState, onFind: () -> Unit, onOpen: (String) -> U
 fun ProfileScreen(
     state: AppUiState,
     onSettings: () -> Unit,
-    onFavorites: () -> Unit,
     onRecent: () -> Unit,
     onMyRecipes: () -> Unit,
-    onAddRecipe: () -> Unit,
+    onFoodPreferences: () -> Unit,
     onOpen: (String) -> Unit,
     onFavorite: (String) -> Unit,
     onFind: () -> Unit,
 ) {
-    val favorites = state.user.favorites.mapNotNull { saved -> state.recipes.find { it.id == saved.recipeId } }
+    val favoriteIds = state.user.favorites.map { it.recipeId }.toSet()
     val recent = state.user.recent.mapNotNull { saved -> state.recipes.find { it.id == saved.recipeId } }.take(3)
-    val mine = state.myRecipes
     Scaffold(topBar = {
         PageTitle("我的", actions = {
             IconButton(onClick = onSettings) { Icon(Icons.Rounded.Settings, stringResource(R.string.settings)) }
@@ -280,117 +295,41 @@ fun ProfileScreen(
                     ChefMark(Modifier.size(72.dp))
                     Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
                         Text("我的厨房", style = MaterialTheme.typography.headlineMedium)
-                        Text("收藏好菜，慢慢下厨。", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text(
+                            "收藏好菜，慢慢下厨。",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                }
+            }
+            item {
+                Surface(onClick = onMyRecipes, color = Color.Transparent, shape = RoundedCornerShape(12.dp)) {
+                    Row(
+                        Modifier.fillMaxWidth().heightIn(min = 56.dp).padding(vertical = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    ) {
+                        Icon(Icons.Rounded.EditNote, null, Modifier.size(24.dp), tint = MaterialTheme.colorScheme.primary)
+                        Text("我的菜谱", Modifier.weight(1f), style = MaterialTheme.typography.titleMedium)
+                        Icon(Icons.AutoMirrored.Rounded.ArrowForward, null, Modifier.size(18.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 }
             }
             item {
                 Surface(
-                    onClick = onFavorites,
-                    shape = RoundedCornerShape(24.dp),
-                    color = MaterialTheme.colorScheme.primaryContainer,
+                    onClick = onFoodPreferences,
+                    shape = RoundedCornerShape(16.dp),
+                    color = MaterialTheme.colorScheme.surfaceContainerLowest,
+                    border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = .6f)),
                 ) {
-                    Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Column(Modifier.weight(1f)) {
-                                Text(
-                                    "我的收藏",
-                                    style = MaterialTheme.typography.titleLarge,
-                                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                                )
-                                Text("${favorites.size} 道想做的菜", color = MaterialTheme.colorScheme.onPrimaryContainer)
-                            }
-                            Icon(
-                                Icons.AutoMirrored.Rounded.ArrowForward,
-                                null,
-                                tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                            )
+                    Row(Modifier.fillMaxWidth().padding(14.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                        Icon(Icons.Rounded.Spa, null, Modifier.size(24.dp), tint = MaterialTheme.colorScheme.primary)
+                        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                            Text("饮食偏好", style = MaterialTheme.typography.titleMedium)
+                            Text("喜好、忌口与下厨习惯", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
-                        if (favorites.isNotEmpty()) {
-                            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                                repeat(3) { index ->
-                                    val recipe = favorites.getOrNull(index)
-                                    if (recipe != null) {
-                                        RecipeImage(
-                                            recipe.cover,
-                                            Modifier.weight(1f).aspectRatio(4f / 3).clip(RoundedCornerShape(12.dp)),
-                                        )
-                                    } else {
-                                        Spacer(Modifier.weight(1f))
-                                    }
-                                }
-                            }
-                        } else {
-                            Text(
-                                "遇到喜欢的菜，点一下星标就能留住。",
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                            )
-                        }
-                    }
-                }
-            }
-            item {
-                Surface(
-                    shape = RoundedCornerShape(24.dp),
-                    color = MaterialTheme.colorScheme.secondaryContainer,
-                ) {
-                    Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Icon(
-                                Icons.Rounded.EditNote,
-                                null,
-                                Modifier.size(28.dp),
-                                tint = MaterialTheme.colorScheme.onSecondaryContainer,
-                            )
-                            Spacer(Modifier.width(12.dp))
-                            Surface(
-                                onClick = onMyRecipes,
-                                modifier = Modifier.weight(1f),
-                                color = Color.Transparent,
-                            ) {
-                                Column {
-                                    Text(
-                                        "我的菜谱",
-                                        style = MaterialTheme.typography.titleLarge,
-                                        color = MaterialTheme.colorScheme.onSecondaryContainer,
-                                    )
-                                    Text(
-                                        if (mine.isEmpty()) {
-                                            "写一道自己的菜，下次照着做"
-                                        } else {
-                                            "${mine.size} 道自己写的菜"
-                                        },
-                                        color = MaterialTheme.colorScheme.onSecondaryContainer,
-                                    )
-                                }
-                            }
-                            Icon(
-                                Icons.AutoMirrored.Rounded.ArrowForward,
-                                null,
-                                tint = MaterialTheme.colorScheme.onSecondaryContainer,
-                            )
-                        }
-                        if (mine.isNotEmpty()) {
-                            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                                repeat(3) { index ->
-                                    val recipe = mine.getOrNull(index)
-                                    if (recipe != null) {
-                                        RecipeImage(
-                                            recipe.cover,
-                                            Modifier.weight(1f).aspectRatio(4f / 3).clip(RoundedCornerShape(12.dp)),
-                                        )
-                                    } else {
-                                        Spacer(Modifier.weight(1f))
-                                    }
-                                }
-                            }
-                        }
-                        FilledTonalButton(onClick = onAddRecipe, modifier = Modifier.fillMaxWidth()) {
-                            Icon(Icons.Rounded.Add, null, Modifier.size(18.dp))
-                            Spacer(Modifier.width(8.dp))
-                            Text("添加菜谱")
-                        }
+                        Icon(Icons.AutoMirrored.Rounded.ArrowForward, null, Modifier.size(18.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 }
             }
@@ -400,17 +339,20 @@ fun ProfileScreen(
                     EmptyState("从一道菜开始", "看过的菜谱会留在这里，方便下次找到。", "去找菜", onFind, icon = Icons.Rounded.History)
                 }
             }
-            items(recent, key = {
-                it.id
-            }) { recipe ->
-                RecipeRow(
-                    recipe,
-                    favorites.any {
-                        it.id == recipe.id
-                    },
-                    { onOpen(recipe.id) },
-                    { onFavorite(recipe.id) },
-                )
+            item {
+                Column {
+                    recent.forEachIndexed { index, recipe ->
+                        RecipeRow(
+                            recipe,
+                            recipe.id in favoriteIds,
+                            { onOpen(recipe.id) },
+                            { onFavorite(recipe.id) },
+                            favoriteCount = state.favoriteCount(recipe.id),
+                            outlined = false,
+                        )
+                        if (index < recent.lastIndex) HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = .6f))
+                    }
+                }
             }
         }
     }
@@ -429,19 +371,20 @@ fun RecentScreen(
         LazyColumn(
             Modifier.padding(padding),
             contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(0.dp),
         ) {
             if (recent.isEmpty()) {
                 item {
                     EmptyState("还没有浏览记录", "去看看今天想做什么。", "去找菜", onFind, icon = Icons.Rounded.History)
                 }
             }
-            items(recent, key = { it.id }) { recipe ->
+            itemsIndexed(recent, key = { _, recipe -> recipe.id }) { index, recipe ->
                 RecipeRow(recipe, false, { onOpen(recipe.id) }, {}, trailing = {
                     IconButton(onClick = {
                         onRemove(recipe.id)
                     }) { Icon(Icons.Rounded.Close, stringResource(R.string.remove_recent)) }
-                })
+                }, outlined = false)
+                if (index < recent.lastIndex) HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = .6f))
             }
         }
     }
