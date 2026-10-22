@@ -36,6 +36,7 @@ import com.deepcook.app.feature.authoring.MyRecipesScreen
 import com.deepcook.app.feature.authoring.RecipeEditorScreen
 import com.deepcook.app.feature.authoring.RecipeEditorViewModel
 import com.deepcook.app.feature.browse.*
+import com.deepcook.app.feature.profile.ProfileInfoScreen
 import com.deepcook.app.feature.recipe.*
 import com.deepcook.app.feature.search.SearchViewModel
 import com.deepcook.app.feature.settings.SettingsScreen
@@ -67,6 +68,8 @@ data class Reader(val recipeId: String, val initialStepId: String? = null, val s
 @Serializable data object MyRecipes
 
 @Serializable data object FoodPreferences
+/** Name, picture, and taste tags; reached by tapping the heading on the profile page. */
+@Serializable data object ProfileInfo
 
 /** [recipeId] null means "a new recipe"; an id means "edit that one". */
 @Serializable data class RecipeEditor(val recipeId: String? = null)
@@ -188,6 +191,20 @@ fun DeepCookApp(
                             onRecent = { openPage(Recent) },
                             onMyRecipes = { openPage(MyRecipes) },
                             onFoodPreferences = { openPage(FoodPreferences) },
+                            onProfile = { openPage(ProfileInfo) },
+                        )
+                    }
+                    composable<ProfileInfo> {
+                        ProfileInfoScreen(
+                            profile = state.user.profile,
+                            onBack = { nav.popBackStack() },
+                            onName = { name -> vm.updateProfile { it.copy(displayName = name) } },
+                            foodProfile = state.user.foodSetup.profile,
+                            onFoodPreferences = { openPage(FoodPreferences) },
+                            savingAvatar = state.avatarSaving,
+                            loadPhoto = vm::avatarSource,
+                            onSaveAvatar = vm::saveAvatar,
+                            onRemoveAvatar = vm::removeAvatar,
                         )
                     }
                     composable<Recent> {
@@ -322,6 +339,7 @@ private fun HomeScreen(
     onRecent: () -> Unit,
     onMyRecipes: () -> Unit,
     onFoodPreferences: () -> Unit,
+    onProfile: () -> Unit,
 ) {
     val nav = rememberNavController()
     val entry by nav.currentBackStackEntryAsState()
@@ -437,6 +455,7 @@ private fun HomeScreen(
                             onOpen,
                             vm::favorite,
                             { selectTab(0) },
+                            onProfile,
                         )
                     }
                 }

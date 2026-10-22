@@ -44,7 +44,7 @@ internal fun FavoriteGlyph(selected: Boolean, label: String?, modifier: Modifier
     val textBounds = remember(paint, label) {
         Rect().also { if (label != null) paint.getTextBounds(label, 0, label.length, it) }
     }
-    val labelRight = if (label == null) 24f * scale else 17f * scale + paint.measureText(label) + 1.6f * scale
+    val labelRight = if (label == null) 24f * scale else 22f * scale + paint.measureText(label) + 1.6f * scale
     val width = with(density) { maxOf(iconSize.toPx(), labelRight).toDp() }
     val star = remember {
         Path().apply {
@@ -74,9 +74,9 @@ internal fun FavoriteGlyph(selected: Boolean, label: String?, modifier: Modifier
         if (label != null) {
             drawRoundRect(
                 Color.Transparent,
-                topLeft = Offset(16f * scale, .1f * scale),
+                topLeft = Offset(21f * scale, .1f * scale),
                 size = Size(
-                    maxOf(12.7f * scale, labelRight - 16f * scale),
+                    maxOf(12.7f * scale, labelRight - 21f * scale),
                     8f * scale,
                 ),
                 cornerRadius = CornerRadius(3.5f * scale),
@@ -86,7 +86,7 @@ internal fun FavoriteGlyph(selected: Boolean, label: String?, modifier: Modifier
                 // Align visible ink, including font bearing, with the rounded star's top edge.
                 canvas.nativeCanvas.drawText(
                     label,
-                    17f * scale - textBounds.left,
+                    22f * scale - textBounds.left,
                     1.325f * scale - textBounds.top,
                     paint,
                 )

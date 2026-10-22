@@ -227,7 +227,7 @@ fun FoodProfileScreen(vm: FoodProfileViewModel, state: FoodProfileUiState, onCan
                                     }
                                 }
                                 Question("偏爱哪些味道？", "可多选") {
-                                    Chips(FoodChoices.tastes, profile.tastes, Icons.Rounded.Spa) { value ->
+                                    Chips(FoodChoices.tastes + profile.tastes.filterNot { it in FoodChoices.tastes }, profile.tastes, Icons.Rounded.Spa) { value ->
                                         vm.change { it.copy(tastes = it.tastes.exclusiveToggle(value, "都喜欢")) }
                                     }
                                 }

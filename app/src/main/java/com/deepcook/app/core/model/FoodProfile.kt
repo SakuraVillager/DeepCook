@@ -57,6 +57,9 @@ private val ingredientAliases = mapOf(
     "牛肉" to listOf("牛肉", "牛腩", "牛排", "肥牛", "牛筋"),
     "羊肉" to listOf("羊肉", "羊排", "羊腿"),
     "猪肉" to listOf("猪肉", "五花", "里脊", "排骨", "培根", "火腿", "猪油", "肉末", "肉馅"),
+    "海鲜" to listOf("鱼", "虾", "蟹", "贝", "蛤", "蚝", "蛏", "蚌", "贻", "鲍", "鳗", "鳝"),
+    "内脏" to listOf("肝", "腰子", "猪肚", "牛肚", "肥肠", "鸡胗", "鸭胗", "内脏"),
+    "辣" to listOf("辣", "小米椒", "朝天椒"),
 )
 
 private fun String.containsAny(terms: List<String>): Boolean = terms.any { contains(it, ignoreCase = true) }
@@ -120,6 +123,9 @@ fun List<Recipe>.forFoodProfile(profile: FoodProfile): List<Recipe> {
             "鲜香" to listOf("鲜", "菌菇", "香菇"),
             "酸甜" to listOf("糖醋", "酸甜", "番茄", "柠檬"),
             "浓郁" to listOf("红烧", "咖喱", "奶油", "浓"),
+            "甜" to listOf("甜", "糖"), "咸" to listOf("咸"), "酸" to listOf("酸", "醋", "柠檬"),
+            "麻" to listOf("麻", "花椒"), "辣" to listOf("辣", "小米椒"), "鲜" to listOf("鲜"),
+            "油炸" to listOf("炸"), "汤羹" to listOf("汤", "羹"), "下饭" to listOf("下饭"),
         )
         if (profile.tastes.any { text.containsAny(tasteTerms[it].orEmpty()) }) points += 3
         return points

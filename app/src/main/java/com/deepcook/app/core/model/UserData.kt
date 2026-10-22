@@ -33,6 +33,8 @@ data class UserData(
     val recent: List<SavedRecipe> = emptyList(),
     val preferences: UserPreferences = UserPreferences(),
     val foodSetup: FoodSetup = FoodSetup(),
+    /** Name, picture and taste tags; defaulted so a file written before this field still loads. */
+    val profile: UserProfile = UserProfile(),
 ) {
     fun withFavorite(id: String, favorite: Boolean, now: Long): UserData = copy(
         favorites = if (favorite) {

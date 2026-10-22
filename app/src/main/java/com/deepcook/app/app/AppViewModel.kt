@@ -1,10 +1,13 @@
 package com.deepcook.app.app
 
+import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.deepcook.app.core.model.Recipe
 import com.deepcook.app.core.model.UserData
 import com.deepcook.app.core.model.UserPreferences
+import com.deepcook.app.core.model.UserProfile
+import com.deepcook.app.data.Avatars
 import com.deepcook.app.data.CoverStore
 import com.deepcook.app.data.RecipeRepository
 import com.deepcook.app.data.UserDataRepository
@@ -19,6 +22,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import java.io.IOException
 import java.util.concurrent.CancellationException
 
 data class AppUiState(
@@ -33,6 +37,7 @@ data class AppUiState(
     val userError: String? = null,
     val userRecipeError: String? = null,
     val favoriteExamples: Map<String, Int> = emptyMap(),
+    val avatarSaving: Boolean = false,
 )
 
 data class AppMessage(val text: String, val undo: (suspend () -> Unit)? = null)
@@ -46,6 +51,7 @@ class AppViewModel(
     private val userRecipes: UserRecipeStore,
     private val covers: CoverStore,
     private val kitchen: com.deepcook.app.data.KitchenStore? = null,
+    private val avatars: Avatars,
 ) : ViewModel() {
     private val mutableState = MutableStateFlow(AppUiState())
     val state = mutableState.asStateFlow()
@@ -55,6 +61,7 @@ class AppViewModel(
     private var recipeJob: Job? = null
     private var userRecipeJob: Job? = null
     private val favoriteMutex = Mutex()
+    private val avatarMutex = Mutex()
 
     /** Kept apart from the state so a change in either source can rebuild the merged list. */
     private var bundled: List<Recipe> = emptyList()
@@ -93,7 +100,10 @@ class AppViewModel(
             userData.data.catch { error ->
                 if (error is CancellationException) throw error
                 mutableState.value = mutableState.value.copy(userError = "本地收藏与设置暂时无法读取，原数据未被清除。")
-            }.collect { data -> mutableState.value = mutableState.value.copy(user = data, userLoaded = true, userError = null) }
+            }.collect { data ->
+                mutableState.value =
+                    mutableState.value.copy(user = data, userLoaded = true, userError = null)
+            }
         }
     }
 
@@ -139,6 +149,46 @@ class AppViewModel(
     fun visit(id: String) = mutate { userData.recordVisit(id) }
     fun removeVisit(id: String) = mutate { userData.removeVisit(id) }
     fun preferences(transform: (UserPreferences) -> UserPreferences) = mutate { userData.updatePreferences(transform) }
+    fun updateProfile(transform: (UserProfile) -> UserProfile) = mutate { userData.updateProfile(transform) }
+
+    /** Decodes the picked photo for the cropper; null when the file cannot be read. */
+    suspend fun avatarSource(uri: String): Bitmap? = avatars.decode(uri)
+
+    /** Stores the cropped square and points the profile at it, replacing the old file. */
+    fun saveAvatar(bitmap: Bitmap) = viewModelScope.launch {
+        avatarMutex.withLock {
+            mutableState.value = mutableState.value.copy(avatarSaving = true)
+            try {
+                val previous = userData.data.first().profile.avatar
+                val saved = avatars.save(bitmap) ?: throw IOException("头像文件写入失败")
+                try {
+                    userData.updateProfile { it.copy(avatar = saved) }
+                } catch (error: Exception) {
+                    runCatching { avatars.delete(saved) }
+                    throw error
+                }
+                runCatching { avatars.delete(previous) }
+                messageChannel.send(AppMessage("头像已更新"))
+            } catch (error: Exception) {
+                if (error is CancellationException) throw error
+                messageChannel.send(AppMessage("头像没能保存，请换一张试试。"))
+            } finally {
+                mutableState.value = mutableState.value.copy(avatarSaving = false)
+            }
+        }
+    }
+
+    fun removeAvatar() {
+        mutate {
+            avatarMutex.withLock {
+                val previous = userData.data.first().profile.avatar
+                userData.updateProfile { it.copy(avatar = null) }
+                runCatching { avatars.delete(previous) }
+                messageChannel.send(AppMessage("已移除头像"))
+            }
+        }
+    }
+
     fun clearRecent() = mutate {
         userData.clearRecent()
         messageChannel.send(AppMessage("已清除最近浏览"))

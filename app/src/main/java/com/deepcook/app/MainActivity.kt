@@ -35,6 +35,7 @@ class MainActivity : ComponentActivity() {
                                 container.userRecipes,
                                 container.covers,
                                 container.kitchen,
+                                container.avatars,
                             )
                         }
                     },

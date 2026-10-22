@@ -25,6 +25,7 @@ class BrowserFlowTest {
             repo.clearFavorites()
             repo.clearRecent()
             repo.resetPreferences()
+            repo.updateProfile { com.deepcook.app.core.model.UserProfile() }
             repo.updateFoodSetup { com.deepcook.app.core.model.FoodSetup(completed = true) }
         }
         compose.waitUntil(10_000) { compose.onAllNodesWithText("精选菜谱").fetchSemanticsNodes().isNotEmpty() }

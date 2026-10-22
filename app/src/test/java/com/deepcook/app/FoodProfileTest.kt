@@ -59,6 +59,17 @@ class FoodProfileTest {
         }
     }
 
+    @Test fun teammateProfileTagsMigrateToSharedFoodPreferencesWithoutInventingAllergies() = runTest {
+        val old = """{"profile":{"displayName":"小厨师","likes":["甜","鲜"],"avoids":["海鲜","香菜"]}}"""
+        val migrated = UserDataSerializer.readFrom(ByteArrayInputStream(old.toByteArray()))
+        assertEquals("小厨师", migrated.profile.name)
+        assertEquals(setOf("甜", "鲜"), migrated.foodSetup.profile.tastes)
+        assertEquals(setOf("海鲜", "香菜"), migrated.foodSetup.profile.avoided)
+        assertNull(migrated.foodSetup.profile.allergens)
+        assertTrue(migrated.foodSetup.completed)
+        assertFalse(recipe("seafood", "虾仁").matchesFoodExclusions(migrated.foodSetup.profile))
+    }
+
     @Test fun rapidDraftChangesThenSkipKeepAllAnswersAndClearDraft() = runTest {
         val store = MemoryStore()
         val vm = FoodProfileViewModel(LocalUserDataRepository(store), SavedStateHandle(), false)

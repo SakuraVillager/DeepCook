@@ -47,6 +47,23 @@ class UserDataRepositoryTest {
         assertEquals(original, UserDataSerializer.readFrom(ByteArrayInputStream(output.toByteArray())))
     }
 
+    @Test fun serializerPreservesTheProfile() = runBlocking {
+        val original = UserData(
+            profile = UserProfile("小明", "file:/avatars/avatar-1.jpg", setOf("辣", "鲜"), setOf("香菜")),
+        )
+        val output = ByteArrayOutputStream()
+        UserDataSerializer.writeTo(original, output)
+        assertEquals(original, UserDataSerializer.readFrom(ByteArrayInputStream(output.toByteArray())))
+    }
+
+    @Test fun aFileWrittenBeforeTheProfileExistedStillLoads() = runBlocking {
+        // 0.3.0 wrote no "profile" key; the default must fill it in instead of failing the read.
+        val legacy = """{"favorites":[{"recipeId":"a","timestamp":11}],"recent":[],"preferences":{}}"""
+        val data = UserDataSerializer.readFrom(ByteArrayInputStream(legacy.toByteArray()))
+        assertEquals(UserProfile(), data.profile)
+        assertEquals("a", data.favorites.single().recipeId)
+    }
+
     @Test fun invalidDataIsReportedWithoutSilentlyResettingCollections() = runBlocking {
         try {
             UserDataSerializer.readFrom(ByteArrayInputStream("invalid-json".toByteArray()))

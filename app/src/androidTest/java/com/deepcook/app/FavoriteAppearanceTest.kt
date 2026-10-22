@@ -53,7 +53,7 @@ class FavoriteAppearanceTest {
             for (selected in listOf(false, true)) {
                 val image = compose.onNodeWithTag("glyph-$selected-$large").captureToImage()
                 val pixels = image.toPixelMap()
-                val scale = (if (large) 144f else 24f) * image.width / (if (large) 224f else 176f) / 24f
+                val scale = (if (large) 144f else 24f) * image.width / (if (large) 256f else 176f) / 24f
                 fun isInk(x: Int, y: Int): Boolean {
                     val c = pixels[x, y]
                     return abs(c.red - ink.red) + abs(c.green - ink.green) + abs(c.blue - ink.blue) < .12f
@@ -109,7 +109,7 @@ class FavoriteAppearanceTest {
         Column {
             if (large) Text(if (selected) "已收藏" else "未收藏")
             Box(
-                Modifier.width(if (large) 224.dp else 176.dp).height(if (large) 160.dp else 32.dp)
+                Modifier.width(if (large) 256.dp else 176.dp).height(if (large) 160.dp else 32.dp)
                     .background(backdrop).testTag("glyph-$selected-$large"),
             ) {
                 FavoriteGlyph(selected, "128", iconSize = if (large) 144.dp else 24.dp)
