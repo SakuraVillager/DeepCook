@@ -52,7 +52,14 @@
       "originalSha256": "7ca726dce299f6d522ce22831bfbe59e98cf5f9f7036e8e936bdab764af0e67e",
       "imagePath": "dishes/aquatic/小龙虾/成品.jpg",
       "bundled": "photos/import-827fce1a4c5149095871.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/aquatic/%E5%B0%8F%E9%BE%99%E8%99%BE/%E6%88%90%E5%93%81.jpg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/aquatic/%E5%B0%8F%E9%BE%99%E8%99%BE/%E6%88%90%E5%93%81.jpg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-e2a148eb6cf115e2-04.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-6417780c575ca5ed",
@@ -108,7 +115,15 @@
       "originalSha256": "f7d0a6c69cdd4253e3db8816a2d8bacf61fd75bf0ac7c256f4acd2ce42f29c39",
       "imagePath": "dishes/aquatic/油焖大虾/油焖大虾.jpg",
       "bundled": "photos/import-9b9897f2814687a7f42c.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/aquatic/%E6%B2%B9%E7%84%96%E5%A4%A7%E8%99%BE/%E6%B2%B9%E7%84%96%E5%A4%A7%E8%99%BE.jpg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/aquatic/%E6%B2%B9%E7%84%96%E5%A4%A7%E8%99%BE/%E6%B2%B9%E7%84%96%E5%A4%A7%E8%99%BE.jpg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-shrimp-03.jpg",
+          "photos/step-shrimp-06.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-711ab5d8b4ee07be",
@@ -136,6 +151,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-651c621bb1384518-02.jpg"
+        ]
       }
     },
     {
@@ -148,7 +170,15 @@
       "originalSha256": "fe51b4171a90f9f8f2b194f24ac8da7e1966518ca7f437935418bf339a21ff1a",
       "imagePath": "dishes/aquatic/清蒸鲈鱼/清蒸鲈鱼.jpg",
       "bundled": "photos/import-e95ec989029121c5334a.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/aquatic/%E6%B8%85%E8%92%B8%E9%B2%88%E9%B1%BC/%E6%B8%85%E8%92%B8%E9%B2%88%E9%B1%BC.jpg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/aquatic/%E6%B8%85%E8%92%B8%E9%B2%88%E9%B1%BC/%E6%B8%85%E8%92%B8%E9%B2%88%E9%B1%BC.jpg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-steamed-fish-06.jpg",
+          "photos/step-steamed-fish-09.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-61ffbcb05ceb03ee",
@@ -236,6 +266,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-0ed628aba05a38c9-03.jpg"
+        ]
       }
     },
     {
@@ -248,7 +285,14 @@
       "originalSha256": "d970f49cc663ea364df5607c890bf0ae5b7808c1df05e8d174c4afe5d786c530",
       "imagePath": "dishes/aquatic/芥末黄油罗氏虾/芥末黄油罗氏虾.jpg",
       "bundled": "photos/import-656ddea8dd21bf53dcdd.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/aquatic/%E8%8A%A5%E6%9C%AB%E9%BB%84%E6%B2%B9%E7%BD%97%E6%B0%8F%E8%99%BE/%E8%8A%A5%E6%9C%AB%E9%BB%84%E6%B2%B9%E7%BD%97%E6%B0%8F%E8%99%BE.jpg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/aquatic/%E8%8A%A5%E6%9C%AB%E9%BB%84%E6%B2%B9%E7%BD%97%E6%B0%8F%E8%99%BE/%E8%8A%A5%E6%9C%AB%E9%BB%84%E6%B2%B9%E7%BD%97%E6%B0%8F%E8%99%BE.jpg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-93eb7c2440893496-05.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-d22fb95d6bedbc3d",
@@ -316,6 +360,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-9c598d5ae0973cc3-04.jpg"
+        ]
       }
     },
     {
@@ -332,6 +383,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-d3570dbb127b7c8d-02.jpg"
+        ]
       }
     },
     {
@@ -384,7 +442,14 @@
       "originalSha256": "9251244cee7014524ffbfc0426d47b2f16cdde8d4881e54e3cae4522629715a1",
       "imagePath": "dishes/aquatic/鳊鱼炖豆腐/鳊鱼炖豆腐.jpg",
       "bundled": "photos/import-bcec7fad509cd7a4d277.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/aquatic/%E9%B3%8A%E9%B1%BC%E7%82%96%E8%B1%86%E8%85%90/%E9%B3%8A%E9%B1%BC%E7%82%96%E8%B1%86%E8%85%90.jpg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/aquatic/%E9%B3%8A%E9%B1%BC%E7%82%96%E8%B1%86%E8%85%90/%E9%B3%8A%E9%B1%BC%E7%82%96%E8%B1%86%E8%85%90.jpg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-4211c36ff61d4f89-03.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-2aba0e13c9d6470c",
@@ -396,7 +461,14 @@
       "originalSha256": "fc48a45b812cdf4c9e5d4fde7675ae15dffc552af9de685440f480c6669be3d5",
       "imagePath": "dishes/aquatic/黄油煎虾/黄油煎虾.jpg",
       "bundled": "photos/import-114d8029883f2a8eca58.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/aquatic/%E9%BB%84%E6%B2%B9%E7%85%8E%E8%99%BE/%E9%BB%84%E6%B2%B9%E7%85%8E%E8%99%BE.jpg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/aquatic/%E9%BB%84%E6%B2%B9%E7%85%8E%E8%99%BE/%E9%BB%84%E6%B2%B9%E7%85%8E%E8%99%BE.jpg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-2aba0e13c9d6470c-06.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-a1ba8de42384bd27",
@@ -412,6 +484,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-a1ba8de42384bd27-03.jpg"
+        ]
       }
     },
     {
@@ -444,6 +523,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-2a9c58483b71a00d-06.jpg"
+        ]
       }
     },
     {
@@ -460,6 +546,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-e0ef10c6e905370a-01.jpg"
+        ]
       }
     },
     {
@@ -476,6 +569,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-4b816847856fadc6-04.jpg"
+        ]
       }
     },
     {
@@ -492,6 +592,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-17cc9ae41d9fb459-01.jpg"
+        ]
       }
     },
     {
@@ -524,6 +631,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-6bb8f801a8b8e8c2-05.jpg"
+        ]
       }
     },
     {
@@ -540,6 +654,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-5ab770d281369817-05.jpg"
+        ]
       }
     },
     {
@@ -572,6 +693,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-0d12168d06e9bb21-01.jpg"
+        ]
       }
     },
     {
@@ -588,6 +716,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-7a681fba9fd0dadc-03.jpg"
+        ]
       }
     },
     {
@@ -620,6 +755,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-515e68668fde3909-06.jpg"
+        ]
       }
     },
     {
@@ -652,6 +794,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-daeebaa77c3adbd7-03.jpg"
+        ]
       }
     },
     {
@@ -668,6 +817,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-a27c91703f1aaf05-04.jpg"
+        ]
       }
     },
     {
@@ -680,7 +836,14 @@
       "originalSha256": "01459abafb904ebc0aa08ae899468dbf1a6a7a65fcce7c95b7801e9b1a7b572a",
       "imagePath": "dishes/breakfast/苏格兰蛋/egg1.png",
       "bundled": "photos/import-9a1f591238d8702e9994.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/breakfast/%E8%8B%8F%E6%A0%BC%E5%85%B0%E8%9B%8B/egg1.png"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/breakfast/%E8%8B%8F%E6%A0%BC%E5%85%B0%E8%9B%8B/egg1.png",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-aef1ffb7e9d0cccd-06.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-c75ae014f76e19cd",
@@ -696,6 +859,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-c75ae014f76e19cd-06.jpg"
+        ]
       }
     },
     {
@@ -712,6 +882,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-b13f782654bf3db8-05.jpg"
+        ]
       }
     },
     {
@@ -728,6 +905,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-35820a0555d3e682-03.jpg"
+        ]
       }
     },
     {
@@ -744,6 +928,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-61c1012b42f158b1-06.jpg"
+        ]
       }
     },
     {
@@ -760,6 +951,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-f3b656b5a03f4aeb-05.jpg"
+        ]
       }
     },
     {
@@ -776,6 +974,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-fb61ba750320c4b8-01.jpg"
+        ]
       }
     },
     {
@@ -820,6 +1025,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-bebbb3caba349305-03.jpg"
+        ]
       }
     },
     {
@@ -836,6 +1048,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-12863092d2c6437b-02.jpg"
+        ]
       }
     },
     {
@@ -868,6 +1087,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-f26c5646a21a3d7e-04.jpg"
+        ]
       }
     },
     {
@@ -884,6 +1110,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-6674e52ce5acad24-05.jpg"
+        ]
       }
     },
     {
@@ -900,6 +1133,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-53fc0a69484a797c-05.jpg"
+        ]
       }
     },
     {
@@ -916,6 +1156,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-fc61a88b7e007735-03.jpg"
+        ]
       }
     },
     {
@@ -956,7 +1203,14 @@
       "originalSha256": "b5bb0774195d6b6826612a183bc51cc4275fbd11ed443cdefcaa11a1e162fe36",
       "imagePath": "dishes/dessert/咖啡椰奶冻/咖啡椰奶冻.png",
       "bundled": "photos/import-09febd63660438488ae2.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/dessert/%E5%92%96%E5%95%A1%E6%A4%B0%E5%A5%B6%E5%86%BB/%E5%92%96%E5%95%A1%E6%A4%B0%E5%A5%B6%E5%86%BB.png"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/dessert/%E5%92%96%E5%95%A1%E6%A4%B0%E5%A5%B6%E5%86%BB/%E5%92%96%E5%95%A1%E6%A4%B0%E5%A5%B6%E5%86%BB.png",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-0f2b773be2e0b8a3-04.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-12a0f2535a3d3305",
@@ -972,6 +1226,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-12a0f2535a3d3305-05.jpg"
+        ]
       }
     },
     {
@@ -1040,6 +1301,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-5112cfeefccc6edf-06.jpg"
+        ]
       }
     },
     {
@@ -1064,7 +1332,14 @@
       "originalSha256": "7bfed2870e38d0e34d2eda7ad55ed7db33d81b1d3aa847f0aefc94d95f14b89f",
       "imagePath": "dishes/dessert/玛格丽特饼干/玛格丽特饼干.jpg",
       "bundled": "photos/import-bf58ac4cc934b1a7e3e5.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/dessert/%E7%8E%9B%E6%A0%BC%E4%B8%BD%E7%89%B9%E9%A5%BC%E5%B9%B2/%E7%8E%9B%E6%A0%BC%E4%B8%BD%E7%89%B9%E9%A5%BC%E5%B9%B2.jpg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/dessert/%E7%8E%9B%E6%A0%BC%E4%B8%BD%E7%89%B9%E9%A5%BC%E5%B9%B2/%E7%8E%9B%E6%A0%BC%E4%B8%BD%E7%89%B9%E9%A5%BC%E5%B9%B2.jpg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-0fdf098192030592-06.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-6cda991d90ce7cd9",
@@ -1120,7 +1395,14 @@
       "originalSha256": "286fb85e071ee5ed2bc66e28643195902ebcb94f27342b48eb2496a65fcfe8cf",
       "imagePath": "dishes/dessert/英式司康/英式司康.png",
       "bundled": "photos/import-40cdcbdb38054c4eb57b.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/dessert/%E8%8B%B1%E5%BC%8F%E5%8F%B8%E5%BA%B7/%E8%8B%B1%E5%BC%8F%E5%8F%B8%E5%BA%B7.png"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/dessert/%E8%8B%B1%E5%BC%8F%E5%8F%B8%E5%BA%B7/%E8%8B%B1%E5%BC%8F%E5%8F%B8%E5%BA%B7.png",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-91bc15e9352de9ea-01.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-7047e23423f0ad9b",
@@ -1136,6 +1418,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-7047e23423f0ad9b-03.jpg"
+        ]
       }
     },
     {
@@ -1148,7 +1437,14 @@
       "originalSha256": "ed525430319710507b1d72d5fad7594dddcfd67649c8150c546ce1c411bbc018",
       "imagePath": "dishes/dessert/酸奶意式奶冻/酸奶意式奶冻.png",
       "bundled": "photos/import-3f6e18f7c7914f516c5e.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/dessert/%E9%85%B8%E5%A5%B6%E6%84%8F%E5%BC%8F%E5%A5%B6%E5%86%BB/%E9%85%B8%E5%A5%B6%E6%84%8F%E5%BC%8F%E5%A5%B6%E5%86%BB.png"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/dessert/%E9%85%B8%E5%A5%B6%E6%84%8F%E5%BC%8F%E5%A5%B6%E5%86%BB/%E9%85%B8%E5%A5%B6%E6%84%8F%E5%BC%8F%E5%A5%B6%E5%86%BB.png",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-545e3a3e64c935de-02.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-0175adf06f5fdd01",
@@ -1164,6 +1460,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-0175adf06f5fdd01-06.jpg"
+        ]
       }
     },
     {
@@ -1192,7 +1495,14 @@
       "originalSha256": "3cd91e6e63df6d88cdb9f1bf542e22dc28fc80a9972f65e5cf9db53c491b825f",
       "imagePath": "dishes/dessert/龟苓膏/龟苓膏成品.jpg",
       "bundled": "photos/import-8302a6510034539153f3.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/dessert/%E9%BE%9F%E8%8B%93%E8%86%8F/%E9%BE%9F%E8%8B%93%E8%86%8F%E6%88%90%E5%93%81.jpg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/dessert/%E9%BE%9F%E8%8B%93%E8%86%8F/%E9%BE%9F%E8%8B%93%E8%86%8F%E6%88%90%E5%93%81.jpg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-43027c68c0009576-04.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-989ccdcae7af8a8f",
@@ -1208,6 +1518,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-989ccdcae7af8a8f-02.jpg"
+        ]
       }
     },
     {
@@ -1312,6 +1629,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-ed29771026e7eed6-04.jpg"
+        ]
       }
     },
     {
@@ -1328,6 +1652,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-e403ba22275a0439-04.jpg"
+        ]
       }
     },
     {
@@ -1340,7 +1671,14 @@
       "originalSha256": "616ddb33e28fd5bb741b2de561113ff9478ece9f6e11f49506489eaa5f802a09",
       "imagePath": "dishes/drink/柠檬水/柠檬水.jpg",
       "bundled": "photos/import-4abb55b4a28b53765b25.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/drink/%E6%9F%A0%E6%AA%AC%E6%B0%B4/%E6%9F%A0%E6%AA%AC%E6%B0%B4.jpg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/drink/%E6%9F%A0%E6%AA%AC%E6%B0%B4/%E6%9F%A0%E6%AA%AC%E6%B0%B4.jpg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-378f9d2c3a565ff2-01.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-91c84c26992872ca",
@@ -1356,6 +1694,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-91c84c26992872ca-01.jpg"
+        ]
       }
     },
     {
@@ -1388,6 +1733,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-3a181639cf9138dd-04.jpg"
+        ]
       }
     },
     {
@@ -1400,7 +1752,14 @@
       "originalSha256": "782b566b27e62bcca4d3f453b1db28bf63e3c79f1e35a17e2bd3c7fcaa6e8c4e",
       "imagePath": "dishes/drink/百香果橙子特调/tea-version.jpg",
       "bundled": "photos/import-113c73348dfbb2e2bba3.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/drink/%E7%99%BE%E9%A6%99%E6%9E%9C%E6%A9%99%E5%AD%90%E7%89%B9%E8%B0%83/tea-version.jpg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/drink/%E7%99%BE%E9%A6%99%E6%9E%9C%E6%A9%99%E5%AD%90%E7%89%B9%E8%B0%83/tea-version.jpg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-30eafb2f0a661bd1-04.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-677f373658d27bf3",
@@ -1412,7 +1771,14 @@
       "originalSha256": "17145dff9b50ea37eab075bc7bfa0491deb7014fb22080acb0d9c29c2a9f9a1d",
       "imagePath": "dishes/drink/砂糖椰子冰沙/砂糖椰子冰沙-1.jpg",
       "bundled": "photos/import-afc42b00c9921e69e9c9.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/drink/%E7%A0%82%E7%B3%96%E6%A4%B0%E5%AD%90%E5%86%B0%E6%B2%99/%E7%A0%82%E7%B3%96%E6%A4%B0%E5%AD%90%E5%86%B0%E6%B2%99-1.jpg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/drink/%E7%A0%82%E7%B3%96%E6%A4%B0%E5%AD%90%E5%86%B0%E6%B2%99/%E7%A0%82%E7%B3%96%E6%A4%B0%E5%AD%90%E5%86%B0%E6%B2%99-1.jpg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-677f373658d27bf3-06.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-11368a20c31b46c4",
@@ -1468,6 +1834,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-d20888ebc3bf92ff-02.jpg"
+        ]
       }
     },
     {
@@ -1560,7 +1933,14 @@
       "originalSha256": "7dddee256e59a120fc0c17e0401f0e911a3ef3f27e55dbd6bcf88bf674561ef9",
       "imagePath": "dishes/meat_dish/农家一碗香/农家一碗香成品.jpg",
       "bundled": "photos/import-fd4b9a9321017d4ab9c7.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E5%86%9C%E5%AE%B6%E4%B8%80%E7%A2%97%E9%A6%99/%E5%86%9C%E5%AE%B6%E4%B8%80%E7%A2%97%E9%A6%99%E6%88%90%E5%93%81.jpg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E5%86%9C%E5%AE%B6%E4%B8%80%E7%A2%97%E9%A6%99/%E5%86%9C%E5%AE%B6%E4%B8%80%E7%A2%97%E9%A6%99%E6%88%90%E5%93%81.jpg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-cd64270612fa1da8-02.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-75dec508093166f9",
@@ -1576,6 +1956,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-75dec508093166f9-05.jpg"
+        ]
       }
     },
     {
@@ -1660,6 +2047,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-3a892c884d6f39e0-03.jpg"
+        ]
       }
     },
     {
@@ -1704,7 +2098,14 @@
       "originalSha256": "2caf8f28aab2078702e3e6a6620fff325524dd77a03ff2bb998948e9b17beb73",
       "imagePath": "dishes/meat_dish/咖喱肥牛/咖喱肥牛.jpg",
       "bundled": "photos/import-6c426efbf1491769e440.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E5%92%96%E5%96%B1%E8%82%A5%E7%89%9B/%E5%92%96%E5%96%B1%E8%82%A5%E7%89%9B.jpg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E5%92%96%E5%96%B1%E8%82%A5%E7%89%9B/%E5%92%96%E5%96%B1%E8%82%A5%E7%89%9B.jpg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-e21f5bfb5fe6ef44-07.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-f82a5ad59d69212f",
@@ -1832,6 +2233,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-127edac8e578c1e1-08.jpg"
+        ]
       }
     },
     {
@@ -1844,7 +2252,16 @@
       "originalSha256": "c44371612f01646a0395f7f9e0ef1a6dab6592992f9c1a80ae7d2b0550d6a5ee",
       "imagePath": "dishes/meat_dish/宫保鸡丁/宫保鸡丁.jpg",
       "bundled": "photos/import-52c8aca03aa923d931a1.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E5%AE%AB%E4%BF%9D%E9%B8%A1%E4%B8%81/%E5%AE%AB%E4%BF%9D%E9%B8%A1%E4%B8%81.jpg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E5%AE%AB%E4%BF%9D%E9%B8%A1%E4%B8%81/%E5%AE%AB%E4%BF%9D%E9%B8%A1%E4%B8%81.jpg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-kung-pao-05.jpg",
+          "photos/step-kung-pao-07.jpg",
+          "photos/step-kung-pao-08.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-d15091497996c3ef",
@@ -1872,7 +2289,14 @@
       "originalSha256": "5deda38c689ab59effe6e2a34183ab280915c6f5cf51490f79fb69c4ff23eb71",
       "imagePath": "dishes/meat_dish/小炒鸡肝/成品.jpg",
       "bundled": "photos/import-f6ae900c9fc2d5e7821c.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E5%B0%8F%E7%82%92%E9%B8%A1%E8%82%9D/%E6%88%90%E5%93%81.jpg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E5%B0%8F%E7%82%92%E9%B8%A1%E8%82%9D/%E6%88%90%E5%93%81.jpg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-3eaf0a4511855c63-06.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-824114aa00bd36da",
@@ -1900,6 +2324,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-27b738de814e6ba5-04.jpg"
+        ]
       }
     },
     {
@@ -1960,6 +2391,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-16663c525e6b39c6-06.jpg"
+        ]
       }
     },
     {
@@ -2028,6 +2466,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-ca670c5a113ea88e-02.jpg"
+        ]
       }
     },
     {
@@ -2128,6 +2573,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-b14f5054692bfa3e-02.jpg"
+        ]
       }
     },
     {
@@ -2160,6 +2612,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-f43c7cdf6c27f066-06.jpg"
+        ]
       }
     },
     {
@@ -2204,6 +2663,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-401011c583625d48-02.jpg"
+        ]
       }
     },
     {
@@ -2216,7 +2682,14 @@
       "originalSha256": "f7a4814f8adc51985e78db476e1cd453d67d524cc8eff5249f7dc4ceef54420a",
       "imagePath": "dishes/meat_dish/淄博烧烤/淄博烧烤.jpg",
       "bundled": "photos/import-95c05eb1f2bdb483fe1b.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E6%B7%84%E5%8D%9A%E7%83%A7%E7%83%A4/%E6%B7%84%E5%8D%9A%E7%83%A7%E7%83%A4.jpg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E6%B7%84%E5%8D%9A%E7%83%A7%E7%83%A4/%E6%B7%84%E5%8D%9A%E7%83%A7%E7%83%A4.jpg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-abe023d49637389d-05.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-575da7e2ff66eabf",
@@ -2240,7 +2713,14 @@
       "originalSha256": "b42f460c021f503494281c4c164bd95e803c4e7fa4db455b5b554d3ca91aeb39",
       "imagePath": "dishes/meat_dish/湖南家常红烧肉/湖南家常红烧肉.jpeg",
       "bundled": "photos/import-d99c97a866e269ede167.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E6%B9%96%E5%8D%97%E5%AE%B6%E5%B8%B8%E7%BA%A2%E7%83%A7%E8%82%89/%E6%B9%96%E5%8D%97%E5%AE%B6%E5%B8%B8%E7%BA%A2%E7%83%A7%E8%82%89.jpeg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E6%B9%96%E5%8D%97%E5%AE%B6%E5%B8%B8%E7%BA%A2%E7%83%A7%E8%82%89/%E6%B9%96%E5%8D%97%E5%AE%B6%E5%B8%B8%E7%BA%A2%E7%83%A7%E8%82%89.jpeg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-c57bcc7e9419062d-06.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-6a4a7145b1369b5d",
@@ -2252,7 +2732,14 @@
       "originalSha256": "c2f4dcb20f2276f6d03fa8452e8fcc9eeff2480fad728acd5401aec08bf585d3",
       "imagePath": "dishes/meat_dish/湘祁米夫鸭/湘祁米夫鸭.jpg",
       "bundled": "photos/import-0cef655c58b629718079.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E6%B9%98%E7%A5%81%E7%B1%B3%E5%A4%AB%E9%B8%AD/%E6%B9%98%E7%A5%81%E7%B1%B3%E5%A4%AB%E9%B8%AD.jpg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E6%B9%98%E7%A5%81%E7%B1%B3%E5%A4%AB%E9%B8%AD/%E6%B9%98%E7%A5%81%E7%B1%B3%E5%A4%AB%E9%B8%AD.jpg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-6a4a7145b1369b5d-03.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-bb86c640c665f7c5",
@@ -2280,6 +2767,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-f13ea0db41d81b53-06.jpg"
+        ]
       }
     },
     {
@@ -2320,7 +2814,14 @@
       "originalSha256": "b2602127cd4480f88f26ac7a83eb60be29747ed7326dd9df791f917e29dea3cb",
       "imagePath": "dishes/meat_dish/猪皮冻/猪皮冻.jpg",
       "bundled": "photos/import-86e98b227cf4136b0243.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E7%8C%AA%E7%9A%AE%E5%86%BB/%E7%8C%AA%E7%9A%AE%E5%86%BB.jpg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E7%8C%AA%E7%9A%AE%E5%86%BB/%E7%8C%AA%E7%9A%AE%E5%86%BB.jpg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-ddc763f709d2b5b6-04.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-b43bc0d5b054c4a8",
@@ -2392,7 +2893,14 @@
       "originalSha256": "0ec7cf74e5ee4602413adeaa9dff718f6ed791bc540baa7cc9d1a1670150e789",
       "imagePath": "dishes/meat_dish/瘦肉土豆片/瘦肉土豆片.jpg",
       "bundled": "photos/import-42bdfec44aabfc8859e3.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E7%98%A6%E8%82%89%E5%9C%9F%E8%B1%86%E7%89%87/%E7%98%A6%E8%82%89%E5%9C%9F%E8%B1%86%E7%89%87.jpg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E7%98%A6%E8%82%89%E5%9C%9F%E8%B1%86%E7%89%87/%E7%98%A6%E8%82%89%E5%9C%9F%E8%B1%86%E7%89%87.jpg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-6e1381b6647edbee-06.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-3a4b1f2e6d2d06c0",
@@ -2448,7 +2956,14 @@
       "originalSha256": "a8d978851b23eb937adf7c3ee34224b9ed1e13afbad77773f18aa8c82dad8031",
       "imagePath": "dishes/meat_dish/糖醋排骨/1.jpeg",
       "bundled": "photos/import-c8d688c780601d598df8.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E7%B3%96%E9%86%8B%E6%8E%92%E9%AA%A8/1.jpeg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E7%B3%96%E9%86%8B%E6%8E%92%E9%AA%A8/1.jpeg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-39425dec38664a3b-06.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-788feaed2146ba64",
@@ -2464,6 +2979,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-788feaed2146ba64-06.jpg"
+        ]
       }
     },
     {
@@ -2476,7 +2998,14 @@
       "originalSha256": "56293bbe0ead63b520fd618bba0796d8cd8cb39a6f5808c89617dc559cdc4c00",
       "imagePath": "dishes/meat_dish/红烧猪蹄/红烧猪蹄.jpg",
       "bundled": "photos/import-1cfd0def0f4453b4790c.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E7%BA%A2%E7%83%A7%E7%8C%AA%E8%B9%84/%E7%BA%A2%E7%83%A7%E7%8C%AA%E8%B9%84.jpg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E7%BA%A2%E7%83%A7%E7%8C%AA%E8%B9%84/%E7%BA%A2%E7%83%A7%E7%8C%AA%E8%B9%84.jpg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-18f5ac325209fad4-06.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-373d56f2f32aba5c",
@@ -2504,7 +3033,16 @@
       "originalSha256": "b268ceba9cb9a1a3bdab365e060a29badd34589aab8d2a54c80bc9c9baf42447",
       "imagePath": "dishes/meat_dish/红烧肉/000.jpg",
       "bundled": "photos/import-303fc8bc4b52adeaa4a5.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E7%BA%A2%E7%83%A7%E8%82%89/000.jpg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E7%BA%A2%E7%83%A7%E8%82%89/000.jpg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-braised-pork-09.jpg",
+          "photos/step-braised-pork-11.jpg",
+          "photos/step-braised-pork-13.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-0d42f08d156d6500",
@@ -2544,7 +3082,14 @@
       "originalSha256": "1a65ea8cb8dd1df65acb41aedd557c8155bda16bfe1797d536eda184bec70f00",
       "imagePath": "dishes/meat_dish/老妈蹄花/result3.jpg",
       "bundled": "photos/import-18d93452995eead8db9a.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E8%80%81%E5%A6%88%E8%B9%84%E8%8A%B1/result3.jpg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E8%80%81%E5%A6%88%E8%B9%84%E8%8A%B1/result3.jpg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-a086e2764c0abd41-04.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-c40321c423784be7",
@@ -2588,6 +3133,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-68c7a9333f5e4d58-05.jpg"
+        ]
       }
     },
     {
@@ -2600,7 +3152,14 @@
       "originalSha256": "691d729b38763cff0f43166d147d2f5d94bd573b147054c02473514e6a4adba9",
       "imagePath": "dishes/meat_dish/芥末罗氏虾/芥末罗氏虾成品.jpg",
       "bundled": "photos/import-d3e64899542ece5a8fbc.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E8%8A%A5%E6%9C%AB%E7%BD%97%E6%B0%8F%E8%99%BE/%E8%8A%A5%E6%9C%AB%E7%BD%97%E6%B0%8F%E8%99%BE%E6%88%90%E5%93%81.jpg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E8%8A%A5%E6%9C%AB%E7%BD%97%E6%B0%8F%E8%99%BE/%E8%8A%A5%E6%9C%AB%E7%BD%97%E6%B0%8F%E8%99%BE%E6%88%90%E5%93%81.jpg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-c61aa113077b5cef-03.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-77632e4f909da58f",
@@ -2616,6 +3175,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-77632e4f909da58f-06.jpg"
+        ]
       }
     },
     {
@@ -2644,7 +3210,14 @@
       "originalSha256": "67609e743f9f79d425788c8820cbd779f1e61bbcd4e7b65da4472f308f49de0e",
       "imagePath": "dishes/meat_dish/荷兰豆炒腊肠/1.png",
       "bundled": "photos/import-d80740c7e9684e9b2ad2.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E8%8D%B7%E5%85%B0%E8%B1%86%E7%82%92%E8%85%8A%E8%82%A0/1.png"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E8%8D%B7%E5%85%B0%E8%B1%86%E7%82%92%E8%85%8A%E8%82%A0/1.png",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-48dd3251882e1522-06.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-5b50c173e66f4a3c",
@@ -2748,7 +3321,14 @@
       "originalSha256": "4455842b432b3149c37727b5c58c7faa0f34ed197b5acd8353a5de18cc83c09b",
       "imagePath": "dishes/meat_dish/西红柿土豆炖牛肉/abaaba_1.png",
       "bundled": "photos/import-af88885b550ea94b13fb.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E8%A5%BF%E7%BA%A2%E6%9F%BF%E5%9C%9F%E8%B1%86%E7%82%96%E7%89%9B%E8%82%89/abaaba_1.png"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E8%A5%BF%E7%BA%A2%E6%9F%BF%E5%9C%9F%E8%B1%86%E7%82%96%E7%89%9B%E8%82%89/abaaba_1.png",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-90f04c224709ac2c-02.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-24562260b0e14389",
@@ -2776,7 +3356,14 @@
       "originalSha256": "c681e57c88a55666cbbadd2e29b7d5e0e016bea5070ab642bcd7b6898212d2cb",
       "imagePath": "dishes/meat_dish/豆豉鲮鱼油麦菜/豆豉鲮鱼油麦菜成品.jpg",
       "bundled": "photos/import-35a40c6406b614c193cb.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E8%B1%86%E8%B1%89%E9%B2%AE%E9%B1%BC%E6%B2%B9%E9%BA%A6%E8%8F%9C/%E8%B1%86%E8%B1%89%E9%B2%AE%E9%B1%BC%E6%B2%B9%E9%BA%A6%E8%8F%9C%E6%88%90%E5%93%81.jpg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E8%B1%86%E8%B1%89%E9%B2%AE%E9%B1%BC%E6%B2%B9%E9%BA%A6%E8%8F%9C/%E8%B1%86%E8%B1%89%E9%B2%AE%E9%B1%BC%E6%B2%B9%E9%BA%A6%E8%8F%9C%E6%88%90%E5%93%81.jpg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-6f41690d80c8a8b2-02.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-ba3ce0d2e7674607",
@@ -2792,6 +3379,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-ba3ce0d2e7674607-06.jpg"
+        ]
       }
     },
     {
@@ -2804,7 +3398,14 @@
       "originalSha256": "c879e13b051f4a807e1e544143151c23f1b5416413376c8312ef3d14d65b3cba",
       "imagePath": "dishes/meat_dish/豉汁蒸白鱔/豉汁蒸白鱔.jpeg",
       "bundled": "photos/import-09dde5f0bd000396f2dd.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E8%B1%89%E6%B1%81%E8%92%B8%E7%99%BD%E9%B1%94/%E8%B1%89%E6%B1%81%E8%92%B8%E7%99%BD%E9%B1%94.jpeg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E8%B1%89%E6%B1%81%E8%92%B8%E7%99%BD%E9%B1%94/%E8%B1%89%E6%B1%81%E8%92%B8%E7%99%BD%E9%B1%94.jpeg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-945e60912113bba4-04.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-280e1f88f772ec3c",
@@ -2816,7 +3417,14 @@
       "originalSha256": "775b0651198bf29bdd9d3e4096f449f500b00180bed67aec3bc46191fe35e622",
       "imagePath": "dishes/meat_dish/贵州辣子鸡/贵州辣子鸡.jpg",
       "bundled": "photos/import-c9840804ce177bbccabf.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E8%B4%B5%E5%B7%9E%E8%BE%A3%E5%AD%90%E9%B8%A1/%E8%B4%B5%E5%B7%9E%E8%BE%A3%E5%AD%90%E9%B8%A1.jpg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E8%B4%B5%E5%B7%9E%E8%BE%A3%E5%AD%90%E9%B8%A1/%E8%B4%B5%E5%B7%9E%E8%BE%A3%E5%AD%90%E9%B8%A1.jpg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-280e1f88f772ec3c-04.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-41754f839cbffa65",
@@ -2844,7 +3452,14 @@
       "originalSha256": "58ad1b84b77ffde771670a23df17cba1eacaba7114902a69e1d00725d1a9f941",
       "imagePath": "dishes/meat_dish/酱排骨/1.jpeg",
       "bundled": "photos/import-0f4739a53eb8c2171923.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E9%85%B1%E6%8E%92%E9%AA%A8/1.jpeg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E9%85%B1%E6%8E%92%E9%AA%A8/1.jpeg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-34fadc2fa767931c-01.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-aaa0f1f21191196b",
@@ -2872,7 +3487,14 @@
       "originalSha256": "08051b4478131faacd8afbb765da4a68f97ac6a5677b973e562d1bab1279470f",
       "imagePath": "dishes/meat_dish/醉排骨/1.jpeg",
       "bundled": "photos/import-d711d829bfb3cb4bce8c.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E9%86%89%E6%8E%92%E9%AA%A8/1.jpeg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E9%86%89%E6%8E%92%E9%AA%A8/1.jpeg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-249efab791e10293-07.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-bcbc233bc07cafa4",
@@ -2884,7 +3506,14 @@
       "originalSha256": "6312784fb25a4f1d7b144e3824180e3951890a75e6c3c34f4332dc7db35f011d",
       "imagePath": "dishes/meat_dish/青椒土豆炒肉/青椒土豆炒肉.jpg",
       "bundled": "photos/import-48efe39867ea59e4cd79.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E9%9D%92%E6%A4%92%E5%9C%9F%E8%B1%86%E7%82%92%E8%82%89/%E9%9D%92%E6%A4%92%E5%9C%9F%E8%B1%86%E7%82%92%E8%82%89.jpg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E9%9D%92%E6%A4%92%E5%9C%9F%E8%B1%86%E7%82%92%E8%82%89/%E9%9D%92%E6%A4%92%E5%9C%9F%E8%B1%86%E7%82%92%E8%82%89.jpg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-bcbc233bc07cafa4-04.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-f3bcbbe6cbfb3505",
@@ -2940,7 +3569,14 @@
       "originalSha256": "5e29124f9e5db5b0b6aa6305c4ee1bd0308162d3d4a057285572a7b2822f300b",
       "imagePath": "dishes/meat_dish/香煎五花肉/香煎五花肉.jpg",
       "bundled": "photos/import-fe3ebfd39236d9b271d7.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E9%A6%99%E7%85%8E%E4%BA%94%E8%8A%B1%E8%82%89/%E9%A6%99%E7%85%8E%E4%BA%94%E8%8A%B1%E8%82%89.jpg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E9%A6%99%E7%85%8E%E4%BA%94%E8%8A%B1%E8%82%89/%E9%A6%99%E7%85%8E%E4%BA%94%E8%8A%B1%E8%82%89.jpg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-683225505a87b9d9-04.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-4f1a2679eb840431",
@@ -2968,6 +3604,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-36958538b5b1ee45-05.jpg"
+        ]
       }
     },
     {
@@ -2996,7 +3639,14 @@
       "originalSha256": "3b1304b832bf2c010bc55d0de647d49f776545dfed24ec2c99869cdc5027707e",
       "imagePath": "dishes/meat_dish/鱼香茄子/yxqz1.jpg",
       "bundled": "photos/import-9b3b1eac70af98696aac.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E9%B1%BC%E9%A6%99%E8%8C%84%E5%AD%90/yxqz1.jpg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E9%B1%BC%E9%A6%99%E8%8C%84%E5%AD%90/yxqz1.jpg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-bfaaef2163ddf728-04.jpg"
+        ]
+      }
     },
     {
       "recipeId": "mapo-tofu",
@@ -3008,7 +3658,15 @@
       "originalSha256": "11547a2586819cd712ccd275aebf7318a724e2bb5d47d10f5f0e6fa71735ba3d",
       "imagePath": "dishes/meat_dish/麻婆豆腐/1.jpeg",
       "bundled": "photos/import-24d08b8b2fa389b75fd0.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E9%BA%BB%E5%A9%86%E8%B1%86%E8%85%90/1.jpeg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E9%BA%BB%E5%A9%86%E8%B1%86%E8%85%90/1.jpeg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-mapo-tofu-08.jpg",
+          "photos/step-mapo-tofu-12.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-1a8b110f53c68d13",
@@ -3072,6 +3730,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-292d0a9d95d851f8-08.jpg"
+        ]
       }
     },
     {
@@ -3100,6 +3765,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-f20a63e1bd7e9c71-01.jpg"
+        ]
       }
     },
     {
@@ -3144,7 +3816,14 @@
       "originalSha256": "0c3ba0ff42c7d658dc010e3cb3bb5a17be6b542ca3c11ed72f80df70b8545faf",
       "imagePath": "dishes/semi-finished/懒人蛋挞/懒人蛋挞.png",
       "bundled": "photos/import-368499e21a98a7c83dc3.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/semi-finished/%E6%87%92%E4%BA%BA%E8%9B%8B%E6%8C%9E/%E6%87%92%E4%BA%BA%E8%9B%8B%E6%8C%9E.png"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/semi-finished/%E6%87%92%E4%BA%BA%E8%9B%8B%E6%8C%9E/%E6%87%92%E4%BA%BA%E8%9B%8B%E6%8C%9E.png",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-e960ac6812f3005c-03.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-f3e472bcc3e687e5",
@@ -3184,7 +3863,14 @@
       "originalSha256": "dc8365912d92284efd27bfb96609b7629fa5d5ca46d9d5e449a1b95618b349f1",
       "imagePath": "dishes/semi-finished/空气炸锅羊排/羊排.jpg",
       "bundled": "photos/import-a45cfd77498f76c71784.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/semi-finished/%E7%A9%BA%E6%B0%94%E7%82%B8%E9%94%85%E7%BE%8A%E6%8E%92/%E7%BE%8A%E6%8E%92.jpg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/semi-finished/%E7%A9%BA%E6%B0%94%E7%82%B8%E9%94%85%E7%BE%8A%E6%8E%92/%E7%BE%8A%E6%8E%92.jpg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-ad951394e7a99fe2-03.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-01b1d98676a5b225",
@@ -3196,7 +3882,14 @@
       "originalSha256": "7014e67fb1cae7fe75006b6f403e7b4a7fd7bcbd895f2ae260e09b5d0a7a4d66",
       "imagePath": "dishes/semi-finished/空气炸锅鸡翅中/鸡翅中_0.jpg",
       "bundled": "photos/import-64d5593a576fc7743b6a.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/semi-finished/%E7%A9%BA%E6%B0%94%E7%82%B8%E9%94%85%E9%B8%A1%E7%BF%85%E4%B8%AD/%E9%B8%A1%E7%BF%85%E4%B8%AD_0.jpg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/semi-finished/%E7%A9%BA%E6%B0%94%E7%82%B8%E9%94%85%E9%B8%A1%E7%BF%85%E4%B8%AD/%E9%B8%A1%E7%BF%85%E4%B8%AD_0.jpg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-01b1d98676a5b225-03.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-6c8fa75dcb07963c",
@@ -3212,6 +3905,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-6c8fa75dcb07963c-06.jpg"
+        ]
       }
     },
     {
@@ -3224,7 +3924,14 @@
       "originalSha256": "3cd44d0a1a36e8a24d63fe03cc160533947f7840c656d8be7db3661b0af16fbe",
       "imagePath": "dishes/semi-finished/速冻汤圆/速冻汤圆.jpg",
       "bundled": "photos/import-0cafbcbaf10c4781e2fb.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/semi-finished/%E9%80%9F%E5%86%BB%E6%B1%A4%E5%9C%86/%E9%80%9F%E5%86%BB%E6%B1%A4%E5%9C%86.jpg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/semi-finished/%E9%80%9F%E5%86%BB%E6%B1%A4%E5%9C%86/%E9%80%9F%E5%86%BB%E6%B1%A4%E5%9C%86.jpg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-68ca6633c10d07d9-05.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-2e33e0141c78c027",
@@ -3240,6 +3947,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-2e33e0141c78c027-01.jpg"
+        ]
       }
     },
     {
@@ -3256,6 +3970,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-3c05ffd63abd9ea2-04.jpg"
+        ]
       }
     },
     {
@@ -3272,6 +3993,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-95d7b404d04ee264-04.jpg"
+        ]
       }
     },
     {
@@ -3288,6 +4016,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-8ad51751e8b63ae2-04.jpg"
+        ]
       }
     },
     {
@@ -3304,6 +4039,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-4c944fb35c21a8aa-04.jpg"
+        ]
       }
     },
     {
@@ -3320,6 +4062,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-1afcd350dd6d285b-04.jpg"
+        ]
       }
     },
     {
@@ -3336,6 +4085,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-558559ec84a0c5ab-03.jpg"
+        ]
       }
     },
     {
@@ -3364,6 +4120,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-bb2673fc51ecaad3-02.jpg"
+        ]
       }
     },
     {
@@ -3376,7 +4139,15 @@
       "originalSha256": "8358b596b156a615ca980b74754c673f43e9ea2d18e6561037941ff1e8aa85ac",
       "imagePath": "dishes/soup/玉米排骨汤/玉米排骨汤.jpeg",
       "bundled": "photos/import-309eaa9d6ccade5339f7.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/soup/%E7%8E%89%E7%B1%B3%E6%8E%92%E9%AA%A8%E6%B1%A4/%E7%8E%89%E7%B1%B3%E6%8E%92%E9%AA%A8%E6%B1%A4.jpeg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/soup/%E7%8E%89%E7%B1%B3%E6%8E%92%E9%AA%A8%E6%B1%A4/%E7%8E%89%E7%B1%B3%E6%8E%92%E9%AA%A8%E6%B1%A4.jpeg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-corn-soup-07.jpg",
+          "photos/step-corn-soup-09.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-0840396cb2725389",
@@ -3440,6 +4211,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-196eab378a75e74f-04.jpg"
+        ]
       }
     },
     {
@@ -3456,6 +4234,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-b435c11c8067498b-03.jpg"
+        ]
       }
     },
     {
@@ -3484,7 +4269,14 @@
       "originalSha256": "67bb1e702aa8f78f908381c4bb137ab5ee98de2dc6167e0a53bd86d0119cddc1",
       "imagePath": "dishes/soup/羊肉汤/羊肉汤.jpg",
       "bundled": "photos/import-1c1525ce18082cbd95de.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/soup/%E7%BE%8A%E8%82%89%E6%B1%A4/%E7%BE%8A%E8%82%89%E6%B1%A4.jpg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/soup/%E7%BE%8A%E8%82%89%E6%B1%A4/%E7%BE%8A%E8%82%89%E6%B1%A4.jpg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-949bd05cd61f985d-05.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-46c174a49499dd04",
@@ -3500,6 +4292,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-46c174a49499dd04-03.jpg"
+        ]
       }
     },
     {
@@ -3512,7 +4311,14 @@
       "originalSha256": "e1d86e2d918b9c50dc04d1d401169e781ffb84addc287d320e38c4413e115ed5",
       "imagePath": "dishes/soup/菌菇炖乳鸽/菌菇炖乳鸽.jpg",
       "bundled": "photos/import-8cba5a340b84f585be72.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/soup/%E8%8F%8C%E8%8F%87%E7%82%96%E4%B9%B3%E9%B8%BD/%E8%8F%8C%E8%8F%87%E7%82%96%E4%B9%B3%E9%B8%BD.jpg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/soup/%E8%8F%8C%E8%8F%87%E7%82%96%E4%B9%B3%E9%B8%BD/%E8%8F%8C%E8%8F%87%E7%82%96%E4%B9%B3%E9%B8%BD.jpg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-12b1c244a100ef85-03.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-414f79bd9c044d7a",
@@ -3528,6 +4334,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-414f79bd9c044d7a-04.jpg"
+        ]
       }
     },
     {
@@ -3544,6 +4357,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-238c08c29ddb1c4a-03.jpg"
+        ]
       }
     },
     {
@@ -3588,6 +4408,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-502a2a1b61c01bed-04.jpg"
+        ]
       }
     },
     {
@@ -3708,7 +4535,14 @@
       "originalSha256": "1cbcacca0e5bf9721652df1c91da619d46d85e88c4b404e0c9f5e5b864469ccf",
       "imagePath": "dishes/staple/基础牛奶面包/1-1成品.jpg",
       "bundled": "photos/import-5eb35eec3691d08633a5.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/staple/%E5%9F%BA%E7%A1%80%E7%89%9B%E5%A5%B6%E9%9D%A2%E5%8C%85/1-1%E6%88%90%E5%93%81.jpg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/staple/%E5%9F%BA%E7%A1%80%E7%89%9B%E5%A5%B6%E9%9D%A2%E5%8C%85/1-1%E6%88%90%E5%93%81.jpg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-ec9f0780bddb3fb4-05.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-1d64ef29c97b798f",
@@ -3732,7 +4566,14 @@
       "originalSha256": "02329109acd923c6466382e8e3b34c5ca3cd7b6befa3f45d15e25ef3fbecae6e",
       "imagePath": "dishes/staple/意式肉酱面/final.jpg",
       "bundled": "photos/import-a98c86fd0d911925a9bb.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/staple/%E6%84%8F%E5%BC%8F%E8%82%89%E9%85%B1%E9%9D%A2/final.jpg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/staple/%E6%84%8F%E5%BC%8F%E8%82%89%E9%85%B1%E9%9D%A2/final.jpg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-1a5309d32c90a9a3-08.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-c52f0bf257da0b3c",
@@ -3900,7 +4741,14 @@
       "originalSha256": "1f2afa3384002d5c86dd1430853366ae5d28e2a840e37d8e0e6b408f12c733eb",
       "imagePath": "dishes/staple/炒意大利面/a.jpg",
       "bundled": "photos/import-6db07ffa5b20a6a3e7de.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/staple/%E7%82%92%E6%84%8F%E5%A4%A7%E5%88%A9%E9%9D%A2/a.jpg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/staple/%E7%82%92%E6%84%8F%E5%A4%A7%E5%88%A9%E9%9D%A2/a.jpg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-392047faad04360f-02.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-a994a8dc42ec743f",
@@ -3964,6 +4812,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-d916492c172d5d9a-07.jpg"
+        ]
       }
     },
     {
@@ -4004,6 +4859,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-d97323116a825133-01.jpg"
+        ]
       }
     },
     {
@@ -4036,6 +4898,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-103a45a254561fc0-01.jpg"
+        ]
       }
     },
     {
@@ -4076,7 +4945,14 @@
       "originalSha256": "3142a870e7b4080f1ab7832c445ac6912d28a4d3800b799d209501beb20e1247",
       "imagePath": "dishes/staple/空气炸锅照烧鸡饭/空气炸锅照烧鸡饭.jpg",
       "bundled": "photos/import-5a3e92bfc377977708ed.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/staple/%E7%A9%BA%E6%B0%94%E7%82%B8%E9%94%85%E7%85%A7%E7%83%A7%E9%B8%A1%E9%A5%AD/%E7%A9%BA%E6%B0%94%E7%82%B8%E9%94%85%E7%85%A7%E7%83%A7%E9%B8%A1%E9%A5%AD.jpg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/staple/%E7%A9%BA%E6%B0%94%E7%82%B8%E9%94%85%E7%85%A7%E7%83%A7%E9%B8%A1%E9%A5%AD/%E7%A9%BA%E6%B0%94%E7%82%B8%E9%94%85%E7%85%A7%E7%83%A7%E9%B8%A1%E9%A5%AD.jpg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-0492c4583aa9e288-03.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-65d4c06a5b4800be",
@@ -4092,6 +4968,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-65d4c06a5b4800be-03.jpg"
+        ]
       }
     },
     {
@@ -4108,6 +4991,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-cf3dabc066de2aa0-03.jpg"
+        ]
       }
     },
     {
@@ -4152,6 +5042,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-617957ecce2fc981-01.jpg"
+        ]
       }
     },
     {
@@ -4168,6 +5065,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-580927b6ab1e41c2-01.jpg"
+        ]
       }
     },
     {
@@ -4304,7 +5208,14 @@
       "originalSha256": "ee253318dee83882497b63fa08ec1c6663de135c2e69da5fd0eddd24471f4b72",
       "imagePath": "dishes/staple/酱拌荞麦面/1.jpeg",
       "bundled": "photos/import-1dbdc607ba61a7e4e384.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/staple/%E9%85%B1%E6%8B%8C%E8%8D%9E%E9%BA%A6%E9%9D%A2/1.jpeg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/staple/%E9%85%B1%E6%8B%8C%E8%8D%9E%E9%BA%A6%E9%9D%A2/1.jpeg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-c638d9f85df8f09c-03.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-ecbf1bf555cf90ed",
@@ -4336,6 +5247,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-4de3928e6efae0e0-01.jpg"
+        ]
       }
     },
     {
@@ -4368,6 +5286,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-c5e2191c72cc18cf-02.jpg"
+        ]
       }
     },
     {
@@ -4384,6 +5309,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-b8edc500b99e3e9c-04.jpg"
+        ]
       }
     },
     {
@@ -4412,7 +5344,14 @@
       "originalSha256": "05816fe39b71fdf9aca091e4930111f170277f30fbada57f36c6956a2196f96c",
       "imagePath": "dishes/staple/鲣鱼海苔玉米饭/米饭.jpg",
       "bundled": "photos/import-c9b396f5c85db5dbe298.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/staple/%E9%B2%A3%E9%B1%BC%E6%B5%B7%E8%8B%94%E7%8E%89%E7%B1%B3%E9%A5%AD/%E7%B1%B3%E9%A5%AD.jpg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/staple/%E9%B2%A3%E9%B1%BC%E6%B5%B7%E8%8B%94%E7%8E%89%E7%B1%B3%E9%A5%AD/%E7%B1%B3%E9%A5%AD.jpg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-c3250cf8bae4fdf3-01.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-343910aaf7673e11",
@@ -4444,6 +5383,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-e5f0719e22719962-01.jpg"
+        ]
       }
     },
     {
@@ -4460,6 +5406,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-163edd1cb5ff4c8b-03.jpg"
+        ]
       }
     },
     {
@@ -4528,7 +5481,14 @@
       "originalSha256": "3ac67ce68b0837211daf0d62671806453aa5670e254ed53c19ac22d8f531acb7",
       "imagePath": "dishes/vegetable_dish/凉拌莴笋/1.jpeg",
       "bundled": "photos/import-40dec713ae0fe74b1a61.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/vegetable_dish/%E5%87%89%E6%8B%8C%E8%8E%B4%E7%AC%8B/1.jpeg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/vegetable_dish/%E5%87%89%E6%8B%8C%E8%8E%B4%E7%AC%8B/1.jpeg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-fc120554b9fc57fb-04.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-8d02690da7199d2d",
@@ -4632,7 +5592,16 @@
       "originalSha256": "0db707103ad5e9a63677f47628e8719ee46b350a3f820da08cbbfdceda1dd010",
       "imagePath": "dishes/vegetable_dish/地三鲜/地三鲜.jpg",
       "bundled": "photos/import-e9fcdd971a9979a2ee31.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/vegetable_dish/%E5%9C%B0%E4%B8%89%E9%B2%9C/%E5%9C%B0%E4%B8%89%E9%B2%9C.jpg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/vegetable_dish/%E5%9C%B0%E4%B8%89%E9%B2%9C/%E5%9C%B0%E4%B8%89%E9%B2%9C.jpg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-three-treasures-11.jpg",
+          "photos/step-three-treasures-18.jpg",
+          "photos/step-three-treasures-20.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-5097e0e1af4e2096",
@@ -4672,7 +5641,15 @@
       "originalSha256": "7bc7117f7735d73eee88229f81bc4e64ecd750205fa2543a4e1392905cda7780",
       "imagePath": "dishes/vegetable_dish/干锅花菜/干锅花菜.jpg",
       "bundled": "photos/import-a26e416f06bfc8c14b5a.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/vegetable_dish/%E5%B9%B2%E9%94%85%E8%8A%B1%E8%8F%9C/%E5%B9%B2%E9%94%85%E8%8A%B1%E8%8F%9C.jpg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/vegetable_dish/%E5%B9%B2%E9%94%85%E8%8A%B1%E8%8F%9C/%E5%B9%B2%E9%94%85%E8%8A%B1%E8%8F%9C.jpg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-cauliflower-05.jpg",
+          "photos/step-cauliflower-08.jpg"
+        ]
+      }
     },
     {
       "recipeId": "cabbage",
@@ -4688,6 +5665,14 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-cabbage-05.jpg",
+          "photos/step-cabbage-08.jpg"
+        ]
       }
     },
     {
@@ -4704,6 +5689,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-4378c05c5f7be12d-02.jpg"
+        ]
       }
     },
     {
@@ -4720,6 +5712,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-b9ce9dd134001c23-04.jpg"
+        ]
       }
     },
     {
@@ -4776,6 +5775,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-bf3ccf273f058637-05.jpg"
+        ]
       }
     },
     {
@@ -4788,7 +5794,14 @@
       "originalSha256": "d744b2afa5588f756970ee237cbe0393434eaac84d4d0f04f15c773afb9c85b2",
       "imagePath": "dishes/vegetable_dish/洋葱炒鸡蛋/1.jpeg",
       "bundled": "photos/import-abaa588e3586f3ad7a74.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/vegetable_dish/%E6%B4%8B%E8%91%B1%E7%82%92%E9%B8%A1%E8%9B%8B/1.jpeg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/vegetable_dish/%E6%B4%8B%E8%91%B1%E7%82%92%E9%B8%A1%E8%9B%8B/1.jpeg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-11b4b5d7abe0bafa-02.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-5a5cd50a4aaddb61",
@@ -4820,6 +5833,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-d1ede91e3649f27a-05.jpg"
+        ]
       }
     },
     {
@@ -4848,7 +5868,15 @@
       "originalSha256": "3991146afc3f3a34b6ba8a420f80c3aceb95927ecbc4733fc2c2a51015aa0d9d",
       "imagePath": "dishes/vegetable_dish/炒滑蛋/炒滑蛋.jpg",
       "bundled": "photos/import-b83fecb8d6caeb59d149.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/vegetable_dish/%E7%82%92%E6%BB%91%E8%9B%8B/%E7%82%92%E6%BB%91%E8%9B%8B.jpg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/vegetable_dish/%E7%82%92%E6%BB%91%E8%9B%8B/%E7%82%92%E6%BB%91%E8%9B%8B.jpg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-silky-eggs-04.jpg",
+          "photos/step-silky-eggs-05.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-51a4793a1e08410d",
@@ -4880,6 +5908,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-8b9856cd20471044-07.jpg"
+        ]
       }
     },
     {
@@ -4920,7 +5955,15 @@
       "originalSha256": "803779ff7a569d6209f29fc6cf63f5167f15d32c198cd4cd268460f03cadc32f",
       "imagePath": "dishes/vegetable_dish/白灼菜心/白灼菜心.jpg",
       "bundled": "photos/import-4719ca287494e79e1914.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/vegetable_dish/%E7%99%BD%E7%81%BC%E8%8F%9C%E5%BF%83/%E7%99%BD%E7%81%BC%E8%8F%9C%E5%BF%83.jpg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/vegetable_dish/%E7%99%BD%E7%81%BC%E8%8F%9C%E5%BF%83/%E7%99%BD%E7%81%BC%E8%8F%9C%E5%BF%83.jpg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-greens-05.jpg",
+          "photos/step-greens-07.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-26f2457ef559816f",
@@ -4936,6 +5979,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-26f2457ef559816f-03.jpg"
+        ]
       }
     },
     {
@@ -4980,6 +6030,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-afde2c6a34186f7e-02.jpg"
+        ]
       }
     },
     {
@@ -5012,6 +6069,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-9990afe9babe2653-06.jpg"
+        ]
       }
     },
     {
@@ -5056,6 +6120,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-a294a849e9a5f7fe-03.jpg"
+        ]
       }
     },
     {
@@ -5100,6 +6171,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-35b2e221aa1e478b-06.jpg"
+        ]
       }
     },
     {
@@ -5144,6 +6222,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-5086f352be3eacfd-06.jpg"
+        ]
       }
     },
     {
@@ -5188,6 +6273,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-9aafc1145d54a0f4-02.jpg"
+        ]
       }
     },
     {
@@ -5216,7 +6308,15 @@
       "originalSha256": "d4d41279075a56094a4e3ef1dcf5db1db68c04f80a9871a25fbf58af6e54c88d",
       "imagePath": "dishes/vegetable_dish/西红柿豆腐汤羹/1.jpeg",
       "bundled": "photos/import-00721bee8690a04dfdd5.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/vegetable_dish/%E8%A5%BF%E7%BA%A2%E6%9F%BF%E8%B1%86%E8%85%90%E6%B1%A4%E7%BE%B9/1.jpeg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/vegetable_dish/%E8%A5%BF%E7%BA%A2%E6%9F%BF%E8%B1%86%E8%85%90%E6%B1%A4%E7%BE%B9/1.jpeg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-tomato-tofu-02.jpg",
+          "photos/step-tomato-tofu-04.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-4d2ca8f35f3b92a5",
@@ -5240,7 +6340,14 @@
       "originalSha256": "cabe2b4a0bb5f1a6817b2c9e092c3f6408e091e23f337264ff81c069c9e0e70e",
       "imagePath": "dishes/vegetable_dish/话梅煮毛豆/1.jpeg",
       "bundled": "photos/import-05077ad84614a1cbdcd6.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/vegetable_dish/%E8%AF%9D%E6%A2%85%E7%85%AE%E6%AF%9B%E8%B1%86/1.jpeg"
+      "imageUrl": "https://raw.githubusercontent.com/Anduin2017/HowToCook/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/vegetable_dish/%E8%AF%9D%E6%A2%85%E7%85%AE%E6%AF%9B%E8%B1%86/1.jpeg",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-d50d59c1ca77bcd1-02.jpg"
+        ]
+      }
     },
     {
       "recipeId": "htc-9190d44233e72745",
@@ -5256,6 +6363,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-9190d44233e72745-05.jpg"
+        ]
       }
     },
     {
@@ -5408,6 +6522,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-htc-a1b5c702a8129858-02.jpg"
+        ]
       }
     },
     {
@@ -5420,7 +6541,15 @@
       "originalSha256": "2f6644fa9bc57c48657391cebdcbb811f6fa7301a687c3679db5219e498e083a",
       "imagePath": "static/pix/pasta-arrabbiata.webp",
       "bundled": "photos/import-269af04a6aa291651c26.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/LukeSmithxyz/based.cooking/9d4a31a040eedd61e4fb608cb0c114ff9a7c4dd2/static/pix/pasta-arrabbiata.webp"
+      "imageUrl": "https://raw.githubusercontent.com/LukeSmithxyz/based.cooking/9d4a31a040eedd61e4fb608cb0c114ff9a7c4dd2/static/pix/pasta-arrabbiata.webp",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-world-pasta-arrabbiata-04.jpg",
+          "photos/step-world-pasta-arrabbiata-07.jpg"
+        ]
+      }
     },
     {
       "recipeId": "world-greek-salad",
@@ -5436,6 +6565,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-world-greek-salad-02.jpg"
+        ]
       }
     },
     {
@@ -5448,7 +6584,15 @@
       "originalSha256": "4e36c04768240d1397075b8ae17e2cf204c195c79be801f18f6fb3df1609b68f",
       "imagePath": "static/pix/spanish-tortilla.webp",
       "bundled": "photos/import-edbdd181dceca13b4148.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/LukeSmithxyz/based.cooking/9d4a31a040eedd61e4fb608cb0c114ff9a7c4dd2/static/pix/spanish-tortilla.webp"
+      "imageUrl": "https://raw.githubusercontent.com/LukeSmithxyz/based.cooking/9d4a31a040eedd61e4fb608cb0c114ff9a7c4dd2/static/pix/spanish-tortilla.webp",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-world-spanish-tortilla-04.jpg",
+          "photos/step-world-spanish-tortilla-11.jpg"
+        ]
+      }
     },
     {
       "recipeId": "world-ratatouille",
@@ -5464,6 +6608,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-world-ratatouille-03.jpg"
+        ]
       }
     },
     {
@@ -5488,7 +6639,14 @@
       "originalSha256": "61325253366f3bfc8ed215308af45001cfc68cbd02b556dca448fc927d815342",
       "imagePath": "static/pix/schnitzel.webp",
       "bundled": "photos/import-873c25d869c88902085c.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/LukeSmithxyz/based.cooking/9d4a31a040eedd61e4fb608cb0c114ff9a7c4dd2/static/pix/schnitzel.webp"
+      "imageUrl": "https://raw.githubusercontent.com/LukeSmithxyz/based.cooking/9d4a31a040eedd61e4fb608cb0c114ff9a7c4dd2/static/pix/schnitzel.webp",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-world-schnitzel-06.jpg"
+        ]
+      }
     },
     {
       "recipeId": "world-swedish-pancakes",
@@ -5500,7 +6658,14 @@
       "originalSha256": "80d6d5b4dd7ad00201b417b3b11762dcaafcf06f7ea37e108efd7eeba321d9a5",
       "imagePath": "static/pix/swedish-pancakes.webp",
       "bundled": "photos/import-e4a61c1197e6a2e5bf56.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/LukeSmithxyz/based.cooking/9d4a31a040eedd61e4fb608cb0c114ff9a7c4dd2/static/pix/swedish-pancakes.webp"
+      "imageUrl": "https://raw.githubusercontent.com/LukeSmithxyz/based.cooking/9d4a31a040eedd61e4fb608cb0c114ff9a7c4dd2/static/pix/swedish-pancakes.webp",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-world-swedish-pancakes-03.jpg"
+        ]
+      }
     },
     {
       "recipeId": "world-finnish-salmon-soup",
@@ -5516,6 +6681,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-world-finnish-salmon-soup-04.jpg"
+        ]
       }
     },
     {
@@ -5528,7 +6700,14 @@
       "originalSha256": "0770faa200c62ac688971cdd02725874f2794a90492569f1a0c2ae83e4a6e1af",
       "imagePath": "static/pix/danish-pancake.webp",
       "bundled": "photos/import-28822f084e1716fa7bad.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/LukeSmithxyz/based.cooking/9d4a31a040eedd61e4fb608cb0c114ff9a7c4dd2/static/pix/danish-pancake.webp"
+      "imageUrl": "https://raw.githubusercontent.com/LukeSmithxyz/based.cooking/9d4a31a040eedd61e4fb608cb0c114ff9a7c4dd2/static/pix/danish-pancake.webp",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-world-danish-pancake-05.jpg"
+        ]
+      }
     },
     {
       "recipeId": "world-irish-potato-casserole",
@@ -5544,6 +6723,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-world-irish-potato-casserole-03.jpg"
+        ]
       }
     },
     {
@@ -5556,7 +6742,14 @@
       "originalSha256": "1be1e800f0f6dd990f4fe417228c65ec00a1768f8f06cc43f85d1601b8c046a3",
       "imagePath": "static/pix/tunisian-tajine.webp",
       "bundled": "photos/import-a52ab05ea9714ce2ef33.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/LukeSmithxyz/based.cooking/9d4a31a040eedd61e4fb608cb0c114ff9a7c4dd2/static/pix/tunisian-tajine.webp"
+      "imageUrl": "https://raw.githubusercontent.com/LukeSmithxyz/based.cooking/9d4a31a040eedd61e4fb608cb0c114ff9a7c4dd2/static/pix/tunisian-tajine.webp",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-world-tunisian-tajine-06.jpg"
+        ]
+      }
     },
     {
       "recipeId": "world-lebanese-lentil-soup",
@@ -5572,6 +6765,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-world-lebanese-lentil-soup-02.jpg"
+        ]
       }
     },
     {
@@ -5628,6 +6828,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-world-panang-style-beef-curry-03.jpg"
+        ]
       }
     },
     {
@@ -5656,7 +6863,14 @@
       "originalSha256": "b46b7bb2fa962917bfeb0cecd085e139c89a295453181b8021fa8c9e06415c78",
       "imagePath": "static/pix/naan-bread.webp",
       "bundled": "photos/import-2c6b229a741c2392429d.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/LukeSmithxyz/based.cooking/9d4a31a040eedd61e4fb608cb0c114ff9a7c4dd2/static/pix/naan-bread.webp"
+      "imageUrl": "https://raw.githubusercontent.com/LukeSmithxyz/based.cooking/9d4a31a040eedd61e4fb608cb0c114ff9a7c4dd2/static/pix/naan-bread.webp",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-world-naan-bread-06.jpg"
+        ]
+      }
     },
     {
       "recipeId": "world-fajitas",
@@ -5672,6 +6886,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-world-fajitas-05.jpg"
+        ]
       }
     },
     {
@@ -5684,7 +6905,15 @@
       "originalSha256": "6ac61569f27957be6ff76a1bcdeaf4e3c86ffb9eacec3fc7e0d5f0f2dfef4de6",
       "imagePath": "static/pix/brigadeiro.webp",
       "bundled": "photos/import-ce13f8246a194a26a164.jpg",
-      "imageUrl": "https://raw.githubusercontent.com/LukeSmithxyz/based.cooking/9d4a31a040eedd61e4fb608cb0c114ff9a7c4dd2/static/pix/brigadeiro.webp"
+      "imageUrl": "https://raw.githubusercontent.com/LukeSmithxyz/based.cooking/9d4a31a040eedd61e4fb608cb0c114ff9a7c4dd2/static/pix/brigadeiro.webp",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-world-brigadeiro-02.jpg",
+          "photos/step-world-brigadeiro-04.jpg"
+        ]
+      }
     },
     {
       "recipeId": "world-ukrainian-borscht",
@@ -5712,6 +6941,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-world-tzatziki-04.jpg"
+        ]
       }
     },
     {
@@ -5759,6 +6995,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-cn-donggua-paigu-tang-02.jpg"
+        ]
       }
     },
     {
@@ -5802,7 +7045,14 @@
       "imagePath": "dishes/meat_dish/回锅肉/2.jpeg",
       "bundled": "photos/cn-huiguo-rou.jpg",
       "imageUrl": "https://github.com/Anduin2017/HowToCook/blob/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/meat_dish/%E5%9B%9E%E9%94%85%E8%82%89/2.jpeg",
-      "imageLicense": "Unlicense"
+      "imageLicense": "Unlicense",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-cn-huiguo-rou-03.jpg"
+        ]
+      }
     },
     {
       "recipeId": "cn-ziran-yangrou",
@@ -5819,6 +7069,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-cn-ziran-yangrou-03.jpg"
+        ]
       }
     },
     {
@@ -5836,6 +7093,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-cn-jiachang-doufu-04.jpg"
+        ]
       }
     },
     {
@@ -5849,7 +7113,14 @@
       "imagePath": "https://www.foodiesfeed.com/free-food-photo/xiaolongbao-dumplings",
       "bundled": "photos/cn-xiaolongbao.jpg",
       "imageUrl": "https://www.foodiesfeed.com/free-food-photo/xiaolongbao-dumplings",
-      "imageLicense": "CC0 / public domain (FoodiesFeed)"
+      "imageLicense": "CC0 / public domain (FoodiesFeed)",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-cn-xiaolongbao-06.jpg"
+        ]
+      }
     },
     {
       "recipeId": "cn-shanyao-paigu-tang",
@@ -5866,6 +7137,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-cn-shanyao-paigu-tang-02.jpg"
+        ]
       }
     },
     {
@@ -5883,6 +7161,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-cn-ganbian-sijidou-03.jpg"
+        ]
       }
     },
     {
@@ -5900,6 +7185,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-cn-guangshi-changfen-05.jpg"
+        ]
       }
     },
     {
@@ -5917,6 +7209,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-cn-shuizhu-niurou-03.jpg"
+        ]
       }
     },
     {
@@ -5934,6 +7233,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-cn-qingchao-xiaren-03.jpg"
+        ]
       }
     },
     {
@@ -5951,6 +7257,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-cn-zhajiang-mian-04.jpg"
+        ]
       }
     },
     {
@@ -5968,6 +7281,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-cn-pidan-shourou-zhou-03.jpg"
+        ]
       }
     },
     {
@@ -5985,6 +7305,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-cn-tangcu-liji-05.jpg"
+        ]
       }
     },
     {
@@ -6002,6 +7329,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-cn-zicai-danhua-tang-01.jpg"
+        ]
       }
     },
     {
@@ -6019,6 +7353,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-cn-hongshao-daiyu-02.jpg"
+        ]
       }
     },
     {
@@ -6036,6 +7377,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-cn-hongtang-fagao-06.jpg"
+        ]
       }
     },
     {
@@ -6053,6 +7401,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-cn-congyou-bing-05.jpg"
+        ]
       }
     },
     {
@@ -6087,6 +7442,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-cn-suanrong-xilanhua-04.jpg"
+        ]
       }
     },
     {
@@ -6104,6 +7466,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-cn-mayi-shangshu-04.jpg"
+        ]
       }
     },
     {
@@ -6121,6 +7490,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-cn-haoyou-shengcai-03.jpg"
+        ]
       }
     },
     {
@@ -6134,7 +7510,14 @@
       "imagePath": "https://www.foodiesfeed.com/free-food-photo/egg-fried-rice",
       "bundled": "photos/cn-dan-chaofan.jpg",
       "imageUrl": "https://www.foodiesfeed.com/free-food-photo/egg-fried-rice",
-      "imageLicense": "CC0 / public domain (FoodiesFeed)"
+      "imageLicense": "CC0 / public domain (FoodiesFeed)",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-cn-dan-chaofan-04.jpg"
+        ]
+      }
     },
     {
       "recipeId": "cn-xihu-niurou-geng",
@@ -6151,6 +7534,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-cn-xihu-niurou-geng-02.jpg"
+        ]
       }
     },
     {
@@ -6168,6 +7558,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-cn-xihongshi-chao-jidan-03.jpg"
+        ]
       }
     },
     {
@@ -6202,6 +7599,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-cn-chizhi-zheng-paigu-04.jpg"
+        ]
       }
     },
     {
@@ -6219,6 +7623,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-cn-suanla-tudousi-03.jpg"
+        ]
       }
     },
     {
@@ -6270,6 +7681,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-cn-yiner-lianzi-geng-02.jpg"
+        ]
       }
     },
     {
@@ -6287,6 +7705,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-cn-yangchun-mian-02.jpg"
+        ]
       }
     },
     {
@@ -6304,6 +7729,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-cn-qingjiao-rousi-04.jpg"
+        ]
       }
     },
     {
@@ -6321,6 +7753,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-cn-jiucai-hezi-05.jpg"
+        ]
       }
     },
     {
@@ -6355,6 +7794,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-cn-xiangla-xie-02.jpg"
+        ]
       }
     },
     {
@@ -6372,6 +7818,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-cn-yuxiang-rousi-04.jpg"
+        ]
       }
     },
     {
@@ -6389,6 +7842,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-jp-salmon-misoyaki-04.jpg"
+        ]
       }
     },
     {
@@ -6406,6 +7866,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-jp-oyakodon-04.jpg"
+        ]
       }
     },
     {
@@ -6423,6 +7890,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-jp-oden-03.jpg"
+        ]
       }
     },
     {
@@ -6440,6 +7914,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-jp-hiyayakko-03.jpg"
+        ]
       }
     },
     {
@@ -6474,6 +7955,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-jp-okonomiyaki-04.jpg"
+        ]
       }
     },
     {
@@ -6491,6 +7979,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-jp-tempura-04.jpg"
+        ]
       }
     },
     {
@@ -6521,7 +8016,14 @@
       "imagePath": "dishes/staple/日式咖喱饭/成品.jpg",
       "bundled": "photos/jp-curry-rice.jpg",
       "imageUrl": "https://github.com/Anduin2017/HowToCook/blob/743d7f46b7644c43673e0b2e255c745f6fa8ca5e/dishes/staple/%E6%97%A5%E5%BC%8F%E5%92%96%E5%96%B1%E9%A5%AD/%E6%88%90%E5%93%81.jpg",
-      "imageLicense": "Unlicense"
+      "imageLicense": "Unlicense",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-jp-curry-rice-04.jpg"
+        ]
+      }
     },
     {
       "recipeId": "jp-nikujaga",
@@ -6538,6 +8040,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-jp-nikujaga-02.jpg"
+        ]
       }
     },
     {
@@ -6572,6 +8081,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-jp-tonkatsu-04.jpg"
+        ]
       }
     },
     {
@@ -6589,6 +8105,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-jp-teriyaki-chicken-05.jpg"
+        ]
       }
     },
     {
@@ -6606,6 +8129,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-jp-tamagoyaki-05.jpg"
+        ]
       }
     },
     {
@@ -6623,6 +8153,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-jp-chawanmushi-04.jpg"
+        ]
       }
     },
     {
@@ -6640,6 +8177,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-kr-ginseng-chicken-soup-02.jpg"
+        ]
       }
     },
     {
@@ -6674,6 +8218,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-kr-kimchi-stew-03.jpg"
+        ]
       }
     },
     {
@@ -6691,6 +8242,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-kr-kimchi-fried-rice-05.jpg"
+        ]
       }
     },
     {
@@ -6708,6 +8266,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-kr-seafood-pancake-03.jpg"
+        ]
       }
     },
     {
@@ -6721,7 +8286,14 @@
       "imagePath": "https://www.foodiesfeed.com/free-food-photo/korean-bibimbap-in-yamyam-berlin",
       "bundled": "photos/kr-bibimbap.jpg",
       "imageUrl": "https://www.foodiesfeed.com/free-food-photo/korean-bibimbap-in-yamyam-berlin",
-      "imageLicense": "CC0 / public domain (FoodiesFeed)"
+      "imageLicense": "CC0 / public domain (FoodiesFeed)",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-kr-bibimbap-05.jpg"
+        ]
+      }
     },
     {
       "recipeId": "kr-gimbap",
@@ -6734,7 +8306,14 @@
       "imagePath": "https://www.foodiesfeed.com/free-food-photo/man-eating-traditional-korean-gimbap-rice-rolls-with-chopsticks",
       "bundled": "photos/kr-gimbap.jpg",
       "imageUrl": "https://www.foodiesfeed.com/free-food-photo/man-eating-traditional-korean-gimbap-rice-rolls-with-chopsticks",
-      "imageLicense": "CC0 / public domain (FoodiesFeed)"
+      "imageLicense": "CC0 / public domain (FoodiesFeed)",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-kr-gimbap-02.jpg"
+        ]
+      }
     },
     {
       "recipeId": "kr-tteokbokki",
@@ -6751,6 +8330,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-kr-tteokbokki-02.jpg"
+        ]
       }
     },
     {
@@ -6768,6 +8354,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-kr-budae-jjigae-03.jpg"
+        ]
       }
     },
     {
@@ -6785,6 +8378,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-kr-naengmyeon-01.jpg"
+        ]
       }
     },
     {
@@ -6802,6 +8402,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-kr-korean-fried-chicken-05.jpg"
+        ]
       }
     },
     {
@@ -6815,7 +8422,14 @@
       "imagePath": "https://www.foodiesfeed.com/free-food-photo/roasted-pork-belly",
       "bundled": "photos/kr-grilled-pork-belly.jpg",
       "imageUrl": "https://www.foodiesfeed.com/free-food-photo/roasted-pork-belly",
-      "imageLicense": "CC0 / public domain (FoodiesFeed)"
+      "imageLicense": "CC0 / public domain (FoodiesFeed)",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-kr-grilled-pork-belly-03.jpg"
+        ]
+      }
     },
     {
       "recipeId": "us-club-sandwich",
@@ -6845,7 +8459,14 @@
       "imagePath": "https://www.foodiesfeed.com/free-food-photo/crispy-spicy-chicken-wings",
       "bundled": "photos/us-buffalo-wings.jpg",
       "imageUrl": "https://www.foodiesfeed.com/free-food-photo/crispy-spicy-chicken-wings",
-      "imageLicense": "CC0 / public domain (FoodiesFeed)"
+      "imageLicense": "CC0 / public domain (FoodiesFeed)",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-us-buffalo-wings-02.jpg"
+        ]
+      }
     },
     {
       "recipeId": "us-bbq-ribs",
@@ -6858,7 +8479,14 @@
       "imagePath": "https://www.foodiesfeed.com/free-food-photo/pork-ribs",
       "bundled": "photos/us-bbq-ribs.jpg",
       "imageUrl": "https://www.foodiesfeed.com/free-food-photo/pork-ribs",
-      "imageLicense": "CC0 / public domain (FoodiesFeed)"
+      "imageLicense": "CC0 / public domain (FoodiesFeed)",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-us-bbq-ribs-04.jpg"
+        ]
+      }
     },
     {
       "recipeId": "us-corn-chowder",
@@ -6871,7 +8499,14 @@
       "imagePath": "https://www.foodiesfeed.com/free-food-photo/creamy-corn-soup-with-fresh-ingredients",
       "bundled": "photos/us-corn-chowder.jpg",
       "imageUrl": "https://www.foodiesfeed.com/free-food-photo/creamy-corn-soup-with-fresh-ingredients",
-      "imageLicense": "CC0 / public domain (FoodiesFeed)"
+      "imageLicense": "CC0 / public domain (FoodiesFeed)",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-us-corn-chowder-03.jpg"
+        ]
+      }
     },
     {
       "recipeId": "us-cobb-salad",
@@ -6888,6 +8523,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-us-cobb-salad-01.jpg"
+        ]
       }
     },
     {
@@ -6905,6 +8547,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-us-ny-cheesecake-04.jpg"
+        ]
       }
     },
     {
@@ -6918,7 +8567,14 @@
       "imagePath": "https://www.foodiesfeed.com/free-food-photo/cheeseburger",
       "bundled": "photos/us-classic-burger.jpg",
       "imageUrl": "https://www.foodiesfeed.com/free-food-photo/cheeseburger",
-      "imageLicense": "CC0 / public domain (FoodiesFeed)"
+      "imageLicense": "CC0 / public domain (FoodiesFeed)",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-us-classic-burger-03.jpg"
+        ]
+      }
     },
     {
       "recipeId": "us-buttermilk-pancakes",
@@ -6952,6 +8608,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-us-mac-and-cheese-03.jpg"
+        ]
       }
     },
     {
@@ -6969,6 +8632,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-us-apple-pie-06.jpg"
+        ]
       }
     },
     {
@@ -6986,6 +8656,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-eu-carbonara-02.jpg"
+        ]
       }
     },
     {
@@ -7003,6 +8680,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-eu-greek-salad-01.jpg"
+        ]
       }
     },
     {
@@ -7033,7 +8717,14 @@
       "imagePath": "https://www.foodiesfeed.com/free-food-photo/delicious-tiramisu-dessert-slice-on-elegant-plate",
       "bundled": "photos/eu-tiramisu.jpg",
       "imageUrl": "https://www.foodiesfeed.com/free-food-photo/delicious-tiramisu-dessert-slice-on-elegant-plate",
-      "imageLicense": "CC0 / public domain (FoodiesFeed)"
+      "imageLicense": "CC0 / public domain (FoodiesFeed)",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-eu-tiramisu-02.jpg"
+        ]
+      }
     },
     {
       "recipeId": "eu-crepe",
@@ -7067,6 +8758,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-eu-onion-soup-03.jpg"
+        ]
       }
     },
     {
@@ -7080,7 +8778,14 @@
       "imagePath": "https://www.foodiesfeed.com/free-food-photo/fish-and-chips-with-broccoli",
       "bundled": "photos/eu-fish-and-chips.jpg",
       "imageUrl": "https://www.foodiesfeed.com/free-food-photo/fish-and-chips-with-broccoli",
-      "imageLicense": "CC0 / public domain (FoodiesFeed)"
+      "imageLicense": "CC0 / public domain (FoodiesFeed)",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-eu-fish-and-chips-03.jpg"
+        ]
+      }
     },
     {
       "recipeId": "eu-margherita",
@@ -7093,7 +8798,14 @@
       "imagePath": "https://www.foodiesfeed.com/free-food-photo/neapolitan-pizza-margherita",
       "bundled": "photos/eu-margherita.jpg",
       "imageUrl": "https://www.foodiesfeed.com/free-food-photo/neapolitan-pizza-margherita",
-      "imageLicense": "CC0 / public domain (FoodiesFeed)"
+      "imageLicense": "CC0 / public domain (FoodiesFeed)",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-eu-margherita-04.jpg"
+        ]
+      }
     },
     {
       "recipeId": "eu-beef-bourguignon",
@@ -7106,7 +8818,14 @@
       "imagePath": "https://www.foodiesfeed.com/free-food-photo/hearty-beef-stew-with-root-vegetables",
       "bundled": "photos/eu-beef-bourguignon.jpg",
       "imageUrl": "https://www.foodiesfeed.com/free-food-photo/hearty-beef-stew-with-root-vegetables",
-      "imageLicense": "CC0 / public domain (FoodiesFeed)"
+      "imageLicense": "CC0 / public domain (FoodiesFeed)",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-eu-beef-bourguignon-03.jpg"
+        ]
+      }
     },
     {
       "recipeId": "eu-paella",
@@ -7136,6 +8855,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-sea-laksa-02.jpg"
+        ]
       }
     },
     {
@@ -7153,6 +8879,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-sea-tomyum-03.jpg"
+        ]
       }
     },
     {
@@ -7166,7 +8899,14 @@
       "imagePath": "https://www.foodiesfeed.com/free-food-photo/green-curry-with-beans-sprouts",
       "bundled": "photos/sea-green-curry.jpg",
       "imageUrl": "https://www.foodiesfeed.com/free-food-photo/green-curry-with-beans-sprouts",
-      "imageLicense": "CC0 / public domain (FoodiesFeed)"
+      "imageLicense": "CC0 / public domain (FoodiesFeed)",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-sea-green-curry-03.jpg"
+        ]
+      }
     },
     {
       "recipeId": "sea-pineapple-rice",
@@ -7183,6 +8923,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-sea-pineapple-rice-04.jpg"
+        ]
       }
     },
     {
@@ -7200,6 +8947,13 @@
       "generatedCover": {
         "tool": "OpenAI image generation",
         "date": "2026-11-02"
+      },
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-sea-papaya-salad-05.jpg"
+        ]
       }
     },
     {
@@ -7230,7 +8984,14 @@
       "imagePath": "https://www.foodiesfeed.com/free-food-photo/fresh-spring-rolls-with-dipping-sauces-on-wooden-table",
       "bundled": "photos/sea-spring-rolls.jpg",
       "imageUrl": "https://www.foodiesfeed.com/free-food-photo/fresh-spring-rolls-with-dipping-sauces-on-wooden-table",
-      "imageLicense": "CC0 / public domain (FoodiesFeed)"
+      "imageLicense": "CC0 / public domain (FoodiesFeed)",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-sea-spring-rolls-01.jpg"
+        ]
+      }
     },
     {
       "recipeId": "sea-pho",
@@ -7243,7 +9004,14 @@
       "imagePath": "https://www.foodiesfeed.com/free-food-photo/pho-bo-and-pho-ga-in-a-restaurant",
       "bundled": "photos/sea-pho.jpg",
       "imageUrl": "https://www.foodiesfeed.com/free-food-photo/pho-bo-and-pho-ga-in-a-restaurant",
-      "imageLicense": "CC0 / public domain (FoodiesFeed)"
+      "imageLicense": "CC0 / public domain (FoodiesFeed)",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-sea-pho-03.jpg"
+        ]
+      }
     },
     {
       "recipeId": "other-hummus",
@@ -7256,7 +9024,14 @@
       "imagePath": "https://www.foodiesfeed.com/free-food-photo/hummus-close-up",
       "bundled": "photos/other-hummus.jpg",
       "imageUrl": "https://www.foodiesfeed.com/free-food-photo/hummus-close-up",
-      "imageLicense": "CC0 / public domain (FoodiesFeed)"
+      "imageLicense": "CC0 / public domain (FoodiesFeed)",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-other-hummus-04.jpg"
+        ]
+      }
     },
     {
       "recipeId": "other-butter-chicken",
@@ -7269,7 +9044,14 @@
       "imagePath": "https://www.foodiesfeed.com/free-food-photo/butter-chicken-in-a-pan",
       "bundled": "photos/other-butter-chicken.jpg",
       "imageUrl": "https://www.foodiesfeed.com/free-food-photo/butter-chicken-in-a-pan",
-      "imageLicense": "CC0 / public domain (FoodiesFeed)"
+      "imageLicense": "CC0 / public domain (FoodiesFeed)",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-other-butter-chicken-03.jpg"
+        ]
+      }
     },
     {
       "recipeId": "other-lamb-kebab",
@@ -7299,7 +9081,14 @@
       "imagePath": "https://www.foodiesfeed.com/free-food-photo/tacos",
       "bundled": "photos/other-beef-tacos.jpg",
       "imageUrl": "https://www.foodiesfeed.com/free-food-photo/tacos",
-      "imageLicense": "CC0 / public domain (FoodiesFeed)"
+      "imageLicense": "CC0 / public domain (FoodiesFeed)",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-other-beef-tacos-03.jpg"
+        ]
+      }
     },
     {
       "recipeId": "other-chicken-tagine",
@@ -7312,7 +9101,14 @@
       "imagePath": "https://www.foodiesfeed.com/free-food-photo/flavorful-moroccan-chicken-tagine-with-vegetables",
       "bundled": "photos/other-chicken-tagine.jpg",
       "imageUrl": "https://www.foodiesfeed.com/free-food-photo/flavorful-moroccan-chicken-tagine-with-vegetables",
-      "imageLicense": "CC0 / public domain (FoodiesFeed)"
+      "imageLicense": "CC0 / public domain (FoodiesFeed)",
+      "generatedStepImages": {
+        "tool": "OpenAI image generation",
+        "date": "2026-11-03",
+        "paths": [
+          "photos/step-other-chicken-tagine-02.jpg"
+        ]
+      }
     }
   ]
 }
