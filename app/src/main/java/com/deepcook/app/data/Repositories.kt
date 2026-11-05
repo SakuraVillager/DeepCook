@@ -6,12 +6,17 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.core.Serializer
 import androidx.datastore.dataStoreFile
+import com.deepcook.app.BuildConfig
 import com.deepcook.app.core.model.Recipe
 import com.deepcook.app.core.model.RecipeFilter
 import com.deepcook.app.core.model.UserData
 import com.deepcook.app.core.model.UserPreferences
 import com.deepcook.app.core.model.UserProfile
 import com.deepcook.app.core.model.filteredBy
+import com.deepcook.app.data.ai.AiGateway
+import com.deepcook.app.data.ai.AssetPlaybook
+import com.deepcook.app.data.ai.ZhipuGateway
+import com.deepcook.app.data.lookup.AndroidNetworkStatus
 import com.deepcook.app.data.lookup.CatalogFirstLookup
 import com.deepcook.app.data.lookup.HowToCookLookup
 import com.deepcook.app.data.lookup.RecipeLookup
@@ -136,4 +141,20 @@ class AppContainer(context: Context) {
     val lookup: RecipeLookup = CatalogFirstLookup(recipes, HowToCookLookup(context))
     val covers = CoverStore(context)
     val avatars = AvatarStore(context)
+
+    /** Which dish is on the stove right now, plus its running timers. */
+    val cookSessions: CookSessionStore = LocalCookSessionStore(
+        DataStoreFactory.create(serializer = CookSessionSerializer) {
+            context.dataStoreFile("cook_session.json")
+        },
+    )
+
+    /** The cooking assistant. The key is injected at build time and never leaves the app. */
+    val ai: AiGateway = ZhipuGateway(
+        apiKey = BuildConfig.DEEPCOOK_AI_KEY,
+        network = AndroidNetworkStatus(context),
+    )
+
+    /** Fixed answers that must not wait for the network. */
+    val playbook = AssetPlaybook(context)
 }

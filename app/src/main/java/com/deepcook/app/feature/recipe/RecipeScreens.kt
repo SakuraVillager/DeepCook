@@ -5,10 +5,6 @@
 
 package com.deepcook.app.feature.recipe
 
-import android.app.Activity
-import android.content.Context
-import android.content.ContextWrapper
-import android.view.WindowManager
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -32,7 +28,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
@@ -40,8 +35,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.withResumed
 import com.deepcook.app.R
@@ -59,6 +52,7 @@ fun DetailScreen(
     onFavorite: () -> Unit,
     onBack: () -> Unit,
     onRead: (String?) -> Unit,
+    onCook: () -> Unit,
     onVisit: () -> Unit,
     onPhotoVisibilityChange: (Boolean) -> Unit,
 ) {
@@ -143,12 +137,22 @@ fun DetailScreen(
                 Modifier.navigationBarsPadding().fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp),
                 contentAlignment = Alignment.Center,
             ) {
-                Button(onClick = {
-                    onRead(null)
-                }, modifier = Modifier.widthIn(max = 840.dp).fillMaxWidth().heightIn(min = 52.dp)) {
-                    Icon(Icons.AutoMirrored.Rounded.MenuBook, null)
-                    Spacer(Modifier.width(8.dp))
-                    Text("分步阅读")
+                Row(
+                    Modifier.widthIn(max = 840.dp).fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                ) {
+                    Button(onClick = onCook, modifier = Modifier.weight(1f).heightIn(min = 52.dp)) {
+                        Icon(Icons.Rounded.PlayArrow, null)
+                        Spacer(Modifier.width(8.dp))
+                        Text("开始做菜")
+                    }
+                    OutlinedButton(onClick = {
+                        onRead(null)
+                    }, modifier = Modifier.weight(1f).heightIn(min = 52.dp)) {
+                        Icon(Icons.AutoMirrored.Rounded.MenuBook, null)
+                        Spacer(Modifier.width(8.dp))
+                        Text("分步阅读")
+                    }
                 }
             }
         }
@@ -544,30 +548,3 @@ fun ReaderScreen(recipe: Recipe, initialStep: String?, preferences: UserPreferen
     }
 }
 
-private fun Context.activity(): Activity? = when (this) {
-    is Activity -> this
-    is ContextWrapper -> baseContext.activity()
-    else -> null
-}
-
-@Composable
-private fun KeepAwake(enabled: Boolean) {
-    val activity = LocalContext.current.activity()
-    val owner = LocalLifecycleOwner.current
-    DisposableEffect(enabled, activity, owner) {
-        fun update() {
-            if (enabled && owner.lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
-                activity?.window?.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-            } else {
-                activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-            }
-        }
-        val observer = LifecycleEventObserver { _, _ -> update() }
-        owner.lifecycle.addObserver(observer)
-        update()
-        onDispose {
-            owner.lifecycle.removeObserver(observer)
-            activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        }
-    }
-}

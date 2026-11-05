@@ -32,6 +32,7 @@ fun MyRecipesScreen(
     onAdd: () -> Unit,
     onEdit: (String) -> Unit,
     onOpen: (String) -> Unit,
+    onCook: (String) -> Unit,
     onFavorite: (String) -> Unit,
     onDelete: (String) -> Unit,
 ) {
@@ -78,6 +79,14 @@ fun MyRecipesScreen(
                             Box {
                                 IconButton(onClick = { menu = true }) { Icon(Icons.Rounded.MoreVert, "管理菜谱") }
                                 DropdownMenu(expanded = menu, onDismissRequest = { menu = false }) {
+                                    DropdownMenuItem(
+                                        text = { Text("开始做菜") },
+                                        leadingIcon = { Icon(Icons.Rounded.PlayArrow, null) },
+                                        onClick = {
+                                            menu = false
+                                            onCook(recipe.id)
+                                        },
+                                    )
                                     DropdownMenuItem(text = { Text(stringResource(R.string.edit_recipe)) }, onClick = {
                                         menu = false
                                         onEdit(recipe.id)

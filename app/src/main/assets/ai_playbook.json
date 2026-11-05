@@ -1,0 +1,245 @@
+{
+  "version": 1,
+  "entries": [
+    {
+      "id": "pan-fire",
+      "keywords": ["着火", "起火", "烧起来", "窜火", "冒火"],
+      "answer": "先关火，盖锅盖或倒大量盐闷住，别用水，也别端锅跑。",
+      "tier": "safety"
+    },
+    {
+      "id": "oil-splash",
+      "keywords": ["油溅", "溅油", "溅起来", "油崩"],
+      "answer": "离远一点，下锅前把食材擦干，沿锅边滑进去。",
+      "tier": "general"
+    },
+    {
+      "id": "burnt",
+      "keywords": ["糊了", "烧焦", "焦了", "糊锅"],
+      "answer": "先关火，把没糊的盛出来，别去刮锅底那层。",
+      "tier": "general"
+    },
+    {
+      "id": "stuck",
+      "keywords": ["粘锅", "粘底", "扒锅"],
+      "answer": "关小火，等它自己脱开再动；还不行就加一点热水焖一分钟。",
+      "tier": "general"
+    },
+    {
+      "id": "too-salty",
+      "keywords": ["太咸", "咸了", "盐多了", "齁咸"],
+      "answer": "加一点糖或一小块土豆煮两分钟；汤菜就兑点热水。",
+      "tier": "general"
+    },
+    {
+      "id": "too-bland",
+      "keywords": ["太淡", "没味", "没味道", "淡了"],
+      "answer": "补一点盐，出锅前再尝一次，别一次加太多。",
+      "tier": "general"
+    },
+    {
+      "id": "too-spicy",
+      "keywords": ["太辣", "辣了", "辣得"],
+      "answer": "加一点糖或醋压辣，或者添点汤和配菜稀释。",
+      "tier": "general"
+    },
+    {
+      "id": "too-sour",
+      "keywords": ["太酸", "酸了"],
+      "answer": "加一点糖中和，或者多煮一会儿让酸味挥发。",
+      "tier": "general"
+    },
+    {
+      "id": "undercooked",
+      "keywords": ["没熟", "不熟", "夹生", "没煮透"],
+      "answer": "回锅加一点水，盖盖再焖几分钟，戳透没有硬芯再出锅。",
+      "tier": "general"
+    },
+    {
+      "id": "burnt-dry",
+      "keywords": ["烧干", "汤没了", "干锅"],
+      "answer": "先关火换锅，加热水没过食材重新调味，别往干锅里倒冷水。",
+      "tier": "general"
+    },
+    {
+      "id": "too-thin",
+      "keywords": ["太稀", "汤太多", "水太多"],
+      "answer": "开大火收汁，或者勾一点薄芡。",
+      "tier": "general"
+    },
+    {
+      "id": "knife-cut",
+      "keywords": ["切到手", "切手", "刀伤", "划伤"],
+      "answer": "先冲水止血包好，伤口深或止不住就去医院。",
+      "tier": "safety"
+    },
+    {
+      "id": "scald",
+      "keywords": ["烫伤", "烫到", "被油烫"],
+      "answer": "马上用流动凉水冲十五分钟，别抹牙膏或酱油。",
+      "tier": "safety"
+    },
+    {
+      "id": "gas-smell",
+      "keywords": ["燃气味", "煤气味", "漏气"],
+      "answer": "别开灯别点火，先开窗关阀，到门外再打电话。",
+      "tier": "safety"
+    },
+    {
+      "id": "oil-temperature",
+      "keywords": ["油温", "几成热", "油热了没", "油烧热"],
+      "answer": "筷子插进去冒小泡大约五六成热；冒青烟就是太热了。",
+      "tier": "general"
+    },
+    {
+      "id": "thaw",
+      "keywords": ["解冻", "化冻", "冻肉"],
+      "answer": "提前放冷藏解冻，或者装袋泡凉水；别用热水烫。",
+      "tier": "general"
+    },
+    {
+      "id": "blanch",
+      "keywords": ["焯水", "焯一下", "飞水"],
+      "answer": "水开下锅，加姜片和料酒，撇掉浮沫再捞。",
+      "tier": "general"
+    },
+    {
+      "id": "fishy",
+      "keywords": ["去腥", "腥味", "太腥"],
+      "answer": "姜葱料酒腌十分钟，焯水撇沫，出锅前加一点白胡椒。",
+      "tier": "general"
+    },
+    {
+      "id": "reduce-sauce",
+      "keywords": ["收汁", "汤汁太多"],
+      "answer": "开大火别走开，汁能挂住勺背就关火，别收过头。",
+      "tier": "general"
+    },
+    {
+      "id": "thicken",
+      "keywords": ["勾芡", "芡汁"],
+      "answer": "淀粉和水一比二调开，关小火分两次淋，边淋边搅。",
+      "tier": "general"
+    },
+    {
+      "id": "dough",
+      "keywords": ["发面", "发不起来", "面没发"],
+      "answer": "酵母先用温水化开，放到温暖处；发到两倍大再上锅。",
+      "tier": "general"
+    },
+    {
+      "id": "deep-fry",
+      "keywords": ["炸东西", "油炸", "下油锅"],
+      "answer": "油到六七成热再下，分批炸，别一次堆满。",
+      "tier": "general"
+    },
+    {
+      "id": "leftovers",
+      "keywords": ["剩菜", "隔夜", "吃不完"],
+      "answer": "放凉后马上冷藏，第二天彻底加热再吃；叶菜别过夜。",
+      "tier": "general"
+    },
+    {
+      "id": "fridge-life",
+      "keywords": ["冰箱能放", "能放多久", "保存多久"],
+      "answer": "熟菜冷藏最多两天，吃前热透；闻着不对就扔。",
+      "tier": "general"
+    },
+    {
+      "id": "microwave",
+      "keywords": ["微波炉", "微波"],
+      "answer": "用微波炉专用容器，别放金属和带壳的蛋。",
+      "tier": "general"
+    },
+    {
+      "id": "pressure-cooker",
+      "keywords": ["高压锅", "压力锅"],
+      "answer": "上汽后转小火，别超过锅容量的三分之二；泄压前别开盖。",
+      "tier": "safety"
+    },
+    {
+      "id": "nonstick",
+      "keywords": ["不粘锅", "涂层"],
+      "answer": "别用铁铲和钢丝球，涂层划花了就换锅。",
+      "tier": "general"
+    },
+    {
+      "id": "rust",
+      "keywords": ["铁锅生锈", "生锈"],
+      "answer": "刷掉锈，烧干抹一层薄油；别让锅长时间泡水。",
+      "tier": "general"
+    },
+    {
+      "id": "steamer-dry",
+      "keywords": ["蒸锅没水", "蒸干了", "干烧"],
+      "answer": "先关火，加开水再继续，别让锅干烧。",
+      "tier": "safety"
+    },
+    {
+      "id": "rice-hard",
+      "keywords": ["米饭夹生", "饭没熟"],
+      "answer": "加一点热水，戳几个孔，小火再焖十分钟。",
+      "tier": "general"
+    },
+    {
+      "id": "noodle-stick",
+      "keywords": ["面条粘", "面粘一起", "坨了"],
+      "answer": "水多面少，下锅搅两下，捞出来过一下凉水。",
+      "tier": "general"
+    },
+    {
+      "id": "egg-shell",
+      "keywords": ["蛋壳掉", "蛋壳进锅"],
+      "answer": "用蛋壳去捞，一下就带上来了。",
+      "tier": "general"
+    },
+    {
+      "id": "onion-tears",
+      "keywords": ["洋葱辣眼", "切洋葱流泪", "辣眼睛"],
+      "answer": "刀沾点水，洋葱先冰十分钟再切，别用手揉眼。",
+      "tier": "general"
+    },
+    {
+      "id": "garlic-sprout",
+      "keywords": ["蒜发芽", "姜坏了", "发芽"],
+      "answer": "蒜发芽还能用；姜切开有霉点就整块扔。",
+      "tier": "general"
+    },
+    {
+      "id": "msg",
+      "keywords": ["味精", "鸡精"],
+      "answer": "出锅前放，别大火久煮，一小撮就够。",
+      "tier": "general"
+    },
+    {
+      "id": "no-soy",
+      "keywords": ["没有酱油", "没生抽", "酱油没了"],
+      "answer": "可以用盐加一点糖顶上，颜色会浅一些。",
+      "tier": "general"
+    },
+    {
+      "id": "no-wine",
+      "keywords": ["没有料酒", "料酒没了"],
+      "answer": "用一点黄酒或啤酒，实在没有就姜葱加水。",
+      "tier": "general"
+    },
+    {
+      "id": "no-sugar",
+      "keywords": ["没有糖", "糖没了"],
+      "answer": "少量蜂蜜或冰糖可以替代，别用糖精。",
+      "tier": "general"
+    },
+    {
+      "id": "honey-crystal",
+      "keywords": ["蜂蜜结晶", "蜂蜜凝固"],
+      "answer": "温水泡一会儿就化开，别用开水。",
+      "tier": "general"
+    },
+    {
+      "id": "failed-dish",
+      "keywords": ["不好吃", "失败了", "翻车了", "做砸了"],
+      "answer": "先尝一口找问题：咸了加糖，淡了加盐，腥了加姜和酒。",
+      "tier": "general"
+    }
+  ]
+}

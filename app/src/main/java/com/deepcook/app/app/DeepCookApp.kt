@@ -36,6 +36,8 @@ import com.deepcook.app.feature.authoring.MyRecipesScreen
 import com.deepcook.app.feature.authoring.RecipeEditorScreen
 import com.deepcook.app.feature.authoring.RecipeEditorViewModel
 import com.deepcook.app.feature.browse.*
+import com.deepcook.app.feature.cooking.CookingScreen
+import com.deepcook.app.feature.cooking.CookingViewModel
 import com.deepcook.app.feature.profile.ProfileInfoScreen
 import com.deepcook.app.feature.recipe.*
 import com.deepcook.app.feature.search.SearchViewModel
@@ -59,6 +61,9 @@ import java.util.UUID
 @Serializable data class RecipeDetail(val recipeId: String)
 
 @Serializable data class Reader(val recipeId: String, val initialStepId: String? = null)
+
+/** The cooking view: one step at a time, with the timer and (later) the assistant. */
+@Serializable data class Cooking(val recipeId: String)
 
 @Serializable data object Recent
 
@@ -203,7 +208,9 @@ fun DeepCookApp(vm: AppViewModel, state: AppUiState, container: AppContainer) {
                                 recipe, state.user.favorites.any { it.recipeId == recipe.id },
                                 state.user.preferences, restored,
                                 { vm.favorite(recipe.id) }, { nav.popBackStack() },
-                                { openPage(Reader(recipe.id, it)) }, { vm.visit(recipe.id) },
+                                { openPage(Reader(recipe.id, it)) },
+                                { openPage(Cooking(recipe.id)) },
+                                { vm.visit(recipe.id) },
                                 { detailPhotoVisible = it },
                             )
                         }
@@ -218,6 +225,38 @@ fun DeepCookApp(vm: AppViewModel, state: AppUiState, container: AppContainer) {
                             }
                         } else {
                             EmptyState("没有找到这道菜", "请返回重新选择。", "返回", { nav.popBackStack() })
+                        }
+                    }
+                    composable<Cooking> { cookingEntry ->
+                        val args = cookingEntry.toRoute<Cooking>()
+                        val recipe = state.recipes.find { it.id == args.recipeId }
+                        if (recipe == null) {
+                            EmptyState("没有找到这道菜", "内容可能已更新，请返回重新选择。", "返回", { nav.popBackStack() })
+                        } else {
+                            val titles = remember(state.recipes) {
+                                state.recipes.associate { it.id to it.title }
+                            }
+                            val cooking: CookingViewModel = viewModel(
+                                factory = viewModelFactory {
+                                    initializer {
+                                        CookingViewModel(
+                                            recipe = recipe,
+                                            sessions = container.cookSessions,
+                                            ai = container.ai,
+                                            book = container.playbook,
+                                            userData = container.userData,
+                                            titles = titles,
+                                        )
+                                    }
+                                },
+                            )
+                            CookingScreen(
+                                recipe = recipe,
+                                vm = cooking,
+                                preferences = state.user.preferences,
+                                onBack = { nav.popBackStack() },
+                                onComplete = { nav.popBackStack() },
+                            )
                         }
                     }
                     composable<Settings> { settingsEntry ->
@@ -236,6 +275,7 @@ fun DeepCookApp(vm: AppViewModel, state: AppUiState, container: AppContainer) {
                             onAdd = { openPage(RecipeEditor()) },
                             onEdit = { openPage(RecipeEditor(it)) },
                             onOpen = { openPage(RecipeDetail(it)) },
+                            onCook = { openPage(Cooking(it)) },
                             onFavorite = vm::favorite,
                             onDelete = vm::deleteRecipe,
                         )

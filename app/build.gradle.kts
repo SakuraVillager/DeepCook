@@ -1,8 +1,18 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlin.serialization)
 }
+
+// The assistant key lives in local.properties (gitignored) and reaches the app through BuildConfig.
+// It is never written into a tracked file.
+val localProperties = Properties().apply {
+    val file = rootProject.file("local.properties")
+    if (file.isFile) file.inputStream().use { load(it) }
+}
+val aiKey = localProperties.getProperty("DEEPCOOK_AI_KEY").orEmpty()
 
 android {
     namespace = "com.deepcook.app"
@@ -14,6 +24,7 @@ android {
         versionCode = 10
         versionName = "0.3.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "DEEPCOOK_AI_KEY", "\"" + aiKey.replace("\\", "\\\\").replace("\"", "\\\"") + "\"")
     }
     buildFeatures {
         compose = true
