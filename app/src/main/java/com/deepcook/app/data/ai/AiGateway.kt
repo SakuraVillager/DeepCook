@@ -30,4 +30,7 @@ data class AiExchange(val question: String, val answer: String)
 interface AiGateway {
     /** Streams one answer. The flow completes after [AiEvent.Done] or one failure event. */
     fun stream(messages: List<AiMessage>): Flow<AiEvent>
+
+    /** One non-streaming answer, used for field enrichment; null when the call failed. */
+    suspend fun complete(messages: List<AiMessage>): String?
 }

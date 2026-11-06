@@ -22,6 +22,10 @@ data class UserPreferences(
     val readingSize: ReadingSize = ReadingSize.STANDARD,
     val showStepImages: Boolean = true,
     val keepScreenOn: Boolean = false,
+    /** When off, the cooking screen hides the microphone and the user types instead. */
+    val voiceInputEnabled: Boolean = true,
+    /** When off, answers stay on screen and the system voice stays silent. */
+    val speakAnswers: Boolean = true,
 )
 
 @Serializable
@@ -34,6 +38,8 @@ data class UserData(
     val preferences: UserPreferences = UserPreferences(),
     /** Name, picture and taste tags; defaulted so a file written before this field still loads. */
     val profile: UserProfile = UserProfile(),
+    /** Per-dish corrections the user asked to remember; defaulted for older files. */
+    val dishNotes: List<DishNote> = emptyList(),
 ) {
     fun withFavorite(id: String, favorite: Boolean, now: Long): UserData = copy(
         favorites = if (favorite) {
@@ -46,4 +52,23 @@ data class UserData(
     fun withVisit(id: String, now: Long): UserData = copy(
         recent = (listOf(SavedRecipe(id, now)) + recent.filterNot { it.recipeId == id }).take(50),
     )
+
+    /** Notes for one dish, newest first. */
+    fun notesFor(recipeId: String): List<DishNote> =
+        dishNotes.filter { it.recipeId == recipeId }.sortedByDescending { it.updatedAt }
+
+    /** Adds or replaces a note by id, dropping an older note with the exact same wording. */
+    fun withNote(note: DishNote): UserData = copy(
+        dishNotes = (
+            dishNotes.filterNot { it.id == note.id || (it.recipeId == note.recipeId && it.text == note.text) } +
+                note
+            ).takeLast(NOTE_LIMIT),
+    )
+
+    fun withoutNote(id: String): UserData = copy(dishNotes = dishNotes.filterNot { it.id == id })
+
+    companion object {
+        /** Enough history for one kitchen; keeps the file small. */
+        const val NOTE_LIMIT = 200
+    }
 }

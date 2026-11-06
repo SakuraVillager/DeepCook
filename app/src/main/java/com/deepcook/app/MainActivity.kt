@@ -30,6 +30,7 @@ class MainActivity : ComponentActivity() {
                                 container.userRecipes,
                                 container.covers,
                                 container.avatars,
+                                container.aiOverlays,
                             )
                         }
                     },

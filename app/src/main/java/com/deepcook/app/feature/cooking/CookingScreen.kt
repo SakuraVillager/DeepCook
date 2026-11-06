@@ -42,6 +42,7 @@ import com.deepcook.app.core.model.UserPreferences
 import com.deepcook.app.data.CookTimerService
 import com.deepcook.app.data.ai.AiExchange
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.Locale
 
 private val TimerPresets = listOf(1, 3, 5, 10, 15, 30)
@@ -57,17 +58,44 @@ fun CookingScreen(
     preferences: UserPreferences,
     onBack: () -> Unit,
     onComplete: () -> Unit,
+    onDeleteNote: (String) -> Unit,
 ) {
     val state by vm.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
     var showTimers by remember { mutableStateOf(false) }
     var showDirectory by remember { mutableStateOf(false) }
     var showHistory by remember { mutableStateOf(false) }
+    var showNotes by remember { mutableStateOf(false) }
     var question by remember { mutableStateOf("") }
+    var listening by remember { mutableStateOf(false) }
+    var announcedNote by remember(recipe.id) { mutableStateOf(false) }
     val keyboard = LocalSoftwareKeyboardController.current
+    val snackbars = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+    val speaker = remember { TtsSpeaker(context) }
+    val voice = remember { VoiceInput(context) }
     val index = state.stepIndex.coerceIn(recipe.steps.indices)
     val step = recipe.steps[index]
     val lastStep = index == recipe.steps.lastIndex
+
+    LaunchedEffect(vm, preferences.speakAnswers) {
+        if (!preferences.speakAnswers) return@LaunchedEffect
+        vm.speech.collect { sentence -> speaker.speak(sentence) }
+    }
+    DisposableEffect(Unit) {
+        onDispose {
+            voice.stop()
+            speaker.destroy()
+        }
+    }
+    LaunchedEffect(state.notes, preferences.speakAnswers) {
+        val latest = state.notes.firstOrNull() ?: return@LaunchedEffect
+        if (!preferences.speakAnswers) return@LaunchedEffect
+        if (!announcedNote) {
+            announcedNote = true
+            speaker.speak("上次你说：${latest.text}")
+        }
+    }
 
     LaunchedEffect(state.ready) {
         if (state.ready) CookTimerService.start(context)
@@ -82,6 +110,42 @@ fun CookingScreen(
             PackageManager.PERMISSION_GRANTED
         ) {
             permission.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
+    }
+
+    fun beginListening() {
+        speaker.stop()
+        listening = true
+        voice.start(
+            onText = { recognized ->
+                listening = false
+                question = ""
+                keyboard?.hide()
+                speaker.stop()
+                vm.ask(recognized)
+            },
+            onError = { message ->
+                listening = false
+                scope.launch { snackbars.showSnackbar(message) }
+            },
+        )
+    }
+
+    val micPermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+        if (granted) {
+            beginListening()
+        } else {
+            scope.launch { snackbars.showSnackbar("没有麦克风权限，先打字吧。") }
+        }
+    }
+
+    fun requestMic() {
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) ==
+            PackageManager.PERMISSION_GRANTED
+        ) {
+            beginListening()
+        } else {
+            micPermission.launch(Manifest.permission.RECORD_AUDIO)
         }
     }
 
@@ -104,6 +168,7 @@ fun CookingScreen(
                 },
             )
         },
+        snackbarHost = { SnackbarHost(snackbars) },
         bottomBar = {
             Surface(tonalElevation = 3.dp) {
                 Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
@@ -134,8 +199,27 @@ fun CookingScreen(
                                 shape = RoundedCornerShape(24.dp),
                                 textStyle = MaterialTheme.typography.bodyMedium,
                             )
+                            if (preferences.voiceInputEnabled) {
+                                FilledTonalIconButton(
+                                    onClick = {
+                                        if (listening) {
+                                            voice.stop()
+                                            listening = false
+                                        } else {
+                                            requestMic()
+                                        }
+                                    },
+                                    modifier = Modifier.size(52.dp),
+                                ) {
+                                    Icon(
+                                        if (listening) Icons.Rounded.MicOff else Icons.Rounded.Mic,
+                                        if (listening) "停止听" else "说话",
+                                    )
+                                }
+                            }
                             FilledIconButton(
                                 onClick = {
+                                    speaker.stop()
                                     vm.ask(question)
                                     question = ""
                                     keyboard?.hide()
@@ -192,6 +276,9 @@ fun CookingScreen(
     ) { padding ->
         Box(Modifier.padding(padding).fillMaxSize(), contentAlignment = Alignment.TopCenter) {
             Column(Modifier.widthIn(max = 720.dp).fillMaxWidth()) {
+                if (state.notes.isNotEmpty()) {
+                    NoteBanner(note = state.notes.first(), count = state.notes.size, onClick = { showNotes = true })
+                }
                 Column(
                     Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -347,6 +434,70 @@ fun CookingScreen(
                     if (position == exchanges.lastIndex) Spacer(Modifier.height(32.dp))
                 }
             }
+        }
+    }
+
+    if (showNotes) {
+        ModalBottomSheet(onDismissRequest = { showNotes = false }) {
+            LazyColumn(
+                contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                item { Text("这道菜的备注", style = MaterialTheme.typography.titleLarge) }
+                items(state.notes.size) { position ->
+                    val note = state.notes[position]
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(note.text, Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge)
+                        IconButton(onClick = { onDeleteNote(note.id) }) {
+                            Icon(Icons.Rounded.Delete, "删除备注")
+                        }
+                    }
+                }
+                item { Spacer(Modifier.height(24.dp)) }
+            }
+        }
+    }
+}
+
+@Composable
+private fun NoteBanner(note: com.deepcook.app.core.model.DishNote, count: Int, onClick: () -> Unit) {
+    Surface(
+        onClick = onClick,
+        modifier = Modifier.fillMaxWidth(),
+        color = MaterialTheme.colorScheme.tertiaryContainer,
+    ) {
+        Row(
+            Modifier.padding(horizontal = 20.dp, vertical = 10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+        ) {
+            Icon(
+                Icons.Rounded.EditNote,
+                null,
+                Modifier.size(18.dp),
+                tint = MaterialTheme.colorScheme.onTertiaryContainer,
+            )
+            Column(Modifier.weight(1f)) {
+                Text(
+                    "上次：${note.text}",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onTertiaryContainer,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                )
+                if (count > 1) {
+                    Text(
+                        "还有 ${count - 1} 条",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onTertiaryContainer.copy(alpha = .72f),
+                    )
+                }
+            }
+            Icon(
+                Icons.Rounded.ChevronRight,
+                null,
+                tint = MaterialTheme.colorScheme.onTertiaryContainer,
+            )
         }
     }
 }

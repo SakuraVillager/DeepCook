@@ -35,6 +35,7 @@ fun SettingsScreen(
     preferences: UserPreferences,
     favorites: Int,
     recent: Int,
+    notes: Int,
     recipes: List<Recipe>,
     onNavigate: (String) -> Unit,
     onBack: () -> Unit,
@@ -42,6 +43,7 @@ fun SettingsScreen(
     onClearRecent: () -> Unit,
     onClearFavorites: () -> Unit,
     onReset: () -> Unit,
+    onClearAiOverlay: () -> Unit,
 ) {
     val context = LocalContext.current
     val sourceEntries by produceState<List<String>>(emptyList(), section) {
@@ -232,6 +234,52 @@ fun SettingsScreen(
                         PreferenceRow("阅读", "字号、步骤图片、保持亮屏", Icons.AutoMirrored.Rounded.MenuBook, onClick = {
                             onNavigate("reading")
                         })
+                        HorizontalDivider(Modifier.padding(vertical = 12.dp))
+                        PreferenceGroupHeader("AI 与语音")
+                        SwitchPreference(
+                            "语音输入",
+                            "做菜时可点一下说话。关闭后只用键盘输入，AI 仍然可用。",
+                            Icons.Rounded.Mic,
+                            preferences.voiceInputEnabled,
+                        ) { value ->
+                            onPreferences { it.copy(voiceInputEnabled = value) }
+                        }
+                        SwitchPreference(
+                            "朗读回答",
+                            "用系统语音把回答读出来，语速 1.3 倍；关掉后只看屏幕。",
+                            Icons.Rounded.VolumeUp,
+                            preferences.speakAnswers,
+                        ) { value ->
+                            onPreferences { it.copy(speakAnswers = value) }
+                        }
+                        var confirmClear by remember { mutableStateOf(false) }
+                        PreferenceRow(
+                            "AI 补充数据",
+                            "模型按菜补的用时、难度与用量，只影响回答，不改菜谱。点按清空。",
+                            Icons.Rounded.AutoAwesome,
+                            onClick = { confirmClear = true },
+                        )
+                        PreferenceRow(
+                            "口味备注",
+                            "$notes 条。按菜记录，做菜页顶部会提示，也能在那里删除。",
+                            Icons.Rounded.EditNote,
+                        )
+                        if (confirmClear) {
+                            AlertDialog(
+                                onDismissRequest = { confirmClear = false },
+                                title = { Text("清空 AI 补充数据？") },
+                                text = { Text("已缓存的补充信息会被删掉，下次做菜时会重新联网补全。菜谱本身不会改动。") },
+                                confirmButton = {
+                                    TextButton(onClick = {
+                                        confirmClear = false
+                                        onClearAiOverlay()
+                                    }) { Text("清空") }
+                                },
+                                dismissButton = {
+                                    TextButton(onClick = { confirmClear = false }) { Text("取消") }
+                                },
+                            )
+                        }
                         HorizontalDivider(Modifier.padding(vertical = 12.dp))
                         PreferenceGroupHeader("数据与说明")
                         PreferenceRow("本地数据", "$favorites 道收藏 · $recent 条浏览记录", Icons.Rounded.Storage, onClick = {

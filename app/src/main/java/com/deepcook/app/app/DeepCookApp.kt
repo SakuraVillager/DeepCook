@@ -38,6 +38,8 @@ import com.deepcook.app.feature.authoring.RecipeEditorViewModel
 import com.deepcook.app.feature.browse.*
 import com.deepcook.app.feature.cooking.CookingScreen
 import com.deepcook.app.feature.cooking.CookingViewModel
+import com.deepcook.app.feature.cooking.FeedbackScreen
+import com.deepcook.app.feature.cooking.FeedbackViewModel
 import com.deepcook.app.feature.profile.ProfileInfoScreen
 import com.deepcook.app.feature.recipe.*
 import com.deepcook.app.feature.search.SearchViewModel
@@ -64,6 +66,9 @@ import java.util.UUID
 
 /** The cooking view: one step at a time, with the timer and (later) the assistant. */
 @Serializable data class Cooking(val recipeId: String)
+
+/** One sentence of feedback right after cooking, stored as a dish note. */
+@Serializable data class Feedback(val recipeId: String)
 
 @Serializable data object Recent
 
@@ -246,6 +251,8 @@ fun DeepCookApp(vm: AppViewModel, state: AppUiState, container: AppContainer) {
                                             book = container.playbook,
                                             userData = container.userData,
                                             titles = titles,
+                                            overlays = container.aiOverlays,
+                                            enricher = container.enricher,
                                         )
                                     }
                                 },
@@ -255,17 +262,47 @@ fun DeepCookApp(vm: AppViewModel, state: AppUiState, container: AppContainer) {
                                 vm = cooking,
                                 preferences = state.user.preferences,
                                 onBack = { nav.popBackStack() },
-                                onComplete = { nav.popBackStack() },
+                                onComplete = {
+                                    nav.navigate(Feedback(recipe.id)) {
+                                        popUpTo<Cooking> { inclusive = true }
+                                    }
+                                },
+                                onDeleteNote = vm::deleteDishNote,
+                            )
+                        }
+                    }
+                    composable<Feedback> { feedbackEntry ->
+                        val args = feedbackEntry.toRoute<Feedback>()
+                        val recipe = state.recipes.find { it.id == args.recipeId }
+                        if (recipe == null) {
+                            EmptyState("没有找到这道菜", "内容可能已更新，请返回重新选择。", "返回", { nav.popBackStack() })
+                        } else {
+                            val feedback: FeedbackViewModel = viewModel(
+                                factory = viewModelFactory {
+                                    initializer { FeedbackViewModel(container.noteSuggester) }
+                                },
+                            )
+                            FeedbackScreen(
+                                recipe = recipe,
+                                existingNotes = state.user.notesFor(recipe.id),
+                                voiceEnabled = state.user.preferences.voiceInputEnabled,
+                                vm = feedback,
+                                onBack = { nav.popBackStack() },
+                                onSave = { text, raw ->
+                                    vm.saveDishNote(recipe.id, text, raw)
+                                    nav.popBackStack()
+                                },
                             )
                         }
                     }
                     composable<Settings> { settingsEntry ->
                         SettingsScreen(
                             settingsEntry.toRoute<Settings>().section, state.user.preferences,
-                            state.user.favorites.size, state.user.recent.size,
+                            state.user.favorites.size, state.user.recent.size, state.user.dishNotes.size,
                             state.recipes.filterNot { it.id.startsWith(USER_RECIPE_ID_PREFIX) },
                             { openPage(Settings(it)) }, { nav.popBackStack() },
                             vm::preferences, vm::clearRecent, vm::clearFavorites, vm::resetPreferences,
+                            vm::clearAiOverlay,
                         )
                     }
                     composable<MyRecipes> {

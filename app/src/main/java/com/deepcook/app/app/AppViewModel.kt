@@ -3,11 +3,14 @@ package com.deepcook.app.app
 import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.deepcook.app.core.model.DishNote
+import com.deepcook.app.core.model.NoteSource
 import com.deepcook.app.core.model.Recipe
 import com.deepcook.app.core.model.UserData
 import com.deepcook.app.core.model.UserPreferences
 import com.deepcook.app.core.model.UserProfile
 import com.deepcook.app.data.AvatarStore
+import com.deepcook.app.data.AiOverlayStore
 import com.deepcook.app.data.CoverStore
 import com.deepcook.app.data.RecipeRepository
 import com.deepcook.app.data.UserDataRepository
@@ -23,6 +26,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import java.io.IOException
+import java.util.UUID
 import java.util.concurrent.CancellationException
 
 data class AppUiState(
@@ -45,6 +49,7 @@ class AppViewModel(
     private val userRecipes: UserRecipeStore,
     private val covers: CoverStore,
     private val avatars: AvatarStore,
+    private val aiOverlays: AiOverlayStore,
 ) : ViewModel() {
     private val mutableState = MutableStateFlow(AppUiState())
     val state = mutableState.asStateFlow()
@@ -134,6 +139,39 @@ class AppViewModel(
     fun preferences(transform: (UserPreferences) -> UserPreferences) = mutate { userData.updatePreferences(transform) }
     fun updateProfile(transform: (UserProfile) -> UserProfile) = mutate { userData.updateProfile(transform) }
 
+    /**
+     * Stores a correction for one dish and offers an undo snackbar. The note is written at once
+     * (the user asked not to be asked again); undo is the safety net for a bad transcription.
+     */
+    fun saveDishNote(recipeId: String, text: String, raw: String, source: NoteSource = NoteSource.AI) {
+        val trimmed = text.trim()
+        if (trimmed.isEmpty()) return
+        mutate {
+            val note = DishNote(
+                id = UUID.randomUUID().toString(),
+                recipeId = recipeId,
+                text = trimmed,
+                raw = raw.trim(),
+                updatedAt = System.currentTimeMillis(),
+                source = source,
+            )
+            userData.addDishNote(note)
+            messageChannel.send(AppMessage("已记下：$trimmed") { userData.removeDishNote(note.id) })
+        }
+    }
+
+    fun deleteDishNote(id: String) = mutate {
+        val note = userData.data.first().dishNotes.find { it.id == id } ?: return@mutate
+        userData.removeDishNote(id)
+        messageChannel.send(AppMessage("已删除备注") { userData.addDishNote(note) })
+    }
+
+    /** Drops every cached assistant lookup; the next cooking screen will ask again. */
+    fun clearAiOverlay() = mutate {
+        aiOverlays.clear()
+        messageChannel.send(AppMessage("已清空 AI 补充数据"))
+    }
+
     /** Decodes the picked photo for the cropper; null when the file cannot be read. */
     suspend fun avatarSource(uri: String): Bitmap? = avatars.decode(uri)
 
@@ -167,8 +205,7 @@ class AppViewModel(
     fun clearRecent() = mutate {
         userData.clearRecent()
         messageChannel.send(AppMessage("已清除最近浏览"))
-    }
-    fun clearFavorites() = mutate {
+    }    fun clearFavorites() = mutate {
         userData.clearFavorites()
         messageChannel.send(AppMessage("已清空收藏"))
     }

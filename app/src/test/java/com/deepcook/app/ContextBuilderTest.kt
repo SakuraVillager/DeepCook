@@ -69,4 +69,20 @@ class ContextBuilderTest {
         assertTrue(system.contains("喜好：未填"))
         assertTrue(system.contains("忌口：未填"))
     }
+
+    @Test fun enrichmentValuesTakePrecedenceInTheFactsBlock() {
+        val overlay = com.deepcook.app.core.model.AiOverlay(
+            recipeId = recipe.id,
+            minutes = 45,
+            difficulty = 4,
+            servings = "3 人份",
+            amounts = mapOf("i1" to "10 克"),
+        )
+        val messages = builder.messages(recipe, 0, user, titles, "要多久", emptyList(), overlay)
+        val system = messages.first().content
+        assertTrue(system.contains("用时 45 分钟"))
+        assertTrue(system.contains("难度 4/5"))
+        assertTrue(system.contains("3 人份"))
+        assertTrue(system.contains("冰糖 10 克"))
+    }
 }

@@ -7,6 +7,7 @@ import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.core.Serializer
 import androidx.datastore.dataStoreFile
 import com.deepcook.app.BuildConfig
+import com.deepcook.app.core.model.DishNote
 import com.deepcook.app.core.model.Recipe
 import com.deepcook.app.core.model.RecipeFilter
 import com.deepcook.app.core.model.UserData
@@ -15,6 +16,8 @@ import com.deepcook.app.core.model.UserProfile
 import com.deepcook.app.core.model.filteredBy
 import com.deepcook.app.data.ai.AiGateway
 import com.deepcook.app.data.ai.AssetPlaybook
+import com.deepcook.app.data.ai.NoteSuggester
+import com.deepcook.app.data.ai.RecipeEnricher
 import com.deepcook.app.data.ai.ZhipuGateway
 import com.deepcook.app.data.lookup.AndroidNetworkStatus
 import com.deepcook.app.data.lookup.CatalogFirstLookup
@@ -60,6 +63,8 @@ interface UserDataRepository {
     suspend fun removeVisit(id: String)
     suspend fun updatePreferences(transform: (UserPreferences) -> UserPreferences)
     suspend fun updateProfile(transform: (UserProfile) -> UserProfile)
+    suspend fun addDishNote(note: DishNote)
+    suspend fun removeDishNote(id: String)
     suspend fun clearRecent()
     suspend fun clearFavorites()
     suspend fun resetPreferences()
@@ -108,6 +113,12 @@ class LocalUserDataRepository(private val store: DataStore<UserData>) : UserData
         // the profile is written, so reading an older file never loses data silently.
         store.updateData { it.copy(profile = transform(it.profile).sanitized()) }
     }
+    override suspend fun addDishNote(note: DishNote) {
+        store.updateData { it.withNote(note) }
+    }
+    override suspend fun removeDishNote(id: String) {
+        store.updateData { it.withoutNote(id) }
+    }
     override suspend fun clearRecent() {
         store.updateData { it.copy(recent = emptyList()) }
     }
@@ -123,6 +134,7 @@ class LocalUserDataRepository(private val store: DataStore<UserData>) : UserData
             it.copy(
                 favorites = it.favorites.filterNot { saved -> saved.recipeId == id },
                 recent = it.recent.filterNot { saved -> saved.recipeId == id },
+                dishNotes = it.dishNotes.filterNot { note -> note.recipeId == id },
             )
         }
     }
@@ -157,4 +169,16 @@ class AppContainer(context: Context) {
 
     /** Fixed answers that must not wait for the network. */
     val playbook = AssetPlaybook(context)
+
+    /** Assistant-filled fields for recipes whose bundle entry is incomplete; never touches assets. */
+    val aiOverlays: AiOverlayStore = LocalAiOverlayStore(
+        DataStoreFactory.create(serializer = AiOverlaySerializer) {
+            context.dataStoreFile("ai_overlay.json")
+        },
+    )
+
+    val enricher = RecipeEnricher(ai)
+
+    /** Turns a free-form comment into a one-line dish note. */
+    val noteSuggester = NoteSuggester(ai)
 }

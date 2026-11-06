@@ -8,8 +8,13 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.job
+import kotlinx.coroutines.withContext
+import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.addJsonObject
 import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.jsonArray
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.put
 import kotlinx.serialization.json.putJsonArray
 import kotlinx.serialization.json.putJsonObject
@@ -38,7 +43,7 @@ class ZhipuGateway(
             emit(AiEvent.Offline)
             return@flow
         }
-        val body = payload(messages).encodeToByteArray()
+        val body = payload(messages, stream = true).encodeToByteArray()
         val connection = (URL(endpoint).openConnection() as HttpURLConnection).apply {
             requestMethod = "POST"
             connectTimeout = 6_000
@@ -81,11 +86,44 @@ class ZhipuGateway(
         }
     }.flowOn(Dispatchers.IO)
 
-    private fun payload(messages: List<AiMessage>): String = buildJsonObject {
+    override suspend fun complete(messages: List<AiMessage>): String? = withContext(Dispatchers.IO) {
+        if (apiKey.isBlank() || !network.isOnline()) return@withContext null
+        val body = payload(messages, stream = false).encodeToByteArray()
+        val connection = (URL(endpoint).openConnection() as HttpURLConnection).apply {
+            requestMethod = "POST"
+            connectTimeout = 6_000
+            readTimeout = 20_000
+            doOutput = true
+            setRequestProperty("Content-Type", "application/json; charset=utf-8")
+            setRequestProperty("Authorization", "Bearer $apiKey")
+        }
+        try {
+            connection.outputStream.use { it.write(body) }
+            if (connection.responseCode != 200) return@withContext null
+            val text = connection.inputStream.bufferedReader(Charsets.UTF_8).use { it.readText() }
+            runCatching {
+                json.parseToJsonElement(text).jsonObject["choices"]
+                    ?.jsonArray
+                    ?.firstOrNull()
+                    ?.jsonObject
+                    ?.get("message")
+                    ?.jsonObject
+                    ?.get("content")
+                    ?.jsonPrimitive
+                    ?.content
+            }.getOrNull()?.takeIf { it.isNotBlank() }
+        } catch (_: IOException) {
+            null
+        } finally {
+            connection.disconnect()
+        }
+    }
+
+    private fun payload(messages: List<AiMessage>, stream: Boolean): String = buildJsonObject {
         put("model", MODEL)
-        put("stream", true)
+        put("stream", stream)
         put("temperature", 0.3)
-        put("max_tokens", 120)
+        put("max_tokens", if (stream) 120 else 400)
         putJsonObject("thinking") { put("type", "disabled") }
         putJsonArray("messages") {
             messages.forEach { message ->
@@ -100,5 +138,6 @@ class ZhipuGateway(
     companion object {
         const val MODEL = "glm-4.7-flash"
         const val DEFAULT_ENDPOINT = "https://open.bigmodel.cn/api/paas/v4/chat/completions"
+        private val json = Json { ignoreUnknownKeys = true }
     }
 }

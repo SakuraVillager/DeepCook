@@ -70,4 +70,32 @@ class UserDataRepositoryTest {
             fail("Corrupt data must be reported")
         } catch (_: androidx.datastore.core.CorruptionException) { /* Expected: never replace the file. */ }
     }
+
+    @Test fun dishNotesStayNewestFirstAndReplaceTheSameWording() {
+        val data = UserData()
+            .withNote(DishNote("a", "r1", "少放盐", updatedAt = 1))
+            .withNote(DishNote("b", "r1", "火小点", updatedAt = 2))
+            .withNote(DishNote("c", "r2", "多放辣", updatedAt = 3))
+        assertEquals(listOf("火小点", "少放盐"), data.notesFor("r1").map { it.text })
+        val replaced = data.withNote(DishNote("d", "r1", "少放盐", raw = "咸了", updatedAt = 4))
+        assertEquals(3, replaced.dishNotes.size)
+        assertEquals("d", replaced.notesFor("r1").first().id)
+        assertEquals("少放盐", replaced.notesFor("r1").first().text)
+        assertTrue(replaced.withoutNote("d").notesFor("r1").none { it.text == "少放盐" })
+    }
+
+    @Test fun serializerPreservesDishNotes() = runBlocking {
+        val original = UserData().withNote(
+            DishNote("n1", "recipe-1", "下次少放盐", raw = "有点咸", updatedAt = 9, source = NoteSource.AI),
+        )
+        val output = ByteArrayOutputStream()
+        UserDataSerializer.writeTo(original, output)
+        assertEquals(original, UserDataSerializer.readFrom(ByteArrayInputStream(output.toByteArray())))
+    }
+
+    @Test fun aFileWrittenBeforeNotesExistedStillLoads() = runBlocking {
+        val legacy = """{"favorites":[],"recent":[],"preferences":{}}"""
+        val data = UserDataSerializer.readFrom(ByteArrayInputStream(legacy.toByteArray()))
+        assertTrue(data.dishNotes.isEmpty())
+    }
 }
