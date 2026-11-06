@@ -34,20 +34,22 @@ class ZhipuGateway(
     private val network: NetworkStatus,
     private val endpoint: String = DEFAULT_ENDPOINT,
 ) : AiGateway {
-    override fun stream(messages: List<AiMessage>): Flow<AiEvent> = flow {
+    override fun stream(messages: List<AiMessage>, model: String?): Flow<AiEvent> = flow {
         if (apiKey.isBlank()) {
-            emit(AiEvent.Failed)
+            emit(AiEvent.Failed(null))
             return@flow
         }
         if (!network.isOnline()) {
             emit(AiEvent.Offline)
             return@flow
         }
-        val body = payload(messages, stream = true).encodeToByteArray()
+        val body = payload(messages, stream = true, model = model).encodeToByteArray()
         val connection = (URL(endpoint).openConnection() as HttpURLConnection).apply {
             requestMethod = "POST"
             connectTimeout = 6_000
-            readTimeout = 15_000
+            // The free model can queue for ~30 s before the first token; the UI's 2.5 s deadline
+            // already covers that wait, so the socket is allowed to stay open.
+            readTimeout = 40_000
             doOutput = true
             setRequestProperty("Content-Type", "application/json; charset=utf-8")
             setRequestProperty("Accept", "text/event-stream")
@@ -65,7 +67,7 @@ class ZhipuGateway(
                     return@flow
                 }
                 else -> {
-                    emit(AiEvent.Failed)
+                    emit(AiEvent.Failed(status))
                     return@flow
                 }
             }
@@ -79,7 +81,7 @@ class ZhipuGateway(
             }
             emit(AiEvent.Done)
         } catch (_: IOException) {
-            emit(AiEvent.Failed)
+            emit(AiEvent.Failed(null))
         } finally {
             disconnectOnCancel.dispose()
             connection.disconnect()
@@ -92,11 +94,14 @@ class ZhipuGateway(
         val connection = (URL(endpoint).openConnection() as HttpURLConnection).apply {
             requestMethod = "POST"
             connectTimeout = 6_000
-            readTimeout = 20_000
+            readTimeout = 40_000
             doOutput = true
             setRequestProperty("Content-Type", "application/json; charset=utf-8")
             setRequestProperty("Authorization", "Bearer $apiKey")
         }
+        // A cancelled enrichment must release the single request slot immediately, not after the
+        // read timeout.
+        val disconnectOnCancel = currentCoroutineContext().job.invokeOnCompletion { connection.disconnect() }
         try {
             connection.outputStream.use { it.write(body) }
             if (connection.responseCode != 200) return@withContext null
@@ -115,12 +120,13 @@ class ZhipuGateway(
         } catch (_: IOException) {
             null
         } finally {
+            disconnectOnCancel.dispose()
             connection.disconnect()
         }
     }
 
-    private fun payload(messages: List<AiMessage>, stream: Boolean): String = buildJsonObject {
-        put("model", MODEL)
+    private fun payload(messages: List<AiMessage>, stream: Boolean, model: String? = null): String = buildJsonObject {
+        put("model", model ?: MODEL)
         put("stream", stream)
         put("temperature", 0.3)
         put("max_tokens", if (stream) 120 else 400)
@@ -137,6 +143,9 @@ class ZhipuGateway(
 
     companion object {
         const val MODEL = "glm-4.7-flash"
+
+        /** 4.7-flash is the default, but it is often queued; 4.5-flash answers when it is. */
+        const val FALLBACK_MODEL = "glm-4.5-flash"
         const val DEFAULT_ENDPOINT = "https://open.bigmodel.cn/api/paas/v4/chat/completions"
         private val json = Json { ignoreUnknownKeys = true }
     }

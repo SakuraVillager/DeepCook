@@ -57,4 +57,16 @@ class AiPlaybookTest {
             assertTrue(entry.id, Playbook(playbookFile.entries).match(entry.keywords.first())?.id == entry.id)
         }
     }
+
+    @Test fun openQuestionsAreLeftToTheModel() {
+        val file = java.io.File("src/main/assets/${AssetPlaybook.ASSET}")
+        val bundled = Playbook(
+            json.decodeFromString<PlaybookFile>(file.readText()).entries,
+        )
+        // These depend on the dish, the amounts or the step, so a canned line would be wrong.
+        listOf("盐放多少", "要炖多久", "这个怎么做", "火候多大", "放多少水").forEach { question ->
+            assertNull("$question must not hit the playbook", bundled.match(question))
+        }
+        assertEquals("pan-fire", bundled.match("锅里着火了")?.id)
+    }
 }

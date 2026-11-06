@@ -18,6 +18,7 @@ import com.deepcook.app.data.ai.ContextBuilder
 import com.deepcook.app.data.ai.Playbook
 import com.deepcook.app.data.ai.RecipeEnricher
 import com.deepcook.app.data.ai.SafetyRules
+import com.deepcook.app.data.ai.ZhipuGateway
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -78,6 +79,7 @@ class CookingViewModel(
     private var playbook: Playbook? = null
     private var overlay: AiOverlay? = null
     private var aiJob: Job? = null
+    private var enrichJob: Job? = null
 
     /** Guards against a cancelled question writing over the newer one. */
     private var askToken = 0
@@ -114,18 +116,32 @@ class CookingViewModel(
             runCatching { book.get() }.onSuccess { loaded -> playbook = loaded }
         }
         viewModelScope.launch {
-            loadOverlay()
+            loadCachedOverlay()
+            scheduleEnrichment()
         }
     }
 
     /**
-     * Reads this dish's cached enrichment, and asks for one only when the recipe still has empty
-     * fields. Runs silently: the answer bar never mentions it.
+     * Reads this dish's cached enrichment. A fresh lookup is deliberately not started here: the
+     * free model allows one request at a time, and an enrichment call in flight makes the user's
+     * own question fail with 429.
      */
-    private suspend fun loadOverlay() {
+    private suspend fun loadCachedOverlay() {
         runCatching { overlays.get(recipe.id) }.getOrNull()?.let { overlay = it }
+    }
+
+    /**
+     * Starts the background enrichment only after the page has been quiet for a while, and the
+     * job is cancelled the moment the user asks something.
+     */
+    private fun scheduleEnrichment() {
         if (overlay != null || enricher.missingFields(recipe).isEmpty()) return
-        runCatching { enricher.enrich(recipe) }.getOrNull()?.let { filled ->
+        enrichJob?.cancel()
+        enrichJob = viewModelScope.launch {
+            delay(ENRICH_DELAY_MS)
+            // A question always wins the single request slot.
+            if (aiJob?.isActive == true) return@launch
+            val filled = runCatching { enricher.enrich(recipe) }.getOrNull() ?: return@launch
             overlay = filled
             runCatching { overlays.put(filled) }
         }
@@ -155,6 +171,8 @@ class CookingViewModel(
         askToken++
         val token = askToken
         aiJob?.cancel()
+        enrichJob?.cancel()
+        enrichJob = null
         speechBuffer.setLength(0)
         val step = recipe.steps[_state.value.stepIndex.coerceIn(recipe.steps.indices)]
 
@@ -191,9 +209,16 @@ class CookingViewModel(
                 }
             }
             var got = false
+            var failure: AiEvent? = null
             try {
                 for (attempt in 1..MAX_ATTEMPTS) {
                     if (token != askToken) return@launch
+                    // When the primary free model is queued, the second attempt uses the fallback.
+                    val model = if (attempt > 1 && failure == AiEvent.Busy) {
+                        ZhipuGateway.FALLBACK_MODEL
+                    } else {
+                        null
+                    }
                     ai.stream(
                         contextBuilder.messages(
                             recipe = recipe,
@@ -204,28 +229,33 @@ class CookingViewModel(
                             history = _state.value.ai.history,
                             overlay = overlay,
                         ),
+                        model = model,
                     ).collect { event ->
-                        if (event is AiEvent.Delta) {
-                            if (!got) timeout.cancel()
-                            got = true
-                            if (token == askToken) {
-                                speechBuffer.append(event.text)
-                                drainSpeech()
-                                _state.update { current ->
-                                    val base = if (current.ai.timedOut) "" else current.ai.answer
-                                    current.copy(
-                                        ai = current.ai.copy(
-                                            answer = base + event.text,
-                                            thinking = false,
-                                            timedOut = false,
-                                        ),
-                                    )
+                        when (event) {
+                            is AiEvent.Delta -> {
+                                if (!got) timeout.cancel()
+                                got = true
+                                if (token == askToken) {
+                                    speechBuffer.append(event.text)
+                                    drainSpeech()
+                                    _state.update { current ->
+                                        val base = if (current.ai.timedOut) "" else current.ai.answer
+                                        current.copy(
+                                            ai = current.ai.copy(
+                                                answer = base + event.text,
+                                                thinking = false,
+                                                timedOut = false,
+                                            ),
+                                        )
+                                    }
                                 }
                             }
+
+                            else -> failure = event
                         }
                     }
                     if (got || token != askToken) break
-                    if (attempt < MAX_ATTEMPTS) delay(RETRY_DELAY_MS)
+                    if (attempt < MAX_ATTEMPTS && failure != AiEvent.Busy) delay(RETRY_DELAY_MS)
                 }
             } catch (error: CancellationException) {
                 throw error
@@ -237,11 +267,12 @@ class CookingViewModel(
             speechBuffer.setLength(0)
             val answer = _state.value.ai.answer
             if (answer.isEmpty()) {
+                val (prefix, text) = failureText(failure, step.text)
                 _state.update {
-                    it.copy(ai = it.ai.copy(answer = "现在有点忙，先看这一步：${step.text}", thinking = false))
+                    it.copy(ai = it.ai.copy(answer = "$prefix，先看这一步：$text", thinking = false))
                 }
-                _speech.tryEmit("现在有点忙。")
-                _speech.tryEmit(step.text)
+                _speech.tryEmit(prefix)
+                _speech.tryEmit(text)
             } else {
                 _state.update {
                     it.copy(
@@ -266,10 +297,24 @@ class CookingViewModel(
         }
     }
 
+    /** Turns the last transport failure into something the screen can say out loud. */
+    private fun failureText(failure: AiEvent?, step: String): Pair<String, String> = when (failure) {
+        AiEvent.Busy -> "AI 正忙（免费模型排队中），过几秒再问一次" to step
+        AiEvent.Offline -> "手机没网" to step
+        is AiEvent.Failed -> when (failure.status) {
+            401, 403 -> "AI 认证失败（${failure.status}），检查 key" to step
+            null -> "连不上 AI" to step
+            else -> "AI 出错了（${failure.status}）" to step
+        }
+
+        else -> "AI 没回应" to step
+    }
+
     /** Ends the session and stops the notification; the caller then leaves the page. */
     fun complete(onDone: () -> Unit) = viewModelScope.launch {
         askToken++
         aiJob?.cancel()
+        enrichJob?.cancel()
         runCatching { sessions.clear() }
         onDone()
     }
@@ -277,6 +322,7 @@ class CookingViewModel(
     private companion object {
         const val FIRST_TOKEN_TIMEOUT_MS = 2_500L
         const val RETRY_DELAY_MS = 1_000L
+        const val ENRICH_DELAY_MS = 6_000L
         const val MAX_ATTEMPTS = 2
         const val HISTORY_LIMIT = 10
     }

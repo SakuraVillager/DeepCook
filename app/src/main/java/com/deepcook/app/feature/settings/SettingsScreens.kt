@@ -3,13 +3,17 @@
 package com.deepcook.app.feature.settings
 
 import android.os.Build
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.MenuBook
 import androidx.compose.material.icons.rounded.*
@@ -25,8 +29,13 @@ import androidx.compose.ui.unit.dp
 import com.deepcook.app.BuildConfig
 import com.deepcook.app.core.designsystem.*
 import com.deepcook.app.core.model.*
+import com.deepcook.app.feature.cooking.TtsVoiceOption
+import com.deepcook.app.feature.cooking.installedChineseVoices
+import com.deepcook.app.feature.cooking.openSystemTtsSettings
+import com.deepcook.app.feature.cooking.openVoiceDownload
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeoutOrNull
 import kotlinx.serialization.json.*
 
 @Composable
@@ -247,10 +256,27 @@ fun SettingsScreen(
                         SwitchPreference(
                             "朗读回答",
                             "用系统语音把回答读出来，语速 1.3 倍；关掉后只看屏幕。",
-                            Icons.Rounded.VolumeUp,
+                            Icons.Rounded.GraphicEq,
                             preferences.speakAnswers,
                         ) { value ->
                             onPreferences { it.copy(speakAnswers = value) }
+                        }
+                        var showVoices by remember { mutableStateOf(false) }
+                        PreferenceRow(
+                            "朗读声音",
+                            preferences.ttsVoiceLabel ?: preferences.ttsVoice ?: "系统默认",
+                            Icons.Rounded.RecordVoiceOver,
+                            onClick = { showVoices = true },
+                        )
+                        if (showVoices) {
+                            VoicePickerDialog(
+                                current = preferences.ttsVoice,
+                                onSelect = { name, label ->
+                                    onPreferences { it.copy(ttsVoice = name, ttsVoiceLabel = label) }
+                                    showVoices = false
+                                },
+                                onDismiss = { showVoices = false },
+                            )
                         }
                         var confirmClear by remember { mutableStateOf(false) }
                         PreferenceRow(
@@ -448,4 +474,82 @@ private fun AssetText(name: String) {
         }
     }
     SelectionContainer { Text(text, Modifier.padding(16.dp), style = MaterialTheme.typography.bodyMedium) }
+}
+
+/**
+ * Lists the voices the system engine already has and links to the engine's own download page.
+ * Voice data is installed by the engine, so the APK never carries it.
+ */
+@Composable
+private fun VoicePickerDialog(
+    current: String?,
+    onSelect: (name: String?, label: String?) -> Unit,
+    onDismiss: () -> Unit,
+) {
+    val context = LocalContext.current
+    var options by remember { mutableStateOf<List<TtsVoiceOption>?>(null) }
+    LaunchedEffect(Unit) {
+        options = withContext(Dispatchers.IO) {
+            withTimeoutOrNull(3_000) { installedChineseVoices(context) } ?: emptyList()
+        }
+    }
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("朗读声音") },
+        text = {
+            Column(
+                Modifier.heightIn(max = 420.dp).verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(4.dp),
+            ) {
+                Text(
+                    "声音来自系统语音引擎；语音包在引擎里下载，不占安装包。",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                Spacer(Modifier.height(6.dp))
+                VoiceChoice("系统默认", current == null) { onSelect(null, null) }
+                when (val list = options) {
+                    null -> Text("正在读取…", style = MaterialTheme.typography.bodySmall)
+                    else -> {
+                        if (list.isEmpty()) {
+                            Text(
+                                "当前引擎没有可切换的中文语音，可以用下面的按钮下载。",
+                                style = MaterialTheme.typography.bodySmall,
+                            )
+                        }
+                        list.forEach { option ->
+                            VoiceChoice(option.label, current == option.name) {
+                                onSelect(option.name, option.label)
+                            }
+                        }
+                    }
+                }
+                Spacer(Modifier.height(8.dp))
+                Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                    TextButton(onClick = {
+                        if (!openVoiceDownload(context)) {
+                            Toast.makeText(context, "打不开语音下载页，试试系统语音设置", Toast.LENGTH_SHORT).show()
+                        }
+                    }) { Text("下载语音包") }
+                    TextButton(onClick = {
+                        if (!openSystemTtsSettings(context)) {
+                            Toast.makeText(context, "打不开系统语音设置", Toast.LENGTH_SHORT).show()
+                        }
+                    }) { Text("系统语音设置") }
+                }
+            }
+        },
+        confirmButton = { TextButton(onClick = onDismiss) { Text("关闭") } },
+    )
+}
+
+@Composable
+private fun VoiceChoice(label: String, selected: Boolean, onClick: () -> Unit) {
+    Row(
+        Modifier.fillMaxWidth().clickable(onClick = onClick).padding(vertical = 4.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        RadioButton(selected = selected, onClick = onClick)
+        Text(label, style = MaterialTheme.typography.bodyMedium)
+    }
 }

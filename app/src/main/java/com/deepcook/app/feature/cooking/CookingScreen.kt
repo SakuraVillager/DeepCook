@@ -72,7 +72,7 @@ fun CookingScreen(
     val keyboard = LocalSoftwareKeyboardController.current
     val snackbars = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
-    val speaker = remember { TtsSpeaker(context) }
+    val speaker = remember(preferences.ttsVoice) { TtsSpeaker(context, preferences.ttsVoice) }
     val voice = remember { VoiceInput(context) }
     val index = state.stepIndex.coerceIn(recipe.steps.indices)
     val step = recipe.steps[index]
@@ -82,7 +82,7 @@ fun CookingScreen(
         if (!preferences.speakAnswers) return@LaunchedEffect
         vm.speech.collect { sentence -> speaker.speak(sentence) }
     }
-    DisposableEffect(Unit) {
+    DisposableEffect(speaker) {
         onDispose {
             voice.stop()
             speaker.destroy()
@@ -116,19 +116,25 @@ fun CookingScreen(
     fun beginListening() {
         speaker.stop()
         listening = true
-        voice.start(
-            onText = { recognized ->
-                listening = false
-                question = ""
-                keyboard?.hide()
-                speaker.stop()
-                vm.ask(recognized)
-            },
-            onError = { message ->
-                listening = false
-                scope.launch { snackbars.showSnackbar(message) }
-            },
-        )
+        // Give the audio route a moment after TTS stops, otherwise the first syllable is clipped.
+        scope.launch {
+            delay(180)
+            if (!listening) return@launch
+            voice.start(
+                onText = { recognized ->
+                    listening = false
+                    question = ""
+                    keyboard?.hide()
+                    speaker.stop()
+                    vm.ask(recognized)
+                },
+                onError = { message ->
+                    listening = false
+                    scope.launch { snackbars.showSnackbar(message) }
+                },
+                onPartial = { partial -> question = partial },
+            )
+        }
     }
 
     val micPermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
@@ -150,6 +156,12 @@ fun CookingScreen(
     }
 
     Scaffold(
+        // The whole screen ends above the keyboard, so the input row sits exactly on top of it
+        // instead of being covered or padded twice.
+        modifier = Modifier.windowInsetsPadding(
+            WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom),
+        ),
+        contentWindowInsets = WindowInsets(0),
         topBar = {
             TopAppBar(
                 title = {
@@ -173,8 +185,8 @@ fun CookingScreen(
             Surface(tonalElevation = 3.dp) {
                 Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                     Column(
-                        Modifier.widthIn(max = 720.dp).fillMaxWidth().navigationBarsPadding()
-                            .imePadding().padding(horizontal = 16.dp, vertical = 10.dp),
+                        Modifier.widthIn(max = 720.dp).fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 10.dp),
                         verticalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
                         if (state.timers.isNotEmpty()) {

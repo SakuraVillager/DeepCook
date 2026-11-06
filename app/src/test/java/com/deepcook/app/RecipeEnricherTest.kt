@@ -78,8 +78,10 @@ class RecipeEnricherTest {
     }
 
     private class FakeGateway : com.deepcook.app.data.ai.AiGateway {
-        override fun stream(messages: List<com.deepcook.app.data.ai.AiMessage>) =
-            kotlinx.coroutines.flow.emptyFlow<com.deepcook.app.data.ai.AiEvent>()
+        override fun stream(
+            messages: List<com.deepcook.app.data.ai.AiMessage>,
+            model: String?,
+        ) = kotlinx.coroutines.flow.emptyFlow<com.deepcook.app.data.ai.AiEvent>()
 
         override suspend fun complete(messages: List<com.deepcook.app.data.ai.AiMessage>): String? = null
     }

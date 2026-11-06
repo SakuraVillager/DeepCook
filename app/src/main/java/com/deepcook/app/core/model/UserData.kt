@@ -26,6 +26,10 @@ data class UserPreferences(
     val voiceInputEnabled: Boolean = true,
     /** When off, answers stay on screen and the system voice stays silent. */
     val speakAnswers: Boolean = true,
+    /** Name of the system TTS voice, or null for the engine default. */
+    val ttsVoice: String? = null,
+    /** Friendly label for [ttsVoice], kept so Settings can show it without re-querying the engine. */
+    val ttsVoiceLabel: String? = null,
 )
 
 @Serializable

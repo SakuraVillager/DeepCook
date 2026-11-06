@@ -21,15 +21,20 @@ sealed interface AiEvent {
     data object Done : AiEvent
     data object Busy : AiEvent
     data object Offline : AiEvent
-    data object Failed : AiEvent
+
+    /** [status] is the HTTP code when the server answered, null when the connection failed. */
+    data class Failed(val status: Int? = null) : AiEvent
 }
 
 /** One finished question/answer pair, kept only for this cooking session. */
 data class AiExchange(val question: String, val answer: String)
 
 interface AiGateway {
-    /** Streams one answer. The flow completes after [AiEvent.Done] or one failure event. */
-    fun stream(messages: List<AiMessage>): Flow<AiEvent>
+    /**
+     * Streams one answer. [model] overrides the default, which the cooking screen uses to fall
+     * back to a second free model when the primary one is rate limited.
+     */
+    fun stream(messages: List<AiMessage>, model: String? = null): Flow<AiEvent>
 
     /** One non-streaming answer, used for field enrichment; null when the call failed. */
     suspend fun complete(messages: List<AiMessage>): String?

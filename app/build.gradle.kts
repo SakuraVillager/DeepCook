@@ -21,8 +21,8 @@ android {
         applicationId = "com.deepcook.app"
         minSdk = 26
         targetSdk = 36
-        versionCode = 11
-        versionName = "0.4.0"
+        versionCode = 14
+        versionName = "0.4.3"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "DEEPCOOK_AI_KEY", "\"" + aiKey.replace("\\", "\\\\").replace("\"", "\\\"") + "\"")
     }

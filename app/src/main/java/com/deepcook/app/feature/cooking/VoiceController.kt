@@ -7,7 +7,9 @@ import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import android.speech.tts.TextToSpeech
+import kotlinx.coroutines.suspendCancellableCoroutine
 import java.util.Locale
+import kotlin.coroutines.resume
 
 /**
  * Wraps the system speech recognizer. No audio ever leaves the app through this class beyond
@@ -19,7 +21,7 @@ class VoiceInput(private val context: Context) {
 
     fun isListening(): Boolean = listening
 
-    fun start(onText: (String) -> Unit, onError: (String) -> Unit) {
+    fun start(onText: (String) -> Unit, onError: (String) -> Unit, onPartial: (String) -> Unit = {}) {
         if (!SpeechRecognizer.isRecognitionAvailable(context)) {
             onError("这台手机没有语音识别服务，先打字吧。")
             return
@@ -50,14 +52,25 @@ class VoiceInput(private val context: Context) {
                 if (text.isNotEmpty()) onText(text) else onError("没听清，再说一遍。")
             }
 
-            override fun onPartialResults(partialResults: Bundle?) = Unit
+            override fun onPartialResults(partialResults: Bundle?) {
+                val text = partialResults?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
+                    ?.firstOrNull()
+                    .orEmpty()
+                    .trim()
+                if (text.isNotEmpty()) onPartial(text)
+            }
+
             override fun onEvent(eventType: Int, params: Bundle?) = Unit
         })
         val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
             putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
             putExtra(RecognizerIntent.EXTRA_LANGUAGE, "zh-CN")
             putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1)
-            putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, false)
+            putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true)
+            // End the utterance sooner: a short kitchen command should not wait for a long pause.
+            putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 700L)
+            putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS, 500L)
+            putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS, 400L)
         }
         runCatching { speech.startListening(intent) }
             .onFailure {
@@ -89,8 +102,12 @@ class VoiceInput(private val context: Context) {
 /**
  * System text-to-speech at 1.3x. Utterances queue, so a streamed answer can be handed over one
  * sentence at a time and starts speaking before the model has finished.
+ *
+ * [voiceName] picks one of the voices the system engine already has installed; null keeps the
+ * engine's default for Chinese. Voice data itself is downloaded by the engine, never shipped in
+ * the APK.
  */
-class TtsSpeaker(context: Context) {
+class TtsSpeaker(context: Context, private val voiceName: String? = null) {
     private var engine: TextToSpeech? = null
 
     @Volatile
@@ -102,6 +119,11 @@ class TtsSpeaker(context: Context) {
             ready = status == TextToSpeech.SUCCESS
             if (ready) {
                 runCatching { engine?.language = Locale.SIMPLIFIED_CHINESE }
+                voiceName?.let { name ->
+                    runCatching {
+                        engine?.voices?.firstOrNull { it.name == name }?.let { chosen -> engine?.voice = chosen }
+                    }
+                }
                 runCatching { engine?.setSpeechRate(1.3f) }
                 val queued = synchronized(pending) {
                     pending.toList().also { pending.clear() }
@@ -138,3 +160,55 @@ class TtsSpeaker(context: Context) {
         ready = false
     }
 }
+
+/** One selectable system voice, named for the user rather than for the engine. */
+data class TtsVoiceOption(val name: String, val label: String)
+
+/**
+ * Lists the Chinese voices the current system engine already has.
+ *
+ * Voice data is owned by the TTS engine (the same place Android's own settings download it), so
+ * nothing is bundled in the APK; the two intents below open the engine's download/settings pages.
+ */
+suspend fun installedChineseVoices(context: Context): List<TtsVoiceOption> =
+    suspendCancellableCoroutine { continuation ->
+        var engine: TextToSpeech? = null
+        var finished = false
+        fun finish(options: List<TtsVoiceOption>) {
+            if (finished) return
+            finished = true
+            runCatching { engine?.shutdown() }
+            continuation.resume(options)
+        }
+        engine = TextToSpeech(context.applicationContext) { status ->
+            val options = if (status == TextToSpeech.SUCCESS) {
+                runCatching {
+                    engine?.voices.orEmpty()
+                        .filter { it.locale.language == "zh" }
+                        .map { voice ->
+                            val connection = if (voice.isNetworkConnectionRequired) "（联网）" else "（离线）"
+                            TtsVoiceOption(voice.name, voice.locale.displayName + connection)
+                        }
+                        .distinctBy { it.name }
+                }.getOrDefault(emptyList())
+            } else {
+                emptyList()
+            }
+            finish(options)
+        }
+        continuation.invokeOnCancellation { finish(emptyList()) }
+    }
+
+/** Opens the engine's own "download voice data" screen; false when no engine handles it. */
+fun openVoiceDownload(context: Context): Boolean = runCatching {
+    context.startActivity(
+        Intent(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+    )
+}.isSuccess
+
+/** Opens the system text-to-speech settings, where the engine and voice can also be changed. */
+fun openSystemTtsSettings(context: Context): Boolean = runCatching {
+    context.startActivity(
+        Intent("com.android.settings.TTS_SETTINGS").addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+    )
+}.isSuccess
