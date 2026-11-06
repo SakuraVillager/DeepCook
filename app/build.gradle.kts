@@ -25,6 +25,8 @@ android {
         versionName = "0.4.3"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "DEEPCOOK_AI_KEY", "\"" + aiKey.replace("\\", "\\\\").replace("\"", "\\\"") + "\"")
+        // The keyword spotter ships native libs; phones are all arm64 or armv7.
+        ndk { abiFilters += listOf("arm64-v8a", "armeabi-v7a") }
     }
     buildFeatures {
         compose = true
@@ -34,7 +36,10 @@ android {
         getByName("release") {
             isMinifyEnabled = true
             isShrinkResources = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"))
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro",
+            )
         }
         // Locally installable optimized build; production release signing is separate.
         create("preview") {
@@ -69,6 +74,7 @@ dependencies {
     implementation(libs.coil)
     implementation(libs.exifinterface)
     implementation(libs.material.motion)
+    implementation(libs.sherpa.onnx)
     debugImplementation(libs.compose.tooling)
     debugImplementation(libs.compose.test.manifest)
     testImplementation(libs.junit)

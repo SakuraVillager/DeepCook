@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.deepcook.app.core.model.AiOverlay
 import com.deepcook.app.core.model.CookTimer
 import com.deepcook.app.core.model.DishNote
+import com.deepcook.app.core.model.NoteSource
 import com.deepcook.app.core.model.Recipe
 import com.deepcook.app.core.model.UserData
 import com.deepcook.app.data.AiOverlayStore
@@ -29,6 +30,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.util.UUID
 
 /**
  * Owns the position, timers, notes and assistant conversation of one cooking session.
@@ -175,6 +177,54 @@ class CookingViewModel(
         enrichJob = null
         speechBuffer.setLength(0)
         val step = recipe.steps[_state.value.stepIndex.coerceIn(recipe.steps.indices)]
+
+        // "记一笔：少放盐" is a note for this dish, handled without the model.
+        val noted = NoteCommand.extract(question)
+        if (noted != null) {
+            val note = DishNote(
+                id = UUID.randomUUID().toString(),
+                recipeId = recipe.id,
+                text = noted,
+                raw = question,
+                updatedAt = System.currentTimeMillis(),
+                source = NoteSource.USER,
+            )
+            viewModelScope.launch { runCatching { userData.addDishNote(note) } }
+            val reply = "记下了：$noted"
+            _speech.tryEmit(reply)
+            _state.update {
+                it.copy(
+                    ai = it.ai.copy(
+                        question = question,
+                        answer = reply,
+                        thinking = false,
+                        timedOut = false,
+                        history = (it.ai.history + AiExchange(question, reply)).takeLast(HISTORY_LIMIT),
+                    ),
+                )
+            }
+            return
+        }
+
+        // "计时十分钟" is deterministic; handle it before any model call.
+        val timerMinutes = CookCommand.timerMinutes(question)
+        if (timerMinutes != null) {
+            addTimer(timerMinutes)
+            val reply = "好，计时 $timerMinutes 分钟。"
+            _speech.tryEmit(reply)
+            _state.update {
+                it.copy(
+                    ai = it.ai.copy(
+                        question = question,
+                        answer = reply,
+                        thinking = false,
+                        timedOut = false,
+                        history = (it.ai.history + AiExchange(question, reply)).takeLast(HISTORY_LIMIT),
+                    ),
+                )
+            }
+            return
+        }
 
         val quick = playbook?.match(question)?.answer
             ?: SafetyRules.answer(question, recipe, user.profile.avoids)

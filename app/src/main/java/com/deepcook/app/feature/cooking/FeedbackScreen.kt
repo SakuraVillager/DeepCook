@@ -58,7 +58,7 @@ fun FeedbackScreen(
                 listening = false
                 text = (text + recognized).take(120)
             },
-            onError = { message ->
+            onError = { _, message ->
                 listening = false
                 scope.launch { snackbars.showSnackbar(message) }
             },

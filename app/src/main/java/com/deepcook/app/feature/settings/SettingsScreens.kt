@@ -262,6 +262,14 @@ fun SettingsScreen(
                             onPreferences { it.copy(speakAnswers = value) }
                         }
                         var showVoices by remember { mutableStateOf(false) }
+                        SwitchPreference(
+                            "唤醒词「小厨小厨」",
+                            "做菜页常听这四个字，听到就直接开始录音提问。离线识别、不要网；耗电会多一些。",
+                            Icons.Rounded.SettingsVoice,
+                            preferences.wakeWordEnabled,
+                        ) { value ->
+                            onPreferences { it.copy(wakeWordEnabled = value) }
+                        }
                         PreferenceRow(
                             "朗读声音",
                             preferences.ttsVoiceLabel ?: preferences.ttsVoice ?: "系统默认",
@@ -450,6 +458,12 @@ private fun LicenseContent() {
         "CC0 等效许可",
         "允许复制、修改和随应用分发；不将图片作为图库或独立素材售卖。授权：https://www.foodiesfeed.com/license",
         Icons.Rounded.PhotoLibrary,
+    )
+    PreferenceGroupHeader("语音与唤醒词")
+    PreferenceRow(
+        "sherpa-onnx · Apache License 2.0",
+        "离线关键词识别引擎（k2-fsa/sherpa-onnx）。中文 KWS 模型约 5 MB 随包提供，只用于识别「小厨小厨」，音频不出设备。",
+        Icons.Rounded.RecordVoiceOver,
     )
     PreferenceGroupHeader("第三方软件")
     PreferenceRow(

@@ -14,45 +14,69 @@ import kotlin.coroutines.resume
 /**
  * Wraps the system speech recognizer. No audio ever leaves the app through this class beyond
  * what the platform's own recognition service does; the app itself sends only the final text.
+ *
+ * Every start gets a new generation number. Callbacks from a recognizer that was already
+ * replaced or destroyed are ignored, because destroying one can still deliver [onError] on the
+ * old listener — which previously reset the screen while the new utterance was starting.
  */
 class VoiceInput(private val context: Context) {
     private var recognizer: SpeechRecognizer? = null
-    private var listening = false
+    private var generation = 0
 
-    fun isListening(): Boolean = listening
+    @Volatile
+    private var active = false
 
-    fun start(onText: (String) -> Unit, onError: (String) -> Unit, onPartial: (String) -> Unit = {}) {
+    fun isActive(): Boolean = active
+
+    /**
+     * Starts one utterance. [onError] receives the platform error code along with a readable
+     * message, so the screen can fall back to the system speech dialog for real failures but
+     * simply ask again after "didn't catch that".
+     */
+    fun start(
+        onText: (String) -> Unit,
+        onError: (Int, String) -> Unit,
+        onPartial: (String) -> Unit = {},
+    ) {
         if (!SpeechRecognizer.isRecognitionAvailable(context)) {
-            onError("这台手机没有语音识别服务，先打字吧。")
+            onError(ERROR_NOT_AVAILABLE, "这台手机没有语音识别服务")
             return
         }
-        stop()
-        val speech = SpeechRecognizer.createSpeechRecognizer(context)
+        release()
+        val token = ++generation
+        val speech = runCatching { SpeechRecognizer.createSpeechRecognizer(context) }.getOrNull()
+        if (speech == null) {
+            onError(SpeechRecognizer.ERROR_CLIENT, "语音识别没能启动")
+            return
+        }
         recognizer = speech
         speech.setRecognitionListener(object : RecognitionListener {
+            private fun stale(): Boolean = token != generation
+
             override fun onReadyForSpeech(params: Bundle?) = Unit
             override fun onBeginningOfSpeech() = Unit
             override fun onRmsChanged(rmsdB: Float) = Unit
             override fun onBufferReceived(buffer: ByteArray?) = Unit
-            override fun onEndOfSpeech() {
-                listening = false
-            }
+            override fun onEndOfSpeech() = Unit
 
             override fun onError(error: Int) {
-                listening = false
-                onError(messageFor(error))
+                if (stale()) return
+                active = false
+                onError(error, messageFor(error))
             }
 
             override fun onResults(results: Bundle?) {
-                listening = false
+                if (stale()) return
+                active = false
                 val text = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
                     ?.firstOrNull()
                     .orEmpty()
                     .trim()
-                if (text.isNotEmpty()) onText(text) else onError("没听清，再说一遍。")
+                if (text.isNotEmpty()) onText(text) else onError(SpeechRecognizer.ERROR_NO_MATCH, "没听清，再说一遍")
             }
 
             override fun onPartialResults(partialResults: Bundle?) {
+                if (stale()) return
                 val text = partialResults?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
                     ?.firstOrNull()
                     .orEmpty()
@@ -72,30 +96,40 @@ class VoiceInput(private val context: Context) {
             putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS, 500L)
             putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS, 400L)
         }
-        runCatching { speech.startListening(intent) }
-            .onFailure {
-                listening = false
-                onError("麦克风没能启动。")
-            }
-        listening = true
+        val started = runCatching { speech.startListening(intent) }.isSuccess
+        active = started
+        if (!started) onError(SpeechRecognizer.ERROR_CLIENT, "麦克风没能启动")
     }
 
     fun stop() {
+        generation++
+        active = false
+        release()
+    }
+
+    /** Detaches the listener first, so destroying a recognizer cannot call back into the screen. */
+    private fun release() {
         val speech = recognizer ?: return
+        recognizer = null
+        runCatching { speech.setRecognitionListener(null) }
         runCatching { speech.stopListening() }
         runCatching { speech.cancel() }
         runCatching { speech.destroy() }
-        recognizer = null
-        listening = false
     }
 
     private fun messageFor(error: Int): String = when (error) {
-        SpeechRecognizer.ERROR_AUDIO -> "麦克风出问题了。"
-        SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS -> "没有麦克风权限。"
-        SpeechRecognizer.ERROR_NETWORK, SpeechRecognizer.ERROR_NETWORK_TIMEOUT -> "语音识别要联网，现在连不上。"
-        SpeechRecognizer.ERROR_NO_MATCH, SpeechRecognizer.ERROR_SPEECH_TIMEOUT -> "没听清，再说一遍。"
-        SpeechRecognizer.ERROR_RECOGNIZER_BUSY -> "识别正忙，稍后再试。"
-        else -> "没听清，再说一遍。"
+        SpeechRecognizer.ERROR_AUDIO -> "麦克风不可用或正被占用"
+        SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS -> "没有麦克风权限"
+        SpeechRecognizer.ERROR_NETWORK, SpeechRecognizer.ERROR_NETWORK_TIMEOUT -> "语音识别需要联网"
+        SpeechRecognizer.ERROR_NO_MATCH, SpeechRecognizer.ERROR_SPEECH_TIMEOUT -> "没听清，再说一遍"
+        SpeechRecognizer.ERROR_RECOGNIZER_BUSY -> "识别正忙，稍后再试"
+        SpeechRecognizer.ERROR_SERVER -> "语音服务出错"
+        else -> "语音识别没响应"
+    }
+
+    companion object {
+        /** Not a platform code: the device simply has no recognition service installed. */
+        const val ERROR_NOT_AVAILABLE = -100
     }
 }
 

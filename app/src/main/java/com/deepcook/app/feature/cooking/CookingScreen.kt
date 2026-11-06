@@ -3,8 +3,16 @@
 package com.deepcook.app.feature.cooking
 
 import android.Manifest
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
+import android.os.VibrationEffect
+import android.os.Vibrator
+import android.os.VibratorManager
+import android.speech.RecognizerIntent
+import android.speech.SpeechRecognizer
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -34,6 +42,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.deepcook.app.R
 import com.deepcook.app.core.designsystem.*
@@ -41,6 +52,7 @@ import com.deepcook.app.core.model.Recipe
 import com.deepcook.app.core.model.UserPreferences
 import com.deepcook.app.data.CookTimerService
 import com.deepcook.app.data.ai.AiExchange
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Locale
@@ -74,6 +86,9 @@ fun CookingScreen(
     val scope = rememberCoroutineScope()
     val speaker = remember(preferences.ttsVoice) { TtsSpeaker(context, preferences.ttsVoice) }
     val voice = remember { VoiceInput(context) }
+    val wakeRef = remember { mutableStateOf<WakeWordEngine?>(null) }
+    val wakeEvents = remember { Channel<Unit>(Channel.CONFLATED) }
+    val voiceEvents = remember { Channel<Unit>(Channel.CONFLATED) }
     val index = state.stepIndex.coerceIn(recipe.steps.indices)
     val step = recipe.steps[index]
     val lastStep = index == recipe.steps.lastIndex
@@ -113,12 +128,39 @@ fun CookingScreen(
         }
     }
 
+    // Used only when the in-app recognizer fails: the system speech dialog is slower but works
+    // on phones whose speech service misbehaves inside a third-party app.
+    val systemVoice = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val spoken = result.data
+                ?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                ?.firstOrNull()
+                .orEmpty()
+                .trim()
+            if (spoken.isNotEmpty()) {
+                speaker.stop()
+                vm.ask(spoken)
+            }
+        }
+    }
+
+    fun launchSystemVoice() {
+        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+            putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+            putExtra(RecognizerIntent.EXTRA_LANGUAGE, "zh-CN")
+            putExtra(RecognizerIntent.EXTRA_PROMPT, "说一句")
+        }
+        runCatching { systemVoice.launch(intent) }
+            .onFailure { scope.launch { snackbars.showSnackbar("系统语音也打不开") } }
+    }
+
     fun beginListening() {
+        wakeRef.value?.stop()
         speaker.stop()
         listening = true
         // Give the audio route a moment after TTS stops, otherwise the first syllable is clipped.
         scope.launch {
-            delay(180)
+            delay(if (preferences.wakeWordEnabled) 600 else 300)
             if (!listening) return@launch
             voice.start(
                 onText = { recognized ->
@@ -127,13 +169,32 @@ fun CookingScreen(
                     keyboard?.hide()
                     speaker.stop()
                     vm.ask(recognized)
+                    voiceEvents.trySend(Unit)
                 },
-                onError = { message ->
+                onError = { code, message ->
                     listening = false
-                    scope.launch { snackbars.showSnackbar(message) }
+                    voiceEvents.trySend(Unit)
+                    val recovered = code == SpeechRecognizer.ERROR_NO_MATCH ||
+                        code == SpeechRecognizer.ERROR_SPEECH_TIMEOUT
+                    if (recovered) {
+                        scope.launch { snackbars.showSnackbar(message) }
+                    } else {
+                        scope.launch { snackbars.showSnackbar("$message，改用系统语音") }
+                        launchSystemVoice()
+                    }
                 },
                 onPartial = { partial -> question = partial },
             )
+            // If the recognition service never answers at all (some ROMs do this inside a
+            // third-party app), fall back instead of leaving the button stuck on "listening".
+            delay(8_000)
+            if (listening && voice.isActive()) {
+                voice.stop()
+                listening = false
+                voiceEvents.trySend(Unit)
+                snackbars.showSnackbar("没听到声音，改用系统语音")
+                launchSystemVoice()
+            }
         }
     }
 
@@ -152,6 +213,53 @@ fun CookingScreen(
             beginListening()
         } else {
             micPermission.launch(Manifest.permission.RECORD_AUDIO)
+        }
+    }
+
+    val wakeWord = remember { WakeWordEngine(context) { wakeEvents.trySend(Unit) } }
+    SideEffect { wakeRef.value = wakeWord }
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val wakeEnabled = rememberUpdatedState(preferences.wakeWordEnabled)
+
+    // "小厨小厨" heard: buzz, hand the microphone to speech recognition.
+    LaunchedEffect(wakeEvents) {
+        for (ignored in wakeEvents) {
+            buzz(context)
+            if (!listening) beginListening()
+        }
+    }
+    // After a spoken question, give the answer a moment, then listen for the wake word again.
+    LaunchedEffect(voiceEvents) {
+        for (ignored in voiceEvents) {
+            delay(2_500)
+            if (preferences.wakeWordEnabled) wakeWord.start()
+        }
+    }
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            when (event) {
+                Lifecycle.Event.ON_RESUME -> if (wakeEnabled.value && hasMicrophone(context)) wakeWord.start()
+                Lifecycle.Event.ON_PAUSE -> wakeWord.stop()
+                else -> Unit
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+            wakeWord.release()
+        }
+    }
+    LaunchedEffect(preferences.wakeWordEnabled) {
+        if (!preferences.wakeWordEnabled) {
+            wakeWord.stop()
+            return@LaunchedEffect
+        }
+        if (!hasMicrophone(context)) {
+            snackbars.showSnackbar("开启唤醒词需要麦克风权限")
+            return@LaunchedEffect
+        }
+        if (lifecycleOwner.lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
+            wakeWord.start()
         }
     }
 
@@ -588,5 +696,22 @@ private fun CueNote(text: String) {
             Text("观察提示", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
             Text(text, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
+    }
+}
+
+private fun hasMicrophone(context: Context): Boolean =
+    ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) ==
+        PackageManager.PERMISSION_GRANTED
+
+/** A short buzz when the wake word fires, so the user knows the phone is listening. */
+private fun buzz(context: Context) {
+    runCatching {
+        val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            context.getSystemService(VibratorManager::class.java)?.defaultVibrator
+        } else {
+            @Suppress("DEPRECATION")
+            context.getSystemService(Vibrator::class.java)
+        }
+        vibrator?.vibrate(VibrationEffect.createOneShot(80, VibrationEffect.DEFAULT_AMPLITUDE))
     }
 }

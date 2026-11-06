@@ -30,6 +30,8 @@ data class UserPreferences(
     val ttsVoice: String? = null,
     /** Friendly label for [ttsVoice], kept so Settings can show it without re-querying the engine. */
     val ttsVoiceLabel: String? = null,
+    /** Off by default: an always-listening microphone costs battery and is privacy-sensitive. */
+    val wakeWordEnabled: Boolean = false,
 )
 
 @Serializable
