@@ -72,17 +72,20 @@ class OfflineSpeechInput(private val context: Context) {
     }
 
     /**
-     * Starts one utterance. Callbacks arrive on the main thread. [onFinal] carries the recognised
-     * text when the speaker stops or [stop] is called; [onError] explains why nothing was heard.
+     * Starts one utterance. Callbacks arrive on the main thread. [onLevel] is the microphone level
+     * (0..1) for the listening animation, [onFinal] carries the recognised text when the speaker
+     * stops or [stop] is called, and [onError] explains why nothing was heard.
+     *
+     * The streaming model's words are never surfaced: it only says when the sentence ended.
      */
     fun start(
-        onPartial: (String) -> Unit,
+        onLevel: (Float) -> Unit,
         onFinal: (String) -> Unit,
         onError: (String) -> Unit,
     ) {
         stop()
         active = true
-        job = scope.launch { loop(onPartial, onFinal, onError) }
+        job = scope.launch { loop(onLevel, onFinal, onError) }
     }
 
     /** Ends the utterance; whatever has been heard so far is delivered as the final text. */
@@ -104,7 +107,7 @@ class OfflineSpeechInput(private val context: Context) {
     }
 
     private fun loop(
-        onPartial: (String) -> Unit,
+        onLevel: (Float) -> Unit,
         onFinal: (String) -> Unit,
         onError: (String) -> Unit,
     ) {
@@ -153,12 +156,11 @@ class OfflineSpeechInput(private val context: Context) {
                 stream.acceptWaveform(samples, SAMPLE_RATE)
                 while (engine.isReady(stream)) engine.decode(stream)
                 val partial = engine.getResult(stream).text
-                if (partial != preview) {
-                    preview = partial
-                    if (preview.isNotEmpty() && now - lastPushAt > 120) {
-                        lastPushAt = now
-                        post { onPartial(preview) }
-                    }
+                if (partial.isNotEmpty()) preview = partial
+                if (now - lastPushAt > 80) {
+                    lastPushAt = now
+                    val shown = (rms / LEVEL_SCALE).coerceIn(0f, 1f)
+                    post { onLevel(shown) }
                 }
                 when {
                     // Nothing at all has been heard: say so instead of waiting out the maximum.
@@ -192,7 +194,7 @@ class OfflineSpeechInput(private val context: Context) {
         val refined = transcribe(join(chunks))
         val result = refined.trim().ifEmpty { preview.trim() }
         if (result.isEmpty()) {
-            post { onError("没听到内容，再说一次") }
+            post { onError("没听清，再说一次") }
         } else {
             post { onFinal(result) }
         }
@@ -303,6 +305,8 @@ class OfflineSpeechInput(private val context: Context) {
         /** Below this peak after eight seconds there was no usable audio at all. */
         const val AUDIBLE_LEVEL = 0.004f
         const val MAX_UTTERANCE_MS = 25_000L
+        /** RMS that maps to a full-width level animation; speech sits around 0.02–0.10. */
+        const val LEVEL_SCALE = 0.12f
         val STREAMING_MODEL_TYPES = listOf("", "zipformer2", "zipformer")
     }
 }

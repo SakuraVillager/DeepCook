@@ -79,6 +79,11 @@ fun CookingScreen(
     var showNotes by remember { mutableStateOf(false) }
     var question by remember { mutableStateOf("") }
     var listening by remember { mutableStateOf(false) }
+    // The assistant sheet: open while the microphone is on, then shows the answer before folding
+    // away. Its own state machine keeps voice, wake word and typing on one path.
+    var assistant by remember { mutableStateOf(AssistantPhase.Hidden) }
+    var level by remember { mutableFloatStateOf(0f) }
+    var assistantError by remember { mutableStateOf<String?>(null) }
     var announcedNote by remember(recipe.id) { mutableStateOf(false) }
     val keyboard = LocalSoftwareKeyboardController.current
     val snackbars = remember { SnackbarHostState() }
@@ -119,7 +124,6 @@ fun CookingScreen(
     LaunchedEffect(state.ready) {
         if (state.ready) CookTimerService.start(context)
     }
-    BackHandler { onBack() }
     KeepAwake(preferences.keepScreenOn)
 
     val permission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { }
@@ -164,19 +168,27 @@ fun CookingScreen(
             .onFailure { scope.launch { snackbars.showSnackbar("系统语音也打不开，先用键盘吧") } }
     }
 
-    fun beginListening() {
+    fun beginListening(fromWake: Boolean = false) {
         wakeRef.value?.stop()
         speaker.stop()
         listening = true
+        assistantError = null
+        level = 0f
+        assistant = if (fromWake) AssistantPhase.Greeting else AssistantPhase.Listening
         // Give the audio route a moment after TTS stops, otherwise the first syllable is clipped.
         scope.launch {
             delay(if (preferences.wakeWordEnabled) 500 else 250)
             if (!listening) return@launch
             offline.start(
-                onPartial = { partial -> question = partial },
+                onLevel = { value ->
+                    level = value
+                    if (value > 0.05f && assistant == AssistantPhase.Greeting) {
+                        assistant = AssistantPhase.Listening
+                    }
+                },
                 onFinal = { recognized ->
                     listening = false
-                    question = ""
+                    assistant = AssistantPhase.Recognizing
                     keyboard?.hide()
                     speaker.stop()
                     vm.ask(recognized)
@@ -185,12 +197,35 @@ fun CookingScreen(
                 onError = { message ->
                     listening = false
                     voiceEvents.trySend(Unit)
-                    scope.launch { snackbars.showSnackbar(message) }
-                    // Only a model that cannot be loaded is worth trying the system dialog for;
-                    // a silent microphone would fail there too, and the message already says so.
-                    if (message.contains("模型")) launchSystemVoice()
+                    assistantError = message
+                    assistant = AssistantPhase.Failed
                 },
             )
+        }
+    }
+
+    fun closeAssistant() {
+        offline.stop()
+        listening = false
+        assistant = AssistantPhase.Hidden
+        if (preferences.wakeWordEnabled) wakeRef.value?.start()
+    }
+
+    BackHandler {
+        if (assistant == AssistantPhase.Hidden) onBack() else closeAssistant()
+    }
+
+    // The answer started (or the model is thinking): move the sheet from recognising to answering.
+    LaunchedEffect(state.ai.answer, state.ai.thinking, assistant) {
+        if (assistant == AssistantPhase.Recognizing && (state.ai.answer.isNotEmpty() || state.ai.thinking)) {
+            assistant = AssistantPhase.Answering
+        }
+    }
+    // Fold the sheet away once the answer has been shown and read out.
+    LaunchedEffect(assistant, state.ai.answer, state.ai.thinking) {
+        if (assistant == AssistantPhase.Answering && !state.ai.thinking && state.ai.answer.isNotEmpty()) {
+            delay(if (preferences.speakAnswers) 4_000 else 2_500)
+            if (assistant == AssistantPhase.Answering) assistant = AssistantPhase.Hidden
         }
     }
 
@@ -217,11 +252,11 @@ fun CookingScreen(
     val lifecycleOwner = LocalLifecycleOwner.current
     val wakeEnabled = rememberUpdatedState(preferences.wakeWordEnabled)
 
-    // "小厨小厨" heard: buzz, hand the microphone to speech recognition.
+    // "小厨小厨" heard: buzz, then open the assistant sheet without showing any transcript.
     LaunchedEffect(wakeEvents) {
         for (ignored in wakeEvents) {
             buzz(context)
-            if (!listening) beginListening()
+            if (!listening) beginListening(fromWake = true)
         }
     }
     // After a spoken question, give the answer a moment, then listen for the wake word again.
@@ -259,7 +294,10 @@ fun CookingScreen(
         }
     }
 
-    Scaffold(
+    // The assistant sheet is drawn over the whole screen, including the bottom bar, so it needs a
+    // box outside the scaffold.
+    Box(Modifier.fillMaxSize()) {
+        Scaffold(
         // The whole screen ends above the keyboard, so the input row sits exactly on top of it
         // instead of being covered or padded twice.
         modifier = Modifier.windowInsetsPadding(
@@ -326,10 +364,7 @@ fun CookingScreen(
                                 }
                                 if (listening) {
                                     FilledIconButton(
-                                        onClick = {
-                                            offline.stop()
-                                            listening = false
-                                        },
+                                        onClick = { closeAssistant() },
                                         modifier = Modifier.size(52.dp),
                                     ) { mic() }
                                 } else {
@@ -467,6 +502,21 @@ fun CookingScreen(
                 }
             }
         }
+    }
+        AssistantPanel(
+            phase = assistant,
+            level = level,
+            question = state.ai.question,
+            answer = state.ai.answer,
+            thinking = state.ai.thinking,
+            error = assistantError,
+            onCancel = { closeAssistant() },
+            onRetry = { beginListening() },
+            onType = {
+                assistant = AssistantPhase.Hidden
+                keyboard?.show()
+            },
+        )
     }
 
     if (showTimers) {
