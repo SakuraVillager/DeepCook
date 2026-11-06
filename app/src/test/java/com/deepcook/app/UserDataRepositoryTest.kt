@@ -98,4 +98,20 @@ class UserDataRepositoryTest {
         val data = UserDataSerializer.readFrom(ByteArrayInputStream(legacy.toByteArray()))
         assertTrue(data.dishNotes.isEmpty())
     }
+
+    @Test fun editingANoteKeepsItsIdAndBecomesTheUsersOwnWording() {
+        val data = UserData().withNote(
+            DishNote("a", "r1", "少放一点盐", raw = "有点咸", updatedAt = 1, source = NoteSource.AI),
+        )
+        val edited = data.withEditedNote("a", "  少放盐  ", 9)
+        val note = edited.dishNotes.single()
+        assertEquals("a", note.id)
+        assertEquals("r1", note.recipeId)
+        assertEquals("少放盐", note.text)
+        assertEquals(9, note.updatedAt)
+        assertEquals(NoteSource.USER, note.source)
+        // A blank or unknown edit changes nothing rather than deleting the note.
+        assertEquals(data, data.withEditedNote("a", "   ", 9))
+        assertEquals(data, data.withEditedNote("missing", "随便写", 9))
+    }
 }

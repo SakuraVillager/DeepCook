@@ -160,6 +160,36 @@ class AppViewModel(
         }
     }
 
+    /** Writes a note the user typed on the notes page; it is their own wording, not the model's. */
+    fun addDishNote(recipeId: String, text: String) {
+        val trimmed = text.trim()
+        if (trimmed.isEmpty()) return
+        mutate {
+            val note = DishNote(
+                id = UUID.randomUUID().toString(),
+                recipeId = recipeId,
+                text = trimmed,
+                raw = trimmed,
+                updatedAt = System.currentTimeMillis(),
+                source = NoteSource.USER,
+            )
+            userData.addDishNote(note)
+            messageChannel.send(AppMessage("已记下：$trimmed") { userData.removeDishNote(note.id) })
+        }
+    }
+
+    /** Replaces one note's wording, keeping the dish; undo restores the previous text. */
+    fun editDishNote(id: String, text: String) {
+        val trimmed = text.trim()
+        if (trimmed.isEmpty()) return
+        mutate {
+            val previous = userData.data.first().dishNotes.find { it.id == id } ?: return@mutate
+            if (previous.text == trimmed) return@mutate
+            userData.updateDishNote(id, trimmed)
+            messageChannel.send(AppMessage("备注已更新") { userData.addDishNote(previous) })
+        }
+    }
+
     fun deleteDishNote(id: String) = mutate {
         val note = userData.data.first().dishNotes.find { it.id == id } ?: return@mutate
         userData.removeDishNote(id)
@@ -205,10 +235,13 @@ class AppViewModel(
     fun clearRecent() = mutate {
         userData.clearRecent()
         messageChannel.send(AppMessage("已清除最近浏览"))
-    }    fun clearFavorites() = mutate {
+    }
+
+    fun clearFavorites() = mutate {
         userData.clearFavorites()
         messageChannel.send(AppMessage("已清空收藏"))
     }
+
     fun resetPreferences() = mutate {
         userData.resetPreferences()
         messageChannel.send(AppMessage("已恢复默认设置"))

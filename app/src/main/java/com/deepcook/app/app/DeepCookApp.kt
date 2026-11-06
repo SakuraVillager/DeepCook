@@ -40,6 +40,7 @@ import com.deepcook.app.feature.cooking.CookingScreen
 import com.deepcook.app.feature.cooking.CookingViewModel
 import com.deepcook.app.feature.cooking.FeedbackScreen
 import com.deepcook.app.feature.cooking.FeedbackViewModel
+import com.deepcook.app.feature.notes.DishNotesScreen
 import com.deepcook.app.feature.profile.ProfileInfoScreen
 import com.deepcook.app.feature.recipe.*
 import com.deepcook.app.feature.search.SearchViewModel
@@ -73,6 +74,9 @@ import java.util.UUID
 @Serializable data object Recent
 
 @Serializable data object MyRecipes
+
+/** Every remembered dish correction, with hand editing. */
+@Serializable data object Notes
 
 /** Name, picture, and taste tags; reached by tapping the heading on the profile page. */
 @Serializable data object ProfileInfo
@@ -179,6 +183,7 @@ fun DeepCookApp(vm: AppViewModel, state: AppUiState, container: AppContainer) {
                             onMyRecipes = { openPage(MyRecipes) },
                             onAddRecipe = { openPage(RecipeEditor()) },
                             onProfile = { openPage(ProfileInfo) },
+                            onNotes = { openPage(Notes) },
                         )
                     }
                     composable<ProfileInfo> {
@@ -295,6 +300,21 @@ fun DeepCookApp(vm: AppViewModel, state: AppUiState, container: AppContainer) {
                             )
                         }
                     }
+                    composable<Notes> {
+                        DishNotesScreen(
+                            notes = state.user.dishNotes,
+                            recipes = state.recipes,
+                            onBack = { nav.popBackStack() },
+                            onOpen = { openPage(RecipeDetail(it)) },
+                            onEdit = vm::editDishNote,
+                            onDelete = vm::deleteDishNote,
+                            onAdd = vm::addDishNote,
+                            onFind = {
+                                nav.getBackStackEntry<Home>().savedStateHandle["findRequest"] = System.nanoTime()
+                                nav.popBackStack<Home>(inclusive = false)
+                            },
+                        )
+                    }
                     composable<Settings> { settingsEntry ->
                         SettingsScreen(
                             settingsEntry.toRoute<Settings>().section, state.user.preferences,
@@ -303,6 +323,7 @@ fun DeepCookApp(vm: AppViewModel, state: AppUiState, container: AppContainer) {
                             { openPage(Settings(it)) }, { nav.popBackStack() },
                             vm::preferences, vm::clearRecent, vm::clearFavorites, vm::resetPreferences,
                             vm::clearAiOverlay,
+                            onNotes = { openPage(Notes) },
                         )
                     }
                     composable<MyRecipes> {
@@ -365,6 +386,7 @@ private fun HomeScreen(
     onMyRecipes: () -> Unit,
     onAddRecipe: () -> Unit,
     onProfile: () -> Unit,
+    onNotes: () -> Unit,
 ) {
     val nav = rememberNavController()
     val entry by nav.currentBackStackEntryAsState()
@@ -473,7 +495,7 @@ private fun HomeScreen(
                     composable<Profile> {
                         ProfileScreen(
                             state, onSettings, { selectTab(1) }, onRecent, onMyRecipes, onAddRecipe,
-                            onOpen, vm::favorite, { selectTab(0) }, onProfile,
+                            onOpen, vm::favorite, { selectTab(0) }, onProfile, onNotes,
                         )
                     }
                 }

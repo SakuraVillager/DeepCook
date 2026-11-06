@@ -64,6 +64,7 @@ interface UserDataRepository {
     suspend fun updatePreferences(transform: (UserPreferences) -> UserPreferences)
     suspend fun updateProfile(transform: (UserProfile) -> UserProfile)
     suspend fun addDishNote(note: DishNote)
+    suspend fun updateDishNote(id: String, text: String, now: Long = System.currentTimeMillis())
     suspend fun removeDishNote(id: String)
     suspend fun clearRecent()
     suspend fun clearFavorites()
@@ -115,6 +116,9 @@ class LocalUserDataRepository(private val store: DataStore<UserData>) : UserData
     }
     override suspend fun addDishNote(note: DishNote) {
         store.updateData { it.withNote(note) }
+    }
+    override suspend fun updateDishNote(id: String, text: String, now: Long) {
+        store.updateData { it.withEditedNote(id, text, now) }
     }
     override suspend fun removeDishNote(id: String) {
         store.updateData { it.withoutNote(id) }

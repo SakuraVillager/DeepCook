@@ -71,6 +71,24 @@ data class UserData(
             ).takeLast(NOTE_LIMIT),
     )
 
+    /**
+     * Rewrites one note's wording in place. The dish and the note id stay the same so an edit is
+     * an edit, not a second note; a hand edit makes the note the user's own wording again.
+     */
+    fun withEditedNote(id: String, text: String, now: Long): UserData {
+        val trimmed = text.trim()
+        if (trimmed.isEmpty()) return this
+        return copy(
+            dishNotes = dishNotes.map { note ->
+                if (note.id == id) {
+                    note.copy(text = trimmed, updatedAt = now, source = NoteSource.USER)
+                } else {
+                    note
+                }
+            },
+        )
+    }
+
     fun withoutNote(id: String): UserData = copy(dishNotes = dishNotes.filterNot { it.id == id })
 
     companion object {

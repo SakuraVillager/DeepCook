@@ -258,10 +258,12 @@ fun ProfileScreen(
     onFavorite: (String) -> Unit,
     onFind: () -> Unit,
     onProfile: () -> Unit,
+    onNotes: () -> Unit,
 ) {
     val favorites = state.user.favorites.mapNotNull { saved -> state.recipes.find { it.id == saved.recipeId } }
     val recent = state.user.recent.mapNotNull { saved -> state.recipes.find { it.id == saved.recipeId } }.take(3)
     val mine = state.myRecipes
+    val notes = state.user.dishNotes
     Scaffold(topBar = {
         PageTitle("我的", actions = {
             IconButton(onClick = onSettings) { Icon(Icons.Rounded.Settings, stringResource(R.string.settings)) }
@@ -400,6 +402,42 @@ fun ProfileScreen(
                             Spacer(Modifier.width(8.dp))
                             Text("添加菜谱")
                         }
+                    }
+                }
+            }
+            item {
+                Surface(
+                    onClick = onNotes,
+                    shape = RoundedCornerShape(20.dp),
+                    color = MaterialTheme.colorScheme.surfaceContainerLow,
+                ) {
+                    Row(
+                        Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 16.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    ) {
+                        Icon(
+                            Icons.Rounded.EditNote,
+                            null,
+                            Modifier.size(28.dp),
+                            tint = MaterialTheme.colorScheme.primary,
+                        )
+                        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                            Text("口味记忆", style = MaterialTheme.typography.titleMedium)
+                            Text(
+                                if (notes.isEmpty()) {
+                                    "记下每道菜想怎么改，下次做时先提醒你"
+                                } else {
+                                    "${notes.size} 条 · 按菜查看、修改或删除"
+                                },
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
+                        Icon(
+                            Icons.AutoMirrored.Rounded.ArrowForward,
+                            null,
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
                     }
                 }
             }

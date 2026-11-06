@@ -27,6 +27,14 @@ class WakeWordEngine(private val context: Context, private val onWake: () -> Uni
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
     private var job: Job? = null
 
+    /**
+     * The live recorder, kept outside the loop so [stop] can end a blocking read immediately.
+     * Leaving it to coroutine cancellation alone can keep the microphone open for a moment,
+     * which is enough for the speech recognizer started right after to get silence.
+     */
+    @Volatile
+    private var recorder: AudioRecord? = null
+
     @Volatile
     private var running = false
 
@@ -34,6 +42,8 @@ class WakeWordEngine(private val context: Context, private val onWake: () -> Uni
     @Volatile
     var lastError: String? = null
         private set
+
+    fun isRunning(): Boolean = running
 
     fun start() {
         if (running) return
@@ -44,6 +54,7 @@ class WakeWordEngine(private val context: Context, private val onWake: () -> Uni
 
     fun stop() {
         running = false
+        runCatching { recorder?.stop() }
         job?.cancel()
         job = null
     }
@@ -55,7 +66,6 @@ class WakeWordEngine(private val context: Context, private val onWake: () -> Uni
 
     private fun loop() {
         var spotter: KeywordSpotter? = null
-        var recorder: AudioRecord? = null
         try {
             val config = KeywordSpotterConfig(
                 featConfig = FeatureConfig(sampleRate = SAMPLE_RATE, featureDim = 80),
@@ -116,8 +126,10 @@ class WakeWordEngine(private val context: Context, private val onWake: () -> Uni
             // A missing native library or a model that cannot load must never crash cooking.
             lastError = error.message ?: error.javaClass.simpleName
         } finally {
+            running = false
             runCatching { recorder?.stop() }
             runCatching { recorder?.release() }
+            recorder = null
             runCatching { spotter?.release() }
         }
     }

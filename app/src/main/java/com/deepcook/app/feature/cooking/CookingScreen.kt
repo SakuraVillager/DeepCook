@@ -12,7 +12,6 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
 import android.speech.RecognizerIntent
-import android.speech.SpeechRecognizer
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -85,7 +84,12 @@ fun CookingScreen(
     val snackbars = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val speaker = remember(preferences.ttsVoice) { TtsSpeaker(context, preferences.ttsVoice) }
-    val voice = remember { VoiceInput(context) }
+    // On-device recognition: the platform service on this phone accepts the request and never
+    // calls back, and the system dialog fails the same way, so the bundled sherpa-onnx model is
+    // the primary path. No service, no network.
+    val offline = remember { OfflineSpeechInput(context) }
+    // The recogniser is ~24 MB; load it while the cook is reading the first step.
+    LaunchedEffect(offline) { offline.prepare() }
     val wakeRef = remember { mutableStateOf<WakeWordEngine?>(null) }
     val wakeEvents = remember { Channel<Unit>(Channel.CONFLATED) }
     val voiceEvents = remember { Channel<Unit>(Channel.CONFLATED) }
@@ -99,7 +103,7 @@ fun CookingScreen(
     }
     DisposableEffect(speaker) {
         onDispose {
-            voice.stop()
+            offline.release()
             speaker.destroy()
         }
     }
@@ -131,16 +135,22 @@ fun CookingScreen(
     // Used only when the in-app recognizer fails: the system speech dialog is slower but works
     // on phones whose speech service misbehaves inside a third-party app.
     val systemVoice = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val spoken = result.data
+        val spoken = if (result.resultCode == Activity.RESULT_OK) {
+            result.data
                 ?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
                 ?.firstOrNull()
                 .orEmpty()
                 .trim()
-            if (spoken.isNotEmpty()) {
-                speaker.stop()
-                vm.ask(spoken)
-            }
+        } else {
+            ""
+        }
+        if (spoken.isNotEmpty()) {
+            speaker.stop()
+            vm.ask(spoken)
+        } else {
+            // Previously a cancelled or empty dialog returned silently, which looked like
+            // "the microphone did nothing" even though the dialog had opened.
+            scope.launch { snackbars.showSnackbar("没听到内容，可以再说一次，或者直接打字") }
         }
     }
 
@@ -148,10 +158,10 @@ fun CookingScreen(
         val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
             putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
             putExtra(RecognizerIntent.EXTRA_LANGUAGE, "zh-CN")
-            putExtra(RecognizerIntent.EXTRA_PROMPT, "说一句")
+            putExtra(RecognizerIntent.EXTRA_PROMPT, "说一句，然后点发送")
         }
         runCatching { systemVoice.launch(intent) }
-            .onFailure { scope.launch { snackbars.showSnackbar("系统语音也打不开") } }
+            .onFailure { scope.launch { snackbars.showSnackbar("系统语音也打不开，先用键盘吧") } }
     }
 
     fun beginListening() {
@@ -160,10 +170,11 @@ fun CookingScreen(
         listening = true
         // Give the audio route a moment after TTS stops, otherwise the first syllable is clipped.
         scope.launch {
-            delay(if (preferences.wakeWordEnabled) 600 else 300)
+            delay(if (preferences.wakeWordEnabled) 500 else 250)
             if (!listening) return@launch
-            voice.start(
-                onText = { recognized ->
+            offline.start(
+                onPartial = { partial -> question = partial },
+                onFinal = { recognized ->
                     listening = false
                     question = ""
                     keyboard?.hide()
@@ -171,30 +182,15 @@ fun CookingScreen(
                     vm.ask(recognized)
                     voiceEvents.trySend(Unit)
                 },
-                onError = { code, message ->
+                onError = { message ->
                     listening = false
                     voiceEvents.trySend(Unit)
-                    val recovered = code == SpeechRecognizer.ERROR_NO_MATCH ||
-                        code == SpeechRecognizer.ERROR_SPEECH_TIMEOUT
-                    if (recovered) {
-                        scope.launch { snackbars.showSnackbar(message) }
-                    } else {
-                        scope.launch { snackbars.showSnackbar("$message，改用系统语音") }
-                        launchSystemVoice()
-                    }
+                    scope.launch { snackbars.showSnackbar(message) }
+                    // Only a model that cannot be loaded is worth trying the system dialog for;
+                    // a silent microphone would fail there too, and the message already says so.
+                    if (message.contains("模型")) launchSystemVoice()
                 },
-                onPartial = { partial -> question = partial },
             )
-            // If the recognition service never answers at all (some ROMs do this inside a
-            // third-party app), fall back instead of leaving the button stuck on "listening".
-            delay(8_000)
-            if (listening && voice.isActive()) {
-                voice.stop()
-                listening = false
-                voiceEvents.trySend(Unit)
-                snackbars.showSnackbar("没听到声音，改用系统语音")
-                launchSystemVoice()
-            }
         }
     }
 
@@ -320,21 +316,27 @@ fun CookingScreen(
                                 textStyle = MaterialTheme.typography.bodyMedium,
                             )
                             if (preferences.voiceInputEnabled) {
-                                FilledTonalIconButton(
-                                    onClick = {
-                                        if (listening) {
-                                            voice.stop()
-                                            listening = false
-                                        } else {
-                                            requestMic()
-                                        }
-                                    },
-                                    modifier = Modifier.size(52.dp),
-                                ) {
+                                // A stop square while listening reads as "正在收声，点这里停";
+                                // the microphone icon alone looked like a mute toggle.
+                                val mic: @Composable () -> Unit = {
                                     Icon(
-                                        if (listening) Icons.Rounded.MicOff else Icons.Rounded.Mic,
+                                        if (listening) Icons.Rounded.Stop else Icons.Rounded.Mic,
                                         if (listening) "停止听" else "说话",
                                     )
+                                }
+                                if (listening) {
+                                    FilledIconButton(
+                                        onClick = {
+                                            offline.stop()
+                                            listening = false
+                                        },
+                                        modifier = Modifier.size(52.dp),
+                                    ) { mic() }
+                                } else {
+                                    FilledTonalIconButton(
+                                        onClick = { requestMic() },
+                                        modifier = Modifier.size(52.dp),
+                                    ) { mic() }
                                 }
                             }
                             FilledIconButton(

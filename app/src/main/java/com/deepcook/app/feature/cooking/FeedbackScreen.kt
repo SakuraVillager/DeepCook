@@ -140,19 +140,19 @@ fun FeedbackScreen(
             )
             if (voiceEnabled) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    FilledTonalIconButton(onClick = {
-                        if (listening) {
+                    if (listening) {
+                        FilledIconButton(onClick = {
                             voice.stop()
                             listening = false
-                        } else {
-                            requestMic()
+                        }) { Icon(Icons.Rounded.Stop, "停止听") }
+                    } else {
+                        FilledTonalIconButton(onClick = { requestMic() }) {
+                            Icon(Icons.Rounded.Mic, "说一句")
                         }
-                    }) {
-                        Icon(if (listening) Icons.Rounded.MicOff else Icons.Rounded.Mic, if (listening) "停止" else "说一句")
                     }
                     Spacer(Modifier.width(12.dp))
                     Text(
-                        if (listening) "正在听…" else "点一下，说一句",
+                        if (listening) "正在听…说完点方块停止" else "点一下，说一句",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )

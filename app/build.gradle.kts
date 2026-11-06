@@ -1,4 +1,4 @@
-import java.util.Properties
+﻿import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
@@ -21,8 +21,8 @@ android {
         applicationId = "com.deepcook.app"
         minSdk = 26
         targetSdk = 36
-        versionCode = 14
-        versionName = "0.4.3"
+        versionCode = 19
+        versionName = "0.4.8"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "DEEPCOOK_AI_KEY", "\"" + aiKey.replace("\\", "\\\\").replace("\"", "\\\"") + "\"")
         // The keyword spotter ships native libs; phones are all arm64 or armv7.
@@ -54,6 +54,9 @@ android {
     }
     testOptions { unitTests.isReturnDefaultValues = true }
     packaging { resources.excludes += "/META-INF/{AL2.0,LGPL2.1}" }
+    // sherpa-onnx mmaps its models straight out of assets; a compressed asset cannot be opened
+    // that way, so the recogniser and keyword-spotter models must be stored uncompressed.
+    androidResources { noCompress += listOf("onnx") }
 }
 kotlin { jvmToolchain(21) }
 

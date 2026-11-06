@@ -53,6 +53,7 @@ fun SettingsScreen(
     onClearFavorites: () -> Unit,
     onReset: () -> Unit,
     onClearAiOverlay: () -> Unit,
+    onNotes: () -> Unit,
 ) {
     val context = LocalContext.current
     val sourceEntries by produceState<List<String>>(emptyList(), section) {
@@ -286,6 +287,11 @@ fun SettingsScreen(
                                 onDismiss = { showVoices = false },
                             )
                         }
+                        PreferenceRow(
+                            "请求去向",
+                            "问题、当前这道菜的信息和口味备注会发到智谱（bigmodel.cn）的模型；录音与朗读都在本机完成，音频不上传。",
+                            Icons.Rounded.Cloud,
+                        )
                         var confirmClear by remember { mutableStateOf(false) }
                         PreferenceRow(
                             "AI 补充数据",
@@ -295,8 +301,13 @@ fun SettingsScreen(
                         )
                         PreferenceRow(
                             "口味备注",
-                            "$notes 条。按菜记录，做菜页顶部会提示，也能在那里删除。",
+                            if (notes == 0) {
+                                "没有备注。做完一道菜说一句，下次做时会提醒你。"
+                            } else {
+                                "$notes 条。按菜记录，做菜页顶部会提示；点按可查看、修改或删除。"
+                            },
                             Icons.Rounded.EditNote,
+                            onClick = onNotes,
                         )
                         if (confirmClear) {
                             AlertDialog(

@@ -95,13 +95,55 @@ The pinned input is preserved in `tools/cloud_recipes.json`. Expansion recipes e
 ship with a bundled photograph (see the two sections above) or display the bundled
 placeholder image when no clearly licensed, dish-accurate photograph was available.
 
+## sherpa-onnx — Apache License 2.0
+
+Source: https://github.com/k2-fsa/sherpa-onnx
+
+The offline keyword spotter used for the "小厨小厨" wake word is
+`com.bihe0832.android:lib-sherpa-onnx:6.25.21` (a Maven Central redistribution of
+sherpa-onnx's `com.k2fsa.sherpa.onnx` Kotlin API) with its `lib-onnx`
+(`libonnxruntime.so`). Two models ship in `app/src/main/assets/`:
+
+- `kws/` — Chinese keyword-spotting model (`sherpa-onnx-kws-zipformer-wenetspeech-3.3M-2024-01-01`,
+  int8, about 5 MB) for the wake word;
+- `asr/` — Chinese streaming recognizer (`sherpa-onnx-streaming-zipformer-zh-14M-2023-02-23`,
+  int8, about 24 MB) that shows words while the cook is talking and detects the end of a sentence;
+- `asr-paraformer/` — Chinese Paraformer model (`sherpa-onnx-paraformer-zh-small-2024-03-09`,
+  int8, about 78 MB) that re-reads the recorded clip and produces the final text.
+
+Audio is processed inside the app process and is never uploaded; answers and questions are
+exchanged as text. The wake word is off by default and only runs while the cooking screen is in
+the foreground. Full Apache License 2.0 text is bundled as `MIHON-LICENSE.txt` (same licence) and
+shown in the app's licences page.
+
+## AI assistant — Zhipu (智谱)
+
+The cooking assistant sends the current dish's title, ingredients, current step,
+the user's stored taste tags and dish notes, and the last one or two question
+turns to Zhipu's OpenAI-compatible endpoint (`open.bigmodel.cn`) and streams the
+answer back. No image, audio or contact data is sent. Speech recognition and
+speech synthesis use the device's own Android services; the microphone is only
+open while the user is talking or the wake word is enabled. This build embeds a
+personal API key for private use and is not meant for distribution.
+
+
+
 ## Software dependencies
 
 AndroidX (including Compose, Activity, Lifecycle, Navigation and DataStore), Kotlin,
 kotlinx.coroutines, kotlinx.serialization, Coil, Material icons and the Gradle
 wrapper use Apache License 2.0. Dependency versions are fixed in
 `gradle/libs.versions.toml`. JUnit 4, used only in tests, uses Eclipse Public
-License 1.0. The app does not bundle network image-loading components or request
-microphone or notification permissions. Internet and network-state permissions are
-used only for optional public-page fallback when bundled lookup cannot fill a recipe.
-Gallery covers use Android's photo picker without broad media storage permissions.
+License 1.0.
+
+Permissions declared by the app and why:
+
+| Permission | Why |
+| --- | --- |
+| `INTERNET`, `ACCESS_NETWORK_STATE` | Look up public recipe pages and ask the AI assistant |
+| `RECORD_AUDIO` | Tap-to-talk speech recognition and the optional wake word |
+| `POST_NOTIFICATIONS`, `FOREGROUND_SERVICE`, `FOREGROUND_SERVICE_SPECIAL_USE`, `VIBRATE` | Cooking timers that keep ringing when the app is in the background |
+
+The app does not bundle network image-loading components: covers are local assets or
+files in the app's private storage. Gallery covers use Android's photo picker without
+broad media storage permissions.
