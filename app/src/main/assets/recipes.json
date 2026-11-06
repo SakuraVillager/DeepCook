@@ -799,7 +799,8 @@
         "id": "three-treasures-s9",
         "order": 9,
         "title": "步骤 9",
-        "text": "加入土豆，煎炸大约 3-4 分钟，以显示金黄色、筷子能轻松扎透为准。"
+        "text": "加入土豆，煎炸大约 3-4 分钟，以显示金黄色、筷子能轻松扎透为准。",
+        "image": "photos/step-three-treasures-09.jpg"
       },
       {
         "id": "three-treasures-s10",
@@ -1432,7 +1433,8 @@
         "id": "greens-s6",
         "order": 6,
         "title": "步骤 6",
-        "text": "开另一小锅将兑好的料汁倒入，小火烧开，放入一半的蒜末，一点点姜丝和小米椒碎。在制作时加了一点点洋葱碎和大蒜，先在锅底倒油，五成热后倒入蒜末、洋葱，稍稍爆香后再加入料汁，加入小米辣煮开"
+        "text": "开另一小锅将兑好的料汁倒入，小火烧开，放入一半的蒜末，一点点姜丝和小米椒碎。在制作时加了一点点洋葱碎和大蒜，先在锅底倒油，五成热后倒入蒜末、洋葱，稍稍爆香后再加入料汁，加入小米辣煮开",
+        "image": "photos/step-greens-06.jpg"
       },
       {
         "id": "greens-s7",
@@ -1680,7 +1682,8 @@
         "id": "shrimp-s4",
         "order": 4,
         "title": "步骤 4",
-        "text": "大火烧开转小火盖盖子闷（中途不能再加汤水，不要开盖）"
+        "text": "大火烧开转小火盖盖子闷（中途不能再加汤水，不要开盖）",
+        "image": "photos/step-shrimp-04.jpg"
       },
       {
         "id": "shrimp-s5",
@@ -4287,7 +4290,8 @@
         "id": "world-spanish-tortilla-s10",
         "order": 10,
         "title": "步骤 10",
-        "text": "倒出炸土豆锅中的油，将混合物放入原锅，中大火煎约 5 分钟。"
+        "text": "倒出炸土豆锅中的油，将混合物放入原锅，中大火煎约 5 分钟。",
+        "image": "photos/step-world-spanish-tortilla-10.jpg"
       },
       {
         "id": "world-spanish-tortilla-s11",
@@ -4664,7 +4668,8 @@
         "id": "htc-989ccdcae7af8a8f-s5",
         "order": 5,
         "title": "步骤 5",
-        "text": "最后一步点火： 看到淡蓝色的小火苗了吗？"
+        "text": "最后一步点火： 看到淡蓝色的小火苗了吗？",
+        "image": "photos/step-htc-989ccdcae7af8a8f-05.jpg"
       }
     ],
     "notes": [
@@ -10263,7 +10268,8 @@
         "id": "htc-3a892c884d6f39e0-s1",
         "order": 1,
         "title": "步骤 1",
-        "text": "鸡翅入锅，倒入冷水淹没。放生姜 1 片和料酒 10 ～ 20 毫升。大火煮开（ 大约 2 分钟 ）后，撇去浮沫，沥出水分\n* 这一步针对冰鲜鸡翅，刚买来的鸡翅直接改刀用生抽进行腌制即可。"
+        "text": "鸡翅入锅，倒入冷水淹没。放生姜 1 片和料酒 10 ～ 20 毫升。大火煮开（ 大约 2 分钟 ）后，撇去浮沫，沥出水分\n* 这一步针对冰鲜鸡翅，刚买来的鸡翅直接改刀用生抽进行腌制即可。",
+        "image": "photos/step-htc-3a892c884d6f39e0-01.jpg"
       },
       {
         "id": "htc-3a892c884d6f39e0-s2",
@@ -11082,7 +11088,8 @@
         "id": "htc-e21f5bfb5fe6ef44-s8",
         "order": 8,
         "title": "步骤 8",
-        "text": "加入肥牛卷以及牛奶，盖上锅盖再小火煮 2-3 分钟即可出锅（用勺子搅拌食材，注意力度，避免肥牛卷破碎）"
+        "text": "加入肥牛卷以及牛奶，盖上锅盖再小火煮 2-3 分钟即可出锅（用勺子搅拌食材，注意力度，避免肥牛卷破碎）",
+        "image": "photos/step-htc-e21f5bfb5fe6ef44-08.jpg"
       }
     ],
     "notes": [
@@ -12846,13 +12853,15 @@
         "id": "htc-95d7b404d04ee264-s2",
         "order": 2,
         "title": "步骤 2",
-        "text": "平底锅中放入黄油，小火融化后加入洋葱炒至透明。"
+        "text": "平底锅中放入黄油，小火融化后加入洋葱炒至透明。",
+        "image": "photos/step-htc-95d7b404d04ee264-02.jpg"
       },
       {
         "id": "htc-95d7b404d04ee264-s3",
         "order": 3,
         "title": "步骤 3",
-        "text": "加入白蘑菇翻炒至出水变软，撒入面粉搅拌均匀。"
+        "text": "加入白蘑菇翻炒至出水变软，撒入面粉搅拌均匀。",
+        "image": "photos/step-htc-95d7b404d04ee264-03.jpg"
       },
       {
         "id": "htc-95d7b404d04ee264-s4",
@@ -12937,7 +12946,8 @@
         "id": "htc-ed29771026e7eed6-s1",
         "order": 1,
         "title": "步骤 1",
-        "text": "取袋泡红茶 2 包放入杯中，加入 180-200mL 沸水。"
+        "text": "取袋泡红茶 2 包放入杯中，加入 180-200mL 沸水。",
+        "image": "photos/step-htc-ed29771026e7eed6-01.jpg"
       },
       {
         "id": "htc-ed29771026e7eed6-s2",
@@ -17057,7 +17067,8 @@
         "id": "htc-ca670c5a113ea88e-s4",
         "order": 4,
         "title": "步骤 4",
-        "text": "倒入五花肉，翻炒 30 S ，加入姜片、蒜头后翻炒 30 S"
+        "text": "倒入五花肉，翻炒 30 S ，加入姜片、蒜头后翻炒 30 S",
+        "image": "photos/step-htc-ca670c5a113ea88e-04.jpg"
       },
       {
         "id": "htc-ca670c5a113ea88e-s5",
@@ -17255,7 +17266,8 @@
         "id": "htc-1a5309d32c90a9a3-s2",
         "order": 2,
         "title": "步骤 2",
-        "text": "在烧水的时候可以进行下面这些步骤，但请注意煮面的时间"
+        "text": "在烧水的时候可以进行下面这些步骤，但请注意煮面的时间",
+        "image": "photos/step-htc-1a5309d32c90a9a3-02.jpg"
       },
       {
         "id": "htc-1a5309d32c90a9a3-s3",
@@ -23792,7 +23804,8 @@
         "id": "htc-abe023d49637389d-s8",
         "order": 8,
         "title": "步骤 8",
-        "text": "放上烤好的肉片和 1 - 2 段大葱，卷起即可食用"
+        "text": "放上烤好的肉片和 1 - 2 段大葱，卷起即可食用",
+        "image": "photos/step-htc-abe023d49637389d-08.jpg"
       }
     ],
     "notes": [
@@ -28616,7 +28629,8 @@
         "id": "htc-515e68668fde3909-s2",
         "order": 2,
         "title": "步骤 2",
-        "text": "将鸡蛋搅拌均匀至颜色单一程度。"
+        "text": "将鸡蛋搅拌均匀至颜色单一程度。",
+        "image": "photos/step-htc-515e68668fde3909-02.jpg"
       },
       {
         "id": "htc-515e68668fde3909-s3",
@@ -29057,7 +29071,8 @@
         "id": "htc-3a181639cf9138dd-s1",
         "order": 1,
         "title": "步骤 1",
-        "text": "将牛油果对半切开，去核，剥去外皮，将果肉切成小块备用。"
+        "text": "将牛油果对半切开，去核，剥去外皮，将果肉切成小块备用。",
+        "image": "photos/step-htc-3a181639cf9138dd-01.jpg"
       },
       {
         "id": "htc-3a181639cf9138dd-s2",
@@ -35632,7 +35647,8 @@
         "id": "htc-a27c91703f1aaf05-s2",
         "order": 2,
         "title": "步骤 2",
-        "text": "黄油切小块入锅，倒入蛋液，开小火不断搅拌"
+        "text": "黄油切小块入锅，倒入蛋液，开小火不断搅拌",
+        "image": "photos/step-htc-a27c91703f1aaf05-02.jpg"
       },
       {
         "id": "htc-a27c91703f1aaf05-s3",
@@ -39606,7 +39622,8 @@
         "id": "htc-53fc0a69484a797c-s1",
         "order": 1,
         "title": "步骤 1",
-        "text": "开洋泡入 50 度温水中，加入 10ml 料酒去腥，泡 10 分钟后取出沥干水分"
+        "text": "开洋泡入 50 度温水中，加入 10ml 料酒去腥，泡 10 分钟后取出沥干水分",
+        "image": "photos/step-htc-53fc0a69484a797c-01.jpg"
       },
       {
         "id": "htc-53fc0a69484a797c-s2",
@@ -40642,7 +40659,8 @@
         "id": "htc-35b2e221aa1e478b-s4",
         "order": 4,
         "title": "步骤 4",
-        "text": "炒锅烧热，放入 15 ml 猪油，油热后先撒入 2 g 盐"
+        "text": "炒锅烧热，放入 15 ml 猪油，油热后先撒入 2 g 盐",
+        "image": "photos/step-htc-35b2e221aa1e478b-04.jpg"
       },
       {
         "id": "htc-35b2e221aa1e478b-s5",
@@ -41024,7 +41042,8 @@
         "id": "htc-fc61a88b7e007735-s2",
         "order": 2,
         "title": "步骤 2",
-        "text": "往蘸料碟中加入酱油"
+        "text": "往蘸料碟中加入酱油",
+        "image": "photos/step-htc-fc61a88b7e007735-02.jpg"
       },
       {
         "id": "htc-fc61a88b7e007735-s3",
@@ -41255,7 +41274,8 @@
         "id": "htc-5086f352be3eacfd-s2",
         "order": 2,
         "title": "步骤 2",
-        "text": "蒸 5  分钟"
+        "text": "蒸 5  分钟",
+        "image": "photos/step-htc-5086f352be3eacfd-02.jpg"
       },
       {
         "id": "htc-5086f352be3eacfd-s3",
@@ -43162,7 +43182,8 @@
         "id": "htc-9c598d5ae0973cc3-s1",
         "order": 1,
         "title": "步骤 1",
-        "text": "烧开水，将蛏子放入水中，水煮 2 分钟后，捞上来去壳，放入大碗"
+        "text": "烧开水，将蛏子放入水中，水煮 2 分钟后，捞上来去壳，放入大碗",
+        "image": "photos/step-htc-9c598d5ae0973cc3-01.jpg"
       },
       {
         "id": "htc-9c598d5ae0973cc3-s2",
@@ -44095,7 +44116,8 @@
         "id": "htc-414f79bd9c044d7a-s2",
         "order": 2,
         "title": "步骤 2",
-        "text": "葱姜蒜切碎。"
+        "text": "葱姜蒜切碎。",
+        "image": "photos/step-htc-414f79bd9c044d7a-02.jpg"
       },
       {
         "id": "htc-414f79bd9c044d7a-s3",
@@ -44716,7 +44738,8 @@
         "id": "htc-ba3ce0d2e7674607-s2",
         "order": 2,
         "title": "步骤 2",
-        "text": "将豆豉放入水中浸泡 5 分钟"
+        "text": "将豆豉放入水中浸泡 5 分钟",
+        "image": "photos/step-htc-ba3ce0d2e7674607-02.jpg"
       },
       {
         "id": "htc-ba3ce0d2e7674607-s3",
@@ -53645,7 +53668,8 @@
         "id": "htc-f20a63e1bd7e9c71-s2",
         "order": 2,
         "title": "步骤 2",
-        "text": "放入腊肠，计时 13 分钟"
+        "text": "放入腊肠，计时 13 分钟",
+        "image": "photos/step-htc-f20a63e1bd7e9c71-02.jpg"
       },
       {
         "id": "htc-f20a63e1bd7e9c71-s3",
@@ -54130,7 +54154,8 @@
           "i0",
           "i2",
           "i4"
-        ]
+        ],
+        "image": "photos/step-cn-donggua-paigu-tang-01.jpg"
       },
       {
         "id": "cn-donggua-paigu-tang-s2",
@@ -54860,7 +54885,8 @@
         "ingredientRefs": [
           "i0",
           "i10"
-        ]
+        ],
+        "image": "photos/step-cn-jiachang-doufu-02.jpg"
       },
       {
         "id": "cn-jiachang-doufu-s3",
@@ -55307,7 +55333,8 @@
         "cue": "豆角咬开断面色泽一致、没有硬芯和生豆味。",
         "ingredientRefs": [
           "i0"
-        ]
+        ],
+        "image": "photos/step-cn-ganbian-sijidou-05.jpg"
       }
     ],
     "notes": [
@@ -56011,7 +56038,8 @@
           "i0",
           "i9",
           "i5"
-        ]
+        ],
+        "image": "photos/step-cn-pidan-shourou-zhou-01.jpg"
       },
       {
         "id": "cn-pidan-shourou-zhou-s2",
@@ -57023,7 +57051,8 @@
         "cue": "无",
         "ingredientRefs": [
           "i2"
-        ]
+        ],
+        "image": "photos/step-cn-suanrong-xilanhua-05.jpg"
       }
     ],
     "notes": [
@@ -57142,7 +57171,8 @@
           "i3",
           "i4",
           "i2"
-        ]
+        ],
+        "image": "photos/step-cn-mayi-shangshu-03.jpg"
       },
       {
         "id": "cn-mayi-shangshu-s4",
@@ -58651,7 +58681,8 @@
           "i6",
           "i7",
           "i4"
-        ]
+        ],
+        "image": "photos/step-cn-yangchun-mian-01.jpg"
       },
       {
         "id": "cn-yangchun-mian-s2",
@@ -58670,7 +58701,8 @@
         "cue": "面条由硬挺变软、咬开无白芯就是熟了。",
         "ingredientRefs": [
           "i0"
-        ]
+        ],
+        "image": "photos/step-cn-yangchun-mian-03.jpg"
       },
       {
         "id": "cn-yangchun-mian-s4",
@@ -59685,7 +59717,8 @@
           "i5",
           "i6",
           "i7"
-        ]
+        ],
+        "image": "photos/step-jp-oyakodon-02.jpg"
       },
       {
         "id": "jp-oyakodon-s3",
@@ -60216,7 +60249,8 @@
           "i3",
           "i4",
           "i5"
-        ]
+        ],
+        "image": "photos/step-jp-okonomiyaki-01.jpg"
       },
       {
         "id": "jp-okonomiyaki-s2",
@@ -61146,7 +61180,8 @@
         "cue": "面包糠入油后立刻浮起、周围细密冒泡，油温即为合适。",
         "ingredientRefs": [
           "i6"
-        ]
+        ],
+        "image": "photos/step-jp-tonkatsu-03.jpg"
       },
       {
         "id": "jp-tonkatsu-s4",
@@ -62792,7 +62827,8 @@
         "ingredientRefs": [
           "i0",
           "i1"
-        ]
+        ],
+        "image": "photos/step-kr-tteokbokki-03.jpg"
       },
       {
         "id": "kr-tteokbokki-s4",
@@ -64987,7 +65023,8 @@
         "cue": "酱汁呈流动的奶油状并挂住面条，锅底没有结块的熟蛋。",
         "ingredientRefs": [
           "i0"
-        ]
+        ],
+        "image": "photos/step-eu-carbonara-04.jpg"
       }
     ],
     "notes": [
@@ -66450,7 +66487,8 @@
         "ingredientRefs": [
           "i12",
           "i0"
-        ]
+        ],
+        "image": "photos/step-sea-tomyum-02.jpg"
       },
       {
         "id": "sea-tomyum-s3",
@@ -67578,7 +67616,8 @@
         "cue": "颜色明显变浅，提起刀头能缓慢流下。",
         "ingredientRefs": [
           "i6"
-        ]
+        ],
+        "image": "photos/step-other-hummus-03.jpg"
       },
       {
         "id": "other-hummus-s4",
@@ -67765,7 +67804,8 @@
           "i0",
           "i10",
           "i11"
-        ]
+        ],
+        "image": "photos/step-other-butter-chicken-05.jpg"
       }
     ],
     "notes": [
