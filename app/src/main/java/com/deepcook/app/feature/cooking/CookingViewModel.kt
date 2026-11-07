@@ -76,6 +76,7 @@ class CookingViewModel(
     val speech = _speech.asSharedFlow()
 
     private val contextBuilder = ContextBuilder()
+    private val answerCache = AnswerCache()
     private val speechBuffer = StringBuilder()
     private var user = UserData()
     private var playbook: Playbook? = null
@@ -244,6 +245,25 @@ class CookingViewModel(
             return
         }
 
+        // Ask the same thing twice on the same step and the earlier answer is reused, so the cook
+        // does not wait for the model again. Cache is per dish session and bounded.
+        val cacheKey = answerCache.key(_state.value.stepIndex, question)
+        answerCache.get(cacheKey)?.let { cached ->
+            _speech.tryEmit(cached)
+            _state.update {
+                it.copy(
+                    ai = it.ai.copy(
+                        question = question,
+                        answer = cached,
+                        thinking = false,
+                        timedOut = false,
+                        history = (it.ai.history + AiExchange(question, cached)).takeLast(HISTORY_LIMIT),
+                    ),
+                )
+            }
+            return
+        }
+
         _state.update {
             it.copy(ai = it.ai.copy(question = question, answer = "", thinking = true, timedOut = false))
         }
@@ -324,6 +344,7 @@ class CookingViewModel(
                 _speech.tryEmit(prefix)
                 _speech.tryEmit(text)
             } else {
+                answerCache.put(cacheKey, answer)
                 _state.update {
                     it.copy(
                         ai = it.ai.copy(

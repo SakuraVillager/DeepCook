@@ -270,7 +270,17 @@ fun CookingScreen(
         val observer = LifecycleEventObserver { _, event ->
             when (event) {
                 Lifecycle.Event.ON_RESUME -> if (wakeEnabled.value && hasMicrophone(context)) wakeWord.start()
-                Lifecycle.Event.ON_PAUSE -> wakeWord.stop()
+                Lifecycle.Event.ON_PAUSE -> {
+                    wakeWord.stop()
+                    // Leaving the screen must also close the microphone: this app never records
+                    // while it is in the background, which is why no microphone foreground
+                    // service is declared.
+                    if (listening) {
+                        offline.stop()
+                        listening = false
+                        assistant = AssistantPhase.Hidden
+                    }
+                }
                 else -> Unit
             }
         }
