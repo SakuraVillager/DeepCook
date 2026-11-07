@@ -1,5 +1,6 @@
 package com.deepcook.app
 
+import com.deepcook.app.core.model.AI_DRAFT_SOURCE
 import com.deepcook.app.core.model.DraftIngredient
 import com.deepcook.app.core.model.DraftStep
 import com.deepcook.app.core.model.NO_CONTENT
@@ -84,8 +85,16 @@ class RecipeDraftTest {
         assertTrue(prefilled.source.license.contains("Unlicense"))
     }
 
-    @Test fun anIncompleteDraftCannotBecomeARecipe() {
-        try {
+    @Test fun anAiDraftSaysItWasNotCookedAndHasNoLink() {
+        val recipe = complete.copy(prefilled = true, sourceName = AI_DRAFT_SOURCE, sourceUrl = null)
+            .toRecipe("user-abc123")
+        assertTrue(recipe.source.license.contains("AI"))
+        assertTrue(recipe.source.license.contains("未经试做"))
+        assertFalse(recipe.source.license.contains("Unlicense"))
+        assertNull(recipe.source.url)
+    }
+
+    @Test fun anIncompleteDraftCannotBecomeARecipe() {        try {
             RecipeDraft().toRecipe("user-abc123")
             fail("An empty draft must not produce a recipe")
         } catch (_: IllegalArgumentException) {

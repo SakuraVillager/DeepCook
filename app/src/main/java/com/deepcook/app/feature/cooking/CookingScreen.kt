@@ -474,6 +474,7 @@ fun CookingScreen(
                                 verticalArrangement = Arrangement.spacedBy(14.dp),
                             ) {
                                 Text(step.title, style = MaterialTheme.typography.headlineMedium)
+                                StepTiming(step)
                                 if (preferences.showStepImages && step.image != null) {
                                     RecipeImage(
                                         step.image,

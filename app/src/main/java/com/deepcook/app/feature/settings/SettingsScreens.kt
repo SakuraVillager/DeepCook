@@ -289,7 +289,7 @@ fun SettingsScreen(
                         }
                         PreferenceRow(
                             "请求去向",
-                            "问题、当前这道菜的信息和口味备注会发到智谱（bigmodel.cn）的模型；录音与朗读都在本机完成，音频不上传。",
+                            "问题、当前这道菜的信息和口味备注会发到智谱（bigmodel.cn）的模型；新增菜谱时补全资料只发送菜名。录音与朗读都在本机完成，音频不上传。",
                             Icons.Rounded.Cloud,
                         )
                         var confirmClear by remember { mutableStateOf(false) }

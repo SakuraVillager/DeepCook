@@ -214,14 +214,30 @@ fun DeepCookApp(vm: AppViewModel, state: AppUiState, container: AppContainer) {
                         if (recipe == null) {
                             EmptyState("没有找到这道菜", "内容可能已更新，请返回重新选择。", "返回", { nav.popBackStack() })
                         } else {
+                            val dishAi: DishAiViewModel = viewModel(
+                                factory = viewModelFactory {
+                                    initializer {
+                                        DishAiViewModel(
+                                            recipe = recipe,
+                                            ai = container.ai,
+                                            userData = container.userData,
+                                            overlays = container.aiOverlays,
+                                        )
+                                    }
+                                },
+                            )
                             DetailScreen(
-                                recipe, state.user.favorites.any { it.recipeId == recipe.id },
-                                state.user.preferences, restored,
-                                { vm.favorite(recipe.id) }, { nav.popBackStack() },
-                                { openPage(Reader(recipe.id, it)) },
-                                { openPage(Cooking(recipe.id)) },
-                                { vm.visit(recipe.id) },
-                                { detailPhotoVisible = it },
+                                recipe = recipe,
+                                favorite = state.user.favorites.any { it.recipeId == recipe.id },
+                                preferences = state.user.preferences,
+                                restoredStep = restored,
+                                dishAi = dishAi,
+                                onFavorite = { vm.favorite(recipe.id) },
+                                onBack = { nav.popBackStack() },
+                                onRead = { openPage(Reader(recipe.id, it)) },
+                                onCook = { openPage(Cooking(recipe.id)) },
+                                onVisit = { vm.visit(recipe.id) },
+                                onPhotoVisibilityChange = { detailPhotoVisible = it },
                             )
                         }
                     }

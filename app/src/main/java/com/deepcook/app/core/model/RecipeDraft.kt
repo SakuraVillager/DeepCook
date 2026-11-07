@@ -6,6 +6,12 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class DraftIngredient(val name: String = "", val amount: String = "", val id: String? = null)
 
+/**
+ * Marks a draft the model wrote. It travels in [RecipeDraft.sourceName], so the editor can say
+ * "AI 草稿，未试做" and the saved recipe records where its text came from.
+ */
+const val AI_DRAFT_SOURCE = "AI 草稿"
+
 /** One editable step row. [cue] is the "观察提示" the reader shows under the step text. */
 @Serializable
 data class DraftStep(
@@ -15,6 +21,9 @@ data class DraftStep(
     val id: String? = null,
     val image: String? = null,
     val ingredientRefs: List<String> = emptyList(),
+    /** Carried through an edit so timing data survives; the form does not edit it yet. */
+    val minutes: Int? = null,
+    val kind: StepKind? = null,
 )
 
 /**
@@ -60,6 +69,7 @@ data class RecipeDraft(
         if (ingredients.none { it.name.isNotBlank() }) add("至少填写一项材料")
         if (steps.none { it.text.isNotBlank() }) add("至少填写一个步骤的正文")
         if (steps.any { (it.title.isNotBlank() || it.cue.isNotBlank()) && it.text.isBlank() }) add("步骤正文不能为空")
+        if (steps.any { it.minutes != null && it.minutes !in 1..180 }) add("步骤时长需要在 1–180 分钟之间")
     }
 
     /** True when the form has nothing the user typed — used to skip the discard prompt. */
@@ -119,6 +129,8 @@ data class RecipeDraft(
                     cue = step.cue.trim().ifEmpty { NO_CONTENT },
                     image = step.image,
                     ingredientRefs = step.ingredientRefs.filter { ref -> keptIngredients.any { it.id == ref } },
+                    minutes = step.minutes,
+                    kind = step.kind,
                 )
             },
             notes = notes.map(String::trim).filter(String::isNotEmpty),
@@ -132,10 +144,15 @@ data class RecipeDraft(
                 }
             } ?: RecipeSource(
                 author = "我的菜谱",
-                license = if (prefilled) {
-                    "资料取自公开菜谱库（${sourceName ?: "HowToCook"}，Unlicense），已按你的修改保存；未经试做验证。"
-                } else {
-                    "由你自己添加的菜谱，仅保存在本机。"
+                license = when {
+                    !prefilled -> "由你自己添加的菜谱，仅保存在本机。"
+                    // A model draft has no page behind it and nobody has cooked it; say both.
+                    sourceName == AI_DRAFT_SOURCE ->
+                        "AI 生成的草稿，未经试做验证；用量、火候与时长请按自己的经验核对。"
+
+                    else ->
+                        "资料取自公开菜谱库（${sourceName ?: "HowToCook"}，Unlicense），" +
+                            "已按你的修改保存；未经试做验证。"
                 },
                 url = sourceUrl,
             ),
@@ -164,7 +181,18 @@ data class RecipeDraft(
                 .ifEmpty { listOf(DraftIngredient()) },
             steps = recipe.steps
                 .sortedBy { it.order }
-                .map { DraftStep(it.title, it.text, it.visibleCue.orEmpty(), it.id, it.image, it.ingredientRefs) }
+                .map {
+                    DraftStep(
+                        it.title,
+                        it.text,
+                        it.visibleCue.orEmpty(),
+                        it.id,
+                        it.image,
+                        it.ingredientRefs,
+                        it.minutes,
+                        it.kind,
+                    )
+                }
                 .ifEmpty { listOf(DraftStep()) },
             notes = recipe.noteItems,
             cover = recipe.cover,

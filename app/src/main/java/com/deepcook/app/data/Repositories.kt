@@ -20,7 +20,9 @@ import com.deepcook.app.data.ai.NoteSuggester
 import com.deepcook.app.data.ai.RecipeEnricher
 import com.deepcook.app.data.ai.ZhipuGateway
 import com.deepcook.app.data.lookup.AndroidNetworkStatus
+import com.deepcook.app.data.lookup.AiRecipeLookup
 import com.deepcook.app.data.lookup.CatalogFirstLookup
+import com.deepcook.app.data.lookup.FallbackLookup
 import com.deepcook.app.data.lookup.HowToCookLookup
 import com.deepcook.app.data.lookup.RecipeLookup
 import kotlinx.coroutines.Dispatchers
@@ -154,7 +156,6 @@ class AppContainer(context: Context) {
             context.dataStoreFile("user_recipes.json")
         },
     )
-    val lookup: RecipeLookup = CatalogFirstLookup(recipes, HowToCookLookup(context))
     val covers = CoverStore(context)
     val avatars = AvatarStore(context)
 
@@ -169,6 +170,15 @@ class AppContainer(context: Context) {
     val ai: AiGateway = ZhipuGateway(
         apiKey = BuildConfig.DEEPCOOK_AI_KEY,
         network = AndroidNetworkStatus(context),
+    )
+
+    /**
+     * Prefill order, fixed: bundled catalogue → pinned HowToCook page → model draft → the user's
+     * own typing. The model is only asked when no reviewed source has the dish.
+     */
+    val lookup: RecipeLookup = FallbackLookup(
+        primary = CatalogFirstLookup(recipes, HowToCookLookup(context)),
+        fallback = AiRecipeLookup(ai, AndroidNetworkStatus(context)),
     )
 
     /** Fixed answers that must not wait for the network. */

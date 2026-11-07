@@ -121,10 +121,16 @@ shown in the app's licences page.
 The cooking assistant sends the current dish's title, ingredients, current step,
 the user's stored taste tags and dish notes, and the last one or two question
 turns to Zhipu's OpenAI-compatible endpoint (`open.bigmodel.cn`) and streams the
-answer back. No image, audio or contact data is sent. Speech recognition and
-speech synthesis use the device's own Android services; the microphone is only
-open while the user is talking or the wake word is enabled. This build embeds a
-personal API key for private use and is not meant for distribution.
+answer back. The detail page's assistant sends the dish's ingredient list,
+warnings and this dish's notes with the typed question. When a new recipe is
+prefilled and neither the bundled catalogue nor the pinned HowToCook page has
+the dish, only the typed dish name is sent, and the reply is stored as an
+editable draft clearly marked as AI-generated and untried. No image, audio or
+contact data is sent. Speech recognition runs on-device with the bundled
+sherpa-onnx models, and speech synthesis uses the device's own TTS; the
+microphone is only open while the user is talking or the wake word is enabled.
+This build embeds a personal API key for private use and is not meant for
+distribution.
 
 
 

@@ -1,0 +1,188 @@
+{
+  "generatedAt": "2026-11-07T13:09:56+00:00",
+  "model": "glm-4.7-flash",
+  "source": "ai-draft",
+  "mode": "sample-30",
+  "items": {
+    "htc-02e515d6befb2d79-s14": {
+      "minutes": 1,
+      "kind": "ACTIVE",
+      "why": "翻炒需守灶台",
+      "corrected": false
+    },
+    "htc-0d138afee09924fb-s1": {
+      "minutes": 3,
+      "kind": "ACTIVE",
+      "why": "洗肉切片，需操作",
+      "corrected": false
+    },
+    "htc-0f850528c9848307-s2": {
+      "minutes": 1,
+      "kind": "ACTIVE",
+      "why": "准备水，需操作",
+      "corrected": false
+    },
+    "htc-2e33e0141c78c027-s3": {
+      "minutes": 2,
+      "kind": "ACTIVE",
+      "why": "过水需操作",
+      "corrected": false
+    },
+    "htc-3c05ffd63abd9ea2-s3": {
+      "minutes": 2,
+      "kind": "ACTIVE",
+      "why": "处理水分需动手",
+      "corrected": false
+    },
+    "htc-53fc0a69484a797c-s5": {
+      "minutes": 20,
+      "kind": "ACTIVE",
+      "why": "炸制需看火",
+      "corrected": false
+    },
+    "htc-571da379bc04a550-s7": {
+      "minutes": 3,
+      "kind": "ACTIVE",
+      "why": "翻炒需守灶台",
+      "corrected": false
+    },
+    "htc-581d80efc12c2ca8-s9": {
+      "minutes": 3,
+      "kind": "ACTIVE",
+      "why": "热锅倒油，需操作",
+      "corrected": false
+    },
+    "htc-636808171f3d3a8b-s8": {
+      "minutes": 5,
+      "kind": "ACTIVE",
+      "why": "切配需操作",
+      "corrected": false
+    },
+    "htc-6573f2eb3d7f337c-s11": {
+      "minutes": 1,
+      "kind": "PASSIVE",
+      "why": "取出关电，无操作",
+      "corrected": false
+    },
+    "htc-72605b6e5df12044-s6": {
+      "minutes": 1,
+      "kind": "ACTIVE",
+      "why": "放面条需动手",
+      "corrected": false
+    },
+    "htc-73b34579ff0e4a67-s36": {
+      "minutes": 1,
+      "kind": "PASSIVE",
+      "why": "脱模需动手",
+      "corrected": true
+    },
+    "htc-8deffad10bd66074-s2": {
+      "minutes": 2,
+      "kind": "ACTIVE",
+      "why": "搅拌需操作",
+      "corrected": false
+    },
+    "htc-8deffad10bd66074-s5": {
+      "minutes": 3,
+      "kind": "ACTIVE",
+      "why": "搅拌需操作",
+      "corrected": false
+    },
+    "htc-91b68386ebf30740-s1": {
+      "minutes": 2,
+      "kind": "ACTIVE",
+      "why": "切羊排，需操作",
+      "corrected": false
+    },
+    "htc-9990afe9babe2653-s7": {
+      "minutes": 5,
+      "kind": "ACTIVE",
+      "why": "煎豆腐需翻炒",
+      "corrected": false
+    },
+    "htc-9a222b1883cad0aa-s8": {
+      "minutes": 2,
+      "kind": "ACTIVE",
+      "why": "倒水加年糕，需操作",
+      "corrected": false
+    },
+    "htc-9d5b2964d96ab532-s2": {
+      "minutes": 5,
+      "kind": "ACTIVE",
+      "why": "去根洗净需动手",
+      "corrected": false
+    },
+    "htc-a5ad40355b767e44-s5": {
+      "minutes": 3,
+      "kind": "ACTIVE",
+      "why": "翻面煎鱼，需操作",
+      "corrected": false
+    },
+    "htc-abbf66d7a0c12870-s2": {
+      "minutes": 2,
+      "kind": "ACTIVE",
+      "why": "搅拌酱汁，需操作",
+      "corrected": false
+    },
+    "htc-b435c11c8067498b-s2": {
+      "minutes": 3,
+      "kind": "ACTIVE",
+      "why": "烧水放料，需操作",
+      "corrected": false
+    },
+    "htc-bd0928f82e92505f-s9": {
+      "minutes": 4,
+      "kind": "ACTIVE",
+      "why": "煮菜需看顾",
+      "corrected": false
+    },
+    "htc-c52f0bf257da0b3c-s3": {
+      "minutes": 1,
+      "kind": "ACTIVE",
+      "why": "挖洞需动手",
+      "corrected": false
+    },
+    "htc-c5aa148342a3c9c0-s15": {
+      "minutes": 1,
+      "kind": "ACTIVE",
+      "why": "撒芝麻需动手",
+      "corrected": false
+    },
+    "htc-c5aa148342a3c9c0-s19": {
+      "minutes": 1,
+      "kind": "ACTIVE",
+      "why": "放饼需动手",
+      "corrected": false
+    },
+    "htc-d23cfa9525fbb4e0-s12": {
+      "minutes": 3,
+      "kind": "ACTIVE",
+      "why": "装盘撒装饰",
+      "corrected": false
+    },
+    "htc-e38c861fa4b779d7-s2": {
+      "minutes": null,
+      "kind": "PASSIVE",
+      "why": "腌制静置",
+      "corrected": false
+    },
+    "htc-f13ea0db41d81b53-s2": {
+      "minutes": 35,
+      "kind": "PASSIVE",
+      "why": "腌制需等待",
+      "corrected": false
+    },
+    "world-lebanese-lentil-soup-s6": {
+      "minutes": 5,
+      "kind": "ACTIVE",
+      "why": "煮菜需看顾",
+      "corrected": false
+    },
+    "world-miso-soup-s1": {
+      "minutes": 5,
+      "kind": "ACTIVE",
+      "why": "烧水需守灶台",
+      "corrected": false
+    }
+  }
+}

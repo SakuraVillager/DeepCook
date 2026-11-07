@@ -161,4 +161,34 @@ class RecipeEditorTest {
         assertNull(recipe.minutes)
         assertTrue(draft.copy(steps = listOf(DraftStep("只有标题", ""))).problems().any { it.contains("正文") })
     }
+
+    @Test fun anAiDraftIsMarkedAsUntriedAndFillsOnlyBlanks() = runTest {
+        val aiDraft = RecipeDraft(
+            title = "红烧肉",
+            region = "中式",
+            categories = listOf("家常菜"),
+            ingredients = listOf(DraftIngredient("五花肉", "")),
+            steps = listOf(DraftStep("焯水", "冷水下锅焯三分钟。")),
+            sourceName = AI_DRAFT_SOURCE,
+            prefilled = true,
+        )
+        val ai = object : RecipeLookup {
+            override suspend fun lookup(name: String) = LookupOutcome.Filled(aiDraft, name, null, AI_DRAFT_SOURCE)
+        }
+        val editor = RecipeEditorViewModel(ai, Covers(), Store(emptyList()), "user-ai", null, SavedStateHandle())
+        editor.edit { it.copy(title = "红烧肉") }
+        editor.prefill()
+        advanceUntilIdle()
+        val state = editor.state.value
+        val notice = state.notice.orEmpty()
+        assertTrue(notice.contains("AI"))
+        assertTrue(notice.contains("未试做"))
+        assertEquals("五花肉", state.draft.ingredients.first().name)
+        assertTrue(state.draft.problems().isEmpty())
+        // Saving records where the text came from; there is no page to link to.
+        val saved = state.draft.toRecipe("user-ai")
+        assertTrue(saved.source.license.contains("AI"))
+        assertTrue(saved.source.license.contains("未经试做"))
+        assertNull(saved.source.url)
+    }
 }

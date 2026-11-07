@@ -5,6 +5,19 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Ingredient(val id: String, val name: String, val amount: String)
 
+/**
+ * How much of the cook's attention a step costs. The multi-dish timeline (P2) builds on this:
+ * two PASSIVE steps may overlap, two ACTIVE steps may not.
+ */
+@Serializable
+enum class StepKind(val label: String) {
+    /** Hands on the stove: cutting, stir-frying, searing, plating. */
+    ACTIVE("占手"),
+
+    /** Mostly waiting: marinating, simmering, steaming, chilling, resting. */
+    PASSIVE("等待"),
+}
+
 @Serializable
 data class RecipeStep(
     val id: String,
@@ -14,6 +27,10 @@ data class RecipeStep(
     val image: String? = null,
     val ingredientRefs: List<String> = emptyList(),
     val cue: String? = null,
+    /** Reference duration in minutes; null means "not estimated yet", never zero. */
+    val minutes: Int? = null,
+    /** Whether the cook must stay at the stove; null means "not classified yet". */
+    val kind: StepKind? = null,
 ) {
     /** An observation cue that content left empty is stored as [NO_CONTENT] and must stay hidden. */
     val visibleCue: String? get() = cue?.trim()?.takeUnless { it.isEmpty() || it == NO_CONTENT }

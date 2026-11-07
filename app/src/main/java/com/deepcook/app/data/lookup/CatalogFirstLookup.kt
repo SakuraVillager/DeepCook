@@ -15,7 +15,7 @@ class CatalogFirstLookup(private val recipes: RecipeRepository, private val fall
         return LookupOutcome.Filled(
             RecipeDraft.from(recipe).copy(version = 0),
             recipe.title,
-            recipe.source.url.orEmpty(),
+            recipe.source.url,
             recipe.collection.ifBlank { recipe.source.author },
         )
     }

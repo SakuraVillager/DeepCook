@@ -116,12 +116,18 @@ class RecipeEditorViewModel(
             if (mutable.value.draft.title.trim() != name) return@launch
             when (outcome) {
                 is LookupOutcome.Filled -> {
+                    // The user must be able to tell a reviewed source from a model's guess.
+                    val notice = if (outcome.sourceName == AI_DRAFT_SOURCE) {
+                        "AI 按「${outcome.matchedName}」写了一份草稿（未试做）：材料用量留空，请逐项核对后保存。"
+                    } else {
+                        "已按「${outcome.matchedName}」补全空白资料（${outcome.sourceName}），请核对后保存。"
+                    }
                     mutable.update { state ->
                         state.copy(
                             looking = false,
                             draft = fillBlanks(state.draft, outcome.draft),
                             dirty = true,
-                            notice = "已按「${outcome.matchedName}」补全空白资料（${outcome.sourceName}），请核对后保存。",
+                            notice = notice,
                         )
                     }
                     persistDraft()

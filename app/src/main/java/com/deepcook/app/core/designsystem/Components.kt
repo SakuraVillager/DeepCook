@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.deepcook.app.R
 import com.deepcook.app.core.model.Recipe
+import com.deepcook.app.core.model.RecipeStep
 import com.deepcook.app.core.model.isMine
 
 @Composable
@@ -362,5 +363,38 @@ fun InfoCard(title: String, text: String, modifier: Modifier = Modifier) {
                 color = MaterialTheme.colorScheme.onSecondaryContainer,
             )
         }
+    }
+}
+
+/**
+ * "参考 5 分钟 · 等待" for one step.
+ *
+ * Timing is content data that may not be estimated yet, so the row disappears entirely when both
+ * values are absent instead of showing a placeholder. The label says 参考 on purpose: the numbers
+ * are estimates, not measured durations.
+ */
+@Composable
+fun StepTiming(step: RecipeStep, modifier: Modifier = Modifier, compact: Boolean = false) {
+    val parts = listOfNotNull(
+        step.minutes?.let { "参考 $it 分钟" },
+        step.kind?.label,
+    )
+    if (parts.isEmpty()) return
+    Row(
+        modifier,
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
+    ) {
+        Icon(
+            Icons.Rounded.Timer,
+            null,
+            Modifier.size(if (compact) 14.dp else 16.dp),
+            tint = MaterialTheme.colorScheme.primary,
+        )
+        Text(
+            parts.joinToString(" · "),
+            style = if (compact) MaterialTheme.typography.labelSmall else MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
     }
 }

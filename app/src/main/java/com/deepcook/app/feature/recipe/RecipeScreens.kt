@@ -36,6 +36,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.withResumed
 import com.deepcook.app.R
 import com.deepcook.app.core.designsystem.*
@@ -49,6 +50,7 @@ fun DetailScreen(
     favorite: Boolean,
     preferences: UserPreferences,
     restoredStep: String?,
+    dishAi: DishAiViewModel,
     onFavorite: () -> Unit,
     onBack: () -> Unit,
     onRead: (String?) -> Unit,
@@ -56,6 +58,7 @@ fun DetailScreen(
     onVisit: () -> Unit,
     onPhotoVisibilityChange: (Boolean) -> Unit,
 ) {
+    val dishState by dishAi.state.collectAsStateWithLifecycle()
     val listState = rememberLazyListState()
     val density = LocalDensity.current
     val statusBarHeight = WindowInsets.statusBars.getTop(density)
@@ -90,13 +93,18 @@ fun DetailScreen(
         }
     }
     // Each step has a lazy item, so a reader can return to that exact step. Walking the
-    // visible sections keeps this mapping correct when 准备 or 注意 is hidden.
+    // visible sections keeps this mapping correct when 准备 or 注意 is hidden. The "问 AI"
+    // block is a second item under 材料, so that section owns two lazy items.
     val sectionIndices = remember(recipe.id) {
         buildMap {
             var index = headerItems
             sections.forEach { section ->
                 put(section, index)
-                index += if (section == "步骤") recipe.steps.size + 1 else 1
+                index += when (section) {
+                    "步骤" -> recipe.steps.size + 1
+                    "材料" -> 2
+                    else -> 1
+                }
             }
         }
     }
@@ -243,8 +251,30 @@ fun DetailScreen(
                     }
                 }
                 item(key = "材料") {
-                    DetailSection("材料", compact = true) {
+                    DetailSection(
+                        "材料",
+                        compact = true,
+                        action = { ServingsPicker(dishState, dishAi::selectServings) },
+                    ) {
                         Column {
+                            // A range like "2—3 人份" scales from its smaller number, so picking
+                            // that same number changes nothing and needs no notice.
+                            if (dishState.targetServings != null && dishState.factor != 1.0) {
+                                Row(
+                                    Modifier.fillMaxWidth(),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                ) {
+                                    Text(
+                                        "已按 ${dishState.targetServings} 人份换算，调味请按口味调整；" +
+                                            "步骤文字里的用量仍是原文。",
+                                        Modifier.weight(1f),
+                                        style = MaterialTheme.typography.labelSmall,
+                                        color = MaterialTheme.colorScheme.primary,
+                                    )
+                                    TextButton(onClick = { dishAi.selectServings(null) }) { Text("恢复") }
+                                }
+                            }
                             recipe.ingredients.forEachIndexed { index, ingredient ->
                                 Row(
                                     Modifier.fillMaxWidth().padding(vertical = 6.dp),
@@ -252,7 +282,7 @@ fun DetailScreen(
                                 ) {
                                     Text(ingredient.name, Modifier.weight(1f), style = textStyle)
                                     Text(
-                                        ingredient.amount.ifBlank { NO_CONTENT },
+                                        dishAi.amountOf(ingredient).ifBlank { NO_CONTENT },
                                         Modifier.weight(.75f),
                                         style = textStyle,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -267,6 +297,17 @@ fun DetailScreen(
                             }
                         }
                     }
+                }
+                item(key = "问 AI") {
+                    DishAiSection(
+                        recipe = recipe,
+                        state = dishState,
+                        amountOf = dishAi::amountOf,
+                        onSubstitute = dishAi::askSubstitute,
+                        onDiagnose = dishAi::askDiagnosis,
+                        onRetry = dishAi::retry,
+                        onDismiss = dishAi::dismiss,
+                    )
                 }
                 if (recipe.preparationItems.isNotEmpty()) {
                     item(key = "准备") {
@@ -301,6 +342,7 @@ fun DetailScreen(
                                     style = MaterialTheme.typography.titleMedium,
                                 )
                             }
+                            StepTiming(step, Modifier.padding(start = 44.dp))
                             if (preferences.showStepImages &&
                                 step.image != null
                             ) {
@@ -356,12 +398,20 @@ fun DetailScreen(
 }
 
 @Composable
-private fun DetailSection(title: String, compact: Boolean = false, content: @Composable ColumnScope.() -> Unit) {
+private fun DetailSection(
+    title: String,
+    compact: Boolean = false,
+    action: (@Composable () -> Unit)? = null,
+    content: @Composable ColumnScope.() -> Unit,
+) {
     Column(
-        Modifier.fillMaxWidth().padding(20.dp),
+        Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = if (action != null) 10.dp else 20.dp),
         verticalArrangement = Arrangement.spacedBy(if (compact) 8.dp else 14.dp),
     ) {
-        Text(title, style = MaterialTheme.typography.titleLarge)
+        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            Text(title, Modifier.weight(1f), style = MaterialTheme.typography.titleLarge)
+            action?.invoke()
+        }
         content()
     }
 }
@@ -482,6 +532,7 @@ fun ReaderScreen(recipe: Recipe, initialStep: String?, preferences: UserPreferen
                                 verticalArrangement = Arrangement.spacedBy(14.dp),
                             ) {
                                 Text(step.title, style = MaterialTheme.typography.headlineMedium)
+                                StepTiming(step)
                                 if (preferences.showStepImages &&
                                     step.image != null
                                 ) {

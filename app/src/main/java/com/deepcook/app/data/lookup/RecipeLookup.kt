@@ -5,8 +5,13 @@ import com.deepcook.app.core.model.RecipeDraft
 /** What happened when the app tried to prefill a recipe from the online catalogue. */
 sealed interface LookupOutcome {
     /** A match was parsed; [draft] carries every field the source provided. */
-    data class Filled(val draft: RecipeDraft, val matchedName: String, val sourceUrl: String, val sourceName: String) :
-        LookupOutcome
+    data class Filled(
+        val draft: RecipeDraft,
+        val matchedName: String,
+        /** The page the text came from, when a page was actually read. */
+        val sourceUrl: String?,
+        val sourceName: String,
+    ) : LookupOutcome
 
     /** The catalogue was reachable but has no dish by that name. */
     data object NotFound : LookupOutcome

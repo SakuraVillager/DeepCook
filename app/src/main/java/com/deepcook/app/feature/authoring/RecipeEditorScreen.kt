@@ -233,18 +233,16 @@ private fun NameSection(
                 }
             },
         )
-        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            FilledTonalButton(onClick = onLookup, enabled = !state.looking) {
-                Icon(Icons.Rounded.AutoAwesome, null, Modifier.size(18.dp))
-                Spacer(Modifier.width(6.dp))
-                Text(if (state.looking) "正在查找资料…" else "补全资料")
-            }
-            Text(
-                "优先使用本地菜谱，只补空白内容；没有资料也可以手动填写。",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
+        FilledTonalButton(onClick = onLookup, enabled = !state.looking) {
+            Icon(Icons.Rounded.AutoAwesome, null, Modifier.size(18.dp))
+            Spacer(Modifier.width(6.dp))
+            Text(if (state.looking) "正在查找资料…" else "补全资料")
         }
+        Text(
+            "优先用本地菜谱和 HowToCook，都没有才让 AI 写草稿（未试做、用量留空）；只补空白，随时可改。",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
         state.notice?.let { notice ->
             InfoCard("自动补全", notice)
         }
