@@ -31,6 +31,7 @@ class MainActivity : ComponentActivity() {
                                 container.covers,
                                 container.avatars,
                                 container.aiOverlays,
+                                container.coverOverrides,
                             )
                         }
                     },

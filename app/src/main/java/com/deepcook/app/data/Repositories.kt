@@ -159,6 +159,13 @@ class AppContainer(context: Context) {
     val covers = CoverStore(context)
     val avatars = AvatarStore(context)
 
+    /** Finished-dish photos the user set as a cover; shadows bundled pictures, never writes assets. */
+    val coverOverrides: CoverOverrides = LocalCoverOverrides(
+        DataStoreFactory.create(serializer = CoverOverrideSerializer) {
+            context.dataStoreFile("cover_overrides.json")
+        },
+    )
+
     /** Which dish is on the stove right now, plus its running timers. */
     val cookSessions: CookSessionStore = LocalCookSessionStore(
         DataStoreFactory.create(serializer = CookSessionSerializer) {

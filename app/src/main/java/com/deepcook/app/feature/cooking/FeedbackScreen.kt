@@ -5,6 +5,7 @@ package com.deepcook.app.feature.cooking
 import android.Manifest
 import android.content.pm.PackageManager
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -22,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.deepcook.app.core.designsystem.PageTitle
+import com.deepcook.app.core.designsystem.RecipeImage
 import com.deepcook.app.core.model.DishNote
 import com.deepcook.app.core.model.Recipe
 import kotlinx.coroutines.launch
@@ -37,6 +39,7 @@ fun FeedbackScreen(
     voiceEnabled: Boolean,
     vm: FeedbackViewModel,
     onBack: () -> Unit,
+    onCover: (String) -> Unit,
     onSave: (text: String, raw: String) -> Unit,
 ) {
     val saving by vm.saving.collectAsStateWithLifecycle()
@@ -46,6 +49,9 @@ fun FeedbackScreen(
     val voice = remember { VoiceInput(context) }
     val snackbars = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+    val pickCover = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+        if (uri != null) onCover(uri.toString())
+    }
 
     DisposableEffect(Unit) {
         onDispose { voice.stop() }
@@ -112,6 +118,27 @@ fun FeedbackScreen(
             Text(
                 "说说这次的味道，下次做同一道菜会先提醒你。",
                 style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            Text("成品照", style = MaterialTheme.typography.titleMedium)
+            Surface(
+                shape = RoundedCornerShape(16.dp),
+                modifier = Modifier.fillMaxWidth().aspectRatio(4f / 3),
+            ) {
+                RecipeImage(recipe.cover, Modifier.fillMaxSize(), description = "成品照")
+            }
+            FilledTonalButton(
+                onClick = {
+                    pickCover.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                },
+            ) {
+                Icon(Icons.Rounded.PhotoLibrary, null, Modifier.size(18.dp))
+                Spacer(Modifier.width(6.dp))
+                Text("换一张成品照")
+            }
+            Text(
+                "选好的照片会成为这道菜的封面，只保存在本机。",
+                style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
             if (existingNotes.isNotEmpty()) {

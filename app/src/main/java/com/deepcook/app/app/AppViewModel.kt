@@ -9,8 +9,11 @@ import com.deepcook.app.core.model.Recipe
 import com.deepcook.app.core.model.UserData
 import com.deepcook.app.core.model.UserPreferences
 import com.deepcook.app.core.model.UserProfile
+import com.deepcook.app.core.model.isMine
+import com.deepcook.app.core.model.withCoverOverrides
 import com.deepcook.app.data.AvatarStore
 import com.deepcook.app.data.AiOverlayStore
+import com.deepcook.app.data.CoverOverrides
 import com.deepcook.app.data.CoverStore
 import com.deepcook.app.data.RecipeRepository
 import com.deepcook.app.data.UserDataRepository
@@ -50,6 +53,7 @@ class AppViewModel(
     private val covers: CoverStore,
     private val avatars: AvatarStore,
     private val aiOverlays: AiOverlayStore,
+    private val coverOverrides: CoverOverrides,
 ) : ViewModel() {
     private val mutableState = MutableStateFlow(AppUiState())
     val state = mutableState.asStateFlow()
@@ -63,11 +67,14 @@ class AppViewModel(
     /** Kept apart from the state so a change in either source can rebuild the merged list. */
     private var bundled: List<Recipe> = emptyList()
     private var mine: List<Recipe> = emptyList()
+    private var coverByRecipe: Map<String, String> = emptyMap()
+    private var overrideJob: Job? = null
 
     init {
         loadRecipes()
         observeUserData()
         observeUserRecipes()
+        observeCoverOverrides()
     }
 
     fun loadRecipes() {
@@ -114,10 +121,22 @@ class AppViewModel(
 
     /** Rebuilds the merged catalog from both sources without touching unrelated state. */
     private fun publish() {
+        val withCovers = bundled.withCoverOverrides(coverByRecipe)
         mutableState.value = mutableState.value.copy(
-            recipes = bundled + mine,
+            recipes = withCovers + mine,
             myRecipes = mine.reversed(),
         )
+    }
+
+    /** Keeps the user's finished-dish photos in step with the merged list. */
+    fun observeCoverOverrides() {
+        overrideJob?.cancel()
+        overrideJob = viewModelScope.launch {
+            coverOverrides.entries.catch { }.collect { entries ->
+                coverByRecipe = entries
+                publish()
+            }
+        }
     }
 
     fun favorite(id: String) {
@@ -256,6 +275,35 @@ class AppViewModel(
         userRecipes.delete(id)
         runCatching { covers.delete(cover) }
         messageChannel.send(AppMessage("已删除这道菜谱"))
+    }
+
+    /**
+     * Makes a finished-dish photo this recipe's cover.
+     *
+     * The bundled catalog is read-only, so its pictures are shadowed from a separate override
+     * file; a user recipe's own record is updated instead. The previous copy of the photo is
+     * removed, and a failed save never leaves an orphan file behind.
+     */
+    fun setRecipeCover(recipeId: String, uri: String) = mutate {
+        val recipe = (bundled + mine).find { it.id == recipeId } ?: return@mutate
+        val stored = covers.import(uri)
+        if (stored == null) {
+            messageChannel.send(AppMessage("这张图读不出来，换一张试试。"))
+            return@mutate
+        }
+        val previous = if (recipe.isMine) recipe.cover else coverByRecipe[recipeId]
+        if (recipe.isMine) {
+            try {
+                userRecipes.save(recipe.copy(cover = stored))
+            } catch (error: Exception) {
+                runCatching { covers.delete(stored) }
+                throw error
+            }
+        } else {
+            coverOverrides.put(recipeId, stored)
+        }
+        runCatching { covers.delete(previous) }
+        messageChannel.send(AppMessage("封面已更新"))
     }
 
     private fun mutate(action: suspend () -> Unit) {

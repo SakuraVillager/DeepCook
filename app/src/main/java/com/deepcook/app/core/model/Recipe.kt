@@ -6,8 +6,8 @@ import kotlinx.serialization.Serializable
 data class Ingredient(val id: String, val name: String, val amount: String)
 
 /**
- * How much of the cook's attention a step costs. The multi-dish timeline (P2) builds on this:
- * two PASSIVE steps may overlap, two ACTIVE steps may not.
+ * How much of the cook's attention a step costs. The cooking screen shows it as a label next to
+ * the step, so a simmering step reads differently from one that needs the cook at the stove.
  */
 @Serializable
 enum class StepKind(val label: String) {

@@ -309,6 +309,7 @@ fun DeepCookApp(vm: AppViewModel, state: AppUiState, container: AppContainer) {
                                 voiceEnabled = state.user.preferences.voiceInputEnabled,
                                 vm = feedback,
                                 onBack = { nav.popBackStack() },
+                                onCover = { uri -> vm.setRecipeCover(recipe.id, uri) },
                                 onSave = { text, raw ->
                                     vm.saveDishNote(recipe.id, text, raw)
                                     nav.popBackStack()
