@@ -35,6 +35,11 @@ import com.deepcook.app.data.AppContainer
 import com.deepcook.app.feature.authoring.MyRecipesScreen
 import com.deepcook.app.feature.authoring.RecipeEditorScreen
 import com.deepcook.app.feature.authoring.RecipeEditorViewModel
+import com.deepcook.app.feature.auth.AccountScreen
+import com.deepcook.app.feature.auth.AuthFormState
+import com.deepcook.app.feature.auth.AuthHost
+import com.deepcook.app.feature.auth.AuthSessionState
+import com.deepcook.app.feature.auth.AuthViewModel
 import com.deepcook.app.feature.browse.*
 import com.deepcook.app.feature.profile.ProfileInfoScreen
 import com.deepcook.app.feature.recipe.*
@@ -71,6 +76,9 @@ data class Reader(val recipeId: String, val initialStepId: String? = null, val s
 /** Name, picture, and taste tags; reached by tapping the heading on the profile page. */
 @Serializable data object ProfileInfo
 
+/** Phone number, password and sign-out; reached from 用户信息. */
+@Serializable data object AccountSecurity
+
 /** [recipeId] null means "a new recipe"; an id means "edit that one". */
 @Serializable data class RecipeEditor(val recipeId: String? = null)
 
@@ -81,14 +89,30 @@ fun DeepCookApp(
     vm: AppViewModel,
     state: AppUiState,
     container: AppContainer,
+    auth: AuthViewModel,
+    authSession: AuthSessionState,
+    authForm: AuthFormState,
     timerRecipe: String? = null,
     onTimerHandled: () -> Unit = {},
 ) {
     // The previous version used a flat root graph. Do not restore its transient
     // navigation bundle into this new home-container graph on an APK upgrade.
-    val nav = key("root-navigation-v2") { rememberNavController() }
-    LaunchedEffect(timerRecipe, state.loading, state.recipes, state.userLoaded, state.user.foodSetup.completed) {
-        if (timerRecipe != null && !state.loading && state.userLoaded && state.user.foodSetup.completed && state.recipes.isNotEmpty()) {
+    // A different account also gets a fresh stack, so signing out never comes back
+    // to the page the previous person was reading.
+    val nav = key("root-navigation-v2", authSession.session?.accountId) { rememberNavController() }
+    LaunchedEffect(
+        timerRecipe,
+        state.loading,
+        state.recipes,
+        state.userLoaded,
+        state.user.foodSetup.completed,
+        authSession.isSignedIn,
+    ) {
+        // A timer can fire while the phone is logged out; wait for the next sign-in instead of
+        // navigating a graph that is not on screen yet.
+        if (timerRecipe != null && !state.loading && state.userLoaded && authSession.isSignedIn &&
+            state.user.foodSetup.completed && state.recipes.isNotEmpty()
+        ) {
             if (state.recipes.any { it.id == timerRecipe }) {
                 nav.navigate(Reader(timerRecipe, showTimers = true)) {
                     launchSingleTop = true
@@ -158,8 +182,12 @@ fun DeepCookApp(
                     }
                 }
             }
-            if (state.loading || (!state.userLoaded && state.userError == null)) {
+            if (state.loading || (!state.userLoaded && state.userError == null) || !authSession.loaded) {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
+            } else if (!authSession.isSignedIn) {
+                // The account gate sits in front of the whole shell: onboarding, browsing and
+                // everything else is unreachable until a number is signed in.
+                AuthHost(auth, authForm)
             } else if (state.userLoaded && !state.user.foodSetup.completed) {
                 FoodSetupHost(container, editing = false)
             } else if (state.contentError != null) {
@@ -205,6 +233,16 @@ fun DeepCookApp(
                             loadPhoto = vm::avatarSource,
                             onSaveAvatar = vm::saveAvatar,
                             onRemoveAvatar = vm::removeAvatar,
+                            phone = authSession.session?.phone,
+                            onAccount = { openPage(AccountSecurity) },
+                        )
+                    }
+                    composable<AccountSecurity> {
+                        AccountScreen(
+                            state = authSession,
+                            onBack = { nav.popBackStack() },
+                            changePassword = auth::changePassword,
+                            signOut = auth::signOut,
                         )
                     }
                     composable<Recent> {

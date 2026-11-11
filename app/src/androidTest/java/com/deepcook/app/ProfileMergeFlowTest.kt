@@ -20,6 +20,7 @@ class ProfileMergeFlowTest {
     private val repository get() = (compose.activity.application as DeepCookApplication).container.userData
 
     @Before fun prepare() {
+        (compose.activity.application as DeepCookApplication).container.signInForTest()
         runBlocking {
             repository.updateFoodSetup { FoodSetup(completed = true) }
             repository.updateProfile { UserProfile() }

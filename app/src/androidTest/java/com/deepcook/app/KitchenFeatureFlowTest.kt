@@ -18,6 +18,7 @@ class KitchenFeatureFlowTest {
 
     @Before fun prepare() {
         grantTimerPermissions(compose.activity)
+        container.signInForTest()
         runBlocking {
             container.timers.restore()
             container.timers.timers.value.forEach { container.timers.remove(it.id) }

@@ -18,6 +18,7 @@ class OnboardingFlowTest {
     private val repository get() = (compose.activity.application as DeepCookApplication).container.userData
 
     @Before fun freshSetup() {
+        (compose.activity.application as DeepCookApplication).container.signInForTest()
         runBlocking {
             repository.updateFoodSetup { FoodSetup() }
             repository.resetPreferences()

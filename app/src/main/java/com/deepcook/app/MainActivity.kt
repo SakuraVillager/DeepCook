@@ -16,6 +16,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.deepcook.app.app.AppViewModel
 import com.deepcook.app.app.DeepCookApp
 import com.deepcook.app.core.designsystem.DeepCookTheme
+import com.deepcook.app.feature.auth.AuthViewModel
 
 class MainActivity : ComponentActivity() {
     private var timerRecipe by mutableStateOf<String?>(null)
@@ -41,9 +42,17 @@ class MainActivity : ComponentActivity() {
                     },
                 )
             val state by vm.state.collectAsStateWithLifecycle()
+            val auth: AuthViewModel =
+                viewModel(
+                    factory = viewModelFactory {
+                        initializer { AuthViewModel(container.auth) }
+                    },
+                )
+            val authSession by auth.session.collectAsStateWithLifecycle()
+            val authForm by auth.form.collectAsStateWithLifecycle()
             DeepCookTheme(state.user.preferences) {
                 Surface {
-                    DeepCookApp(vm, state, container, timerRecipe) {
+                    DeepCookApp(vm, state, container, auth, authSession, authForm, timerRecipe) {
                         intent.removeExtra("timer_recipe")
                         timerRecipe =
                             null

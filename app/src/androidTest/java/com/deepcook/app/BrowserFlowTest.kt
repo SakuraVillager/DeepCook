@@ -18,6 +18,7 @@ class BrowserFlowTest {
     private fun catalog(): List<Recipe> = runBlocking { AssetRecipeRepository(compose.activity).recipes() }
 
     @Before fun resetUserData() {
+        (compose.activity.application as DeepCookApplication).container.signInForTest()
         val repo = (compose.activity.application as DeepCookApplication).container.userData
         runBlocking {
             val mine = (compose.activity.application as DeepCookApplication).container.userRecipes

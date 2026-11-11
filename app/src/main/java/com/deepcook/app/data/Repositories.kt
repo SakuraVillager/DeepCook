@@ -148,6 +148,10 @@ class AppContainer(context: Context) {
     val kitchen = KitchenStore(kitchenDatabase)
     val timers = TimerManager(context, kitchenDatabase)
     val recipes: RecipeRepository = AssetRecipeRepository(context)
+    // Accounts are their own file so a broken or removed account never touches the recipe data.
+    val auth: AuthRepository = LocalAuthRepository(
+        DataStoreFactory.create(serializer = AuthStateSerializer) { context.dataStoreFile("account.json") },
+    )
     val userData: UserDataRepository = LocalUserDataRepository(
         DataStoreFactory.create(serializer = UserDataSerializer) { context.dataStoreFile("user_data.json") },
     )

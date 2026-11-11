@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material.icons.rounded.Spa
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -24,6 +25,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.deepcook.app.core.designsystem.*
 import com.deepcook.app.core.model.FoodProfile
+import com.deepcook.app.core.model.PhoneNumber
 import com.deepcook.app.core.model.UserProfile
 import kotlinx.coroutines.launch
 
@@ -46,6 +48,9 @@ fun ProfileInfoScreen(
     loadPhoto: suspend (String) -> Bitmap?,
     onSaveAvatar: (Bitmap) -> Unit,
     onRemoveAvatar: () -> Unit,
+    /** Null only while the saved session is being read; the page is not reachable before then. */
+    phone: String?,
+    onAccount: () -> Unit,
 ) {
     var cropping by remember { mutableStateOf<Bitmap?>(null) }
     var photoError by remember { mutableStateOf<String?>(null) }
@@ -114,6 +119,14 @@ fun ProfileInfoScreen(
                     }.take(4).joinToString("、").ifBlank { "喜好、忌口与下厨习惯" },
                     Icons.Rounded.Spa,
                     onClick = onFoodPreferences,
+                )
+            }
+            item {
+                PreferenceRow(
+                    "账号与安全",
+                    phone?.let { PhoneNumber.masked(it) } ?: "未登录",
+                    Icons.Rounded.Lock,
+                    onClick = onAccount,
                 )
             }
             item {
