@@ -13,9 +13,11 @@ object CookCommand {
     private val Duration = Regex("$Number\\s*$Unit")
     private val BareDuration = Regex("^$Number\\s*$Unit$")
     private val HalfHour = Regex("半\\s*个?\\s*(小时|钟头)")
+    /** The recogniser now returns punctuated text ("十分钟。"), so clause marks are not part of it. */
+    private const val Punctuation = "。，、；：！？…,.!?;: "
 
     fun timerMinutes(text: String): Int? {
-        val trimmed = text.trim()
+        val trimmed = text.trim().trim { it in Punctuation }
         if (trimmed.isEmpty()) return null
         val command = CommandWords.any { trimmed.contains(it) }
         if (!command && !BareDuration.matches(trimmed) && !HalfHour.matches(trimmed)) return null

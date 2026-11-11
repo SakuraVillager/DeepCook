@@ -19,6 +19,18 @@ Kotlin 原生 Android 菜谱应用：暖黄 Material 3 主题，离线找菜、�
 
 Debug APK：`app/build/outputs/apk/debug/app-debug.apk`。最低系统 Android 8.0（API 26），目标与编译 SDK 36。
 
+> 识别模型不进仓库：SenseVoice 的 `model.int8.onnx` 有 228 MB，超过 GitHub 单文件 100 MB 上限，`.gitignore` 排除了 `app/src/main/assets/models/`。新克隆的工程要先放模型，否则语音会报「端侧识别模型没能加载」：
+>
+> ```powershell
+> $src = "D:\项目\离线语音识别\model-cache\sherpa-onnx-sense-voice-zh-en-ja-ko-yue-int8-2024-07-17"
+> $dst = "app\src\main\assets\models\sensevoice"
+> New-Item -ItemType Directory -Force -Path $dst | Out-Null
+> Copy-Item "$src\model.int8.onnx" $dst -Force
+> Copy-Item "$src\tokens.txt" $dst -Force
+> ```
+>
+> 没有这份缓存时，从 sherpa-onnx 发布包 `sherpa-onnx-sense-voice-zh-en-ja-ko-yue-int8-2024-07-17.tar.bz2` 解出同名两个文件即可。
+
 日常体验与性能检查使用 `app/build/outputs/apk/preview/app-preview.apk`：关闭调试、开启 R8 与资源缩减，使用本机 Debug 密钥签名，方便直接安装覆盖开发版。正式 `release` 的发布签名另行配置。Compose 与 AndroidX 附带的基线配置会合并进入优化构建；Debug 构建保留调试工具，仅用于开发与自动测试。
 
 使用 AGP 9.3 / Gradle 9.5、内置 Kotlin 和 Kotlin 2.4.10 Compose/Serialization 插件。
@@ -45,7 +57,7 @@ Compose BOM 2025.12.01、Lifecycle 2.10、Coil 3.3 保持与 SDK 36 兼容；较
 - 做菜：详情底部「开始做菜」，大字号当前步骤、上一步/下一步、目录、手动计时（1–30 分钟，可多个、可取消）、恢复上次进度；进入期间由前台服务维持计时与通知，切后台也能到点响铃。
 - AI 现场问答：先查本地固定问答（40 条，含着火、烫伤、太咸等）与安全口径，都不命中才请求模型；2.5 秒没有首字就先读当前步骤，回答 ≤2 句并按句朗读；缺用时/难度/份量/用量时静默补全，只写 `ai_overlay.json`，`recipes.json` 始终只读。
 - 详情页 AI：材料标题右侧可选 1/2/3/4/6/8 人份，按比例换算材料用量（本地计算，步骤文字不改）；「缺料替代」常用调料走本地表，其余交给模型；「哪儿不对？」用一句话诊断失败原因。2.5 秒没出字先显示菜谱原文，断网也能用，`recipes.json` 只读。
-- 语音：点一下麦克风说话，识别在手机本地完成（随包 sherpa-onnx 中文模型，流式 24 MB + Paraformer 78 MB，后者负责最终文本），不依赖系统语音服务、不联网、音频不出设备；可选「小厨小厨」离线唤醒词（默认关闭，仅做菜页前台生效）；「计时十分钟」「记一笔：少放盐」这类指令本地解析，不调模型。
+- 语音：点一下麦克风说话，识别在手机本地完成（随包 sherpa-onnx 模型，流式 24 MB 只负责断句 + SenseVoice 228 MB 出最终文本，带标点、长句也稳），不依赖系统语音服务、不联网、音频不出设备；可选「小厨小厨」离线唤醒词（默认关闭，仅做菜页前台生效）；「计时十分钟」「记一笔：少放盐」这类指令本地解析，不调模型。
 - 口味记忆：做完在反馈页说一句，模型压成 ≤20 字写入并可撤销；下次进同一道菜顶部提醒并朗读；「我的 › 口味记忆」可按菜查看、手写、修改、删除。
 - 成品复盘：做完在反馈页点「换一张成品照」，从相册选图直接作为这道菜的封面；内置菜谱存覆盖记录、自建菜谱更新自身记录，只存本机，不改内容。
 

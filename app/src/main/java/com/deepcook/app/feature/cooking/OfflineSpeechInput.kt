@@ -10,9 +10,9 @@ import com.k2fsa.sherpa.onnx.EndpointConfig
 import com.k2fsa.sherpa.onnx.EndpointRule
 import com.k2fsa.sherpa.onnx.FeatureConfig
 import com.k2fsa.sherpa.onnx.OfflineModelConfig
-import com.k2fsa.sherpa.onnx.OfflineParaformerModelConfig
 import com.k2fsa.sherpa.onnx.OfflineRecognizer
 import com.k2fsa.sherpa.onnx.OfflineRecognizerConfig
+import com.k2fsa.sherpa.onnx.OfflineSenseVoiceModelConfig
 import com.k2fsa.sherpa.onnx.OnlineModelConfig
 import com.k2fsa.sherpa.onnx.OnlineRecognizer
 import com.k2fsa.sherpa.onnx.OnlineRecognizerConfig
@@ -32,8 +32,15 @@ import kotlin.math.sqrt
  * - a small streaming zipformer gives **live words** while the cook is talking and, more
  *   importantly, tells us when the sentence has ended (its endpoint detector looks at the audio
  *   itself, so a quiet microphone no longer cuts people off after one word);
- * - a Paraformer model re-reads the recorded clip once the sentence ends and produces the
+ * - a SenseVoice model re-reads the recorded clip once the sentence ends and produces the
  *   **final text**, because the 14M streaming model confuses homophones ("盐" → "严", "炖" → "顿").
+ *
+ * The second pass used to be Paraformer-zh-small. It was replaced on 2026-11 by SenseVoiceSmall
+ * int8 (228 MB): on a 24-sentence kitchen set it made no character errors where Paraformer made
+ * four (煸炒→边炒, 姜→将, 先炒→鲜炒, 切得→切的), its output carries punctuation, and it keeps
+ * working on audio longer than 20 s — Paraformer starts dropping words at 20 s and returns an
+ * empty result from 25 s on, which is exactly this class's utterance cap. The trade is roughly
+ * three times the decode time and 150 MB more APK; the phone stays offline either way.
  *
  * Nothing leaves the device and no system speech service is involved; the platform recogniser on
  * some ROMs accepts a request and never calls back at all.
@@ -189,8 +196,9 @@ class OfflineSpeechInput(private val context: Context) {
             runCatching { stream.release() }
         }
         if (disposed) return
-        // Second pass: the same clip through the Paraformer model, which does not confuse
-        // homophones. If it is unavailable the streaming text still stands.
+        // Second pass: the same clip through SenseVoice, which does not confuse homophones and
+        // survives the long utterances Paraformer returned empty. If it is unavailable the
+        // streaming text still stands.
         val refined = transcribe(join(chunks))
         val result = refined.trim().ifEmpty { preview.trim() }
         if (result.isEmpty()) {
@@ -251,8 +259,16 @@ class OfflineSpeechInput(private val context: Context) {
                 OfflineRecognizerConfig(
                     featConfig = FeatureConfig(sampleRate = SAMPLE_RATE, featureDim = 80),
                     modelConfig = OfflineModelConfig(
-                        paraformer = OfflineParaformerModelConfig(model = PARAFORMER),
-                        tokens = PARAFORMER_TOKENS,
+                        // Chinese is pinned rather than "auto": the recogniser occasionally takes
+                        // a short Chinese command for another language and transliterates it.
+                        senseVoice = OfflineSenseVoiceModelConfig(
+                            model = SENSEVOICE,
+                            language = "zh",
+                            // Keep Chinese numerals ("十分钟" rather than "10分钟"): CookCommand
+                            // parses both, but the cook reads the digits back as spoken words.
+                            useInverseTextNormalization = false,
+                        ),
+                        tokens = SENSEVOICE_TOKENS,
                         numThreads = 2,
                     ),
                     decodingMethod = "greedy_search",
@@ -299,8 +315,8 @@ class OfflineSpeechInput(private val context: Context) {
         const val DECODER = "asr/decoder.int8.onnx"
         const val JOINER = "asr/joiner.int8.onnx"
         const val TOKENS = "asr/tokens.txt"
-        const val PARAFORMER = "asr-paraformer/model.int8.onnx"
-        const val PARAFORMER_TOKENS = "asr-paraformer/tokens.txt"
+        const val SENSEVOICE = "models/sensevoice/model.int8.onnx"
+        const val SENSEVOICE_TOKENS = "models/sensevoice/tokens.txt"
 
         /** Below this peak after eight seconds there was no usable audio at all. */
         const val AUDIBLE_LEVEL = 0.004f

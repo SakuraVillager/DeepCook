@@ -41,7 +41,7 @@ enum class AssistantPhase { Hidden, Greeting, Listening, Recognizing, Answering,
  * The hands-free assistant panel: a half sheet that rises over the step, keeps the current step
  * visible behind it, and shows only a breathing orb while the microphone is open. Partial
  * transcripts are deliberately not shown — the streaming model is an internal endpoint detector,
- * and the Paraformer pass decides what was actually said.
+ * and the SenseVoice pass decides what was actually said.
  */
 @Composable
 fun AssistantPanel(

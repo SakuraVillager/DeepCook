@@ -108,8 +108,16 @@ sherpa-onnx's `com.k2fsa.sherpa.onnx` Kotlin API) with its `lib-onnx`
   int8, about 5 MB) for the wake word;
 - `asr/` — Chinese streaming recognizer (`sherpa-onnx-streaming-zipformer-zh-14M-2023-02-23`,
   int8, about 24 MB) that shows words while the cook is talking and detects the end of a sentence;
-- `asr-paraformer/` — Chinese Paraformer model (`sherpa-onnx-paraformer-zh-small-2024-03-09`,
-  int8, about 78 MB) that re-reads the recorded clip and produces the final text.
+- `models/sensevoice/` — SenseVoice model (`sherpa-onnx-sense-voice-zh-en-ja-ko-yue-int8-2024-07-17`,
+  int8, about 228 MB) that re-reads the recorded clip and produces the final text.
+
+The SenseVoice weights are **not** covered by Apache-2.0 or MIT: they follow the FunASR Model
+Open Source License (https://github.com/modelscope/FunASR/blob/main/MODEL_LICENSE). The app is
+for private use; distributing it, or shipping these weights inside another product, needs that
+licence checked first. The model came from the sherpa-onnx release
+`sherpa-onnx-sense-voice-zh-en-ja-ko-yue-int8-2024-07-17.tar.bz2`; `model.int8.onnx` is
+239,233,841 bytes (SHA-256 `C71F0CE00BEC95B07744E116345E33D8CBBE08CEF896382CF907BF4B51A2CD51`)
+and `tokens.txt` is 315,894 bytes (SHA-256 `F449EB28DC567533D7FA59BE34E2ABCA8784F771850C78A47FB731A31429A1DC`).
 
 Audio is processed inside the app process and is never uploaded; answers and questions are
 exchanged as text. The wake word is off by default and only runs while the cooking screen is in

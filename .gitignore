@@ -7,3 +7,5 @@ local.properties
 *.iml
 artifacts/
 __pycache__/
+# SenseVoice model (228 MB) is copied in locally; GitHub rejects files over 100 MB.
+app/src/main/assets/models/

@@ -25,4 +25,12 @@ class CookCommandTest {
         assertNull(CookCommand.timerMinutes("计时200分钟"))
         assertNull(CookCommand.timerMinutes("计时0分钟"))
     }
+
+    /** The recogniser punctuates its output now; the marks must not turn a command into a question. */
+    @Test fun punctuationDoesNotHideATimer() {
+        assertEquals(10, CookCommand.timerMinutes("十分钟。"))
+        assertEquals(10, CookCommand.timerMinutes("计时十分钟，谢谢。"))
+        assertEquals(30, CookCommand.timerMinutes("半小时后提醒我！"))
+        assertNull(CookCommand.timerMinutes("炖十分钟够吗？"))
+    }
 }
