@@ -1,9 +1,12 @@
 package com.deepcook.app.feature.cooking
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
 import android.media.AudioFormat
 import android.media.AudioRecord
 import android.media.MediaRecorder
+import androidx.core.content.ContextCompat
 import com.k2fsa.sherpa.onnx.FeatureConfig
 import com.k2fsa.sherpa.onnx.KeywordSpotter
 import com.k2fsa.sherpa.onnx.KeywordSpotterConfig
@@ -47,6 +50,14 @@ class WakeWordEngine(private val context: Context, private val onWake: () -> Uni
 
     fun start() {
         if (running) return
+        // 没有麦克风权限时不要启动循环：AudioRecord 的构造会抛 SecurityException，
+        // 而协程里未捕获的异常会直接崩掉应用。调用方不一定每次都记得先检查。
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) !=
+            PackageManager.PERMISSION_GRANTED
+        ) {
+            lastError = "没有麦克风权限"
+            return
+        }
         running = true
         lastError = null
         job = scope.launch { loop() }
@@ -65,6 +76,14 @@ class WakeWordEngine(private val context: Context, private val onWake: () -> Uni
     }
 
     private fun loop() {
+        // 放在这里而不是只在 start()：权限可能在这之间被撤销，而 AudioRecord 的构造会抛
+        // SecurityException。检查在同一个方法内也能让 lint 认出来。
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) !=
+            PackageManager.PERMISSION_GRANTED
+        ) {
+            lastError = "没有麦克风权限"
+            return
+        }
         var spotter: KeywordSpotter? = null
         try {
             val config = KeywordSpotterConfig(

@@ -93,7 +93,6 @@ def main():
         tap("停止提醒")
 
     shell("pm", "revoke", "com.deepcook.app", "android.permission.POST_NOTIFICATIONS", check=False)
-    shell("appops", "set", "com.deepcook.app", "SCHEDULE_EXACT_ALARM", "deny")
     shell("am", "start", "-W", "-n", "com.deepcook.app/.MainActivity")
     time.sleep(2)
     capture("kitchen-feature-home-counts")
@@ -115,9 +114,6 @@ def main():
         if n.get("text") in ("Allow", "允许"):
             click_node(n)
             break
-    tap("允许精确闹钟")
-    capture("kitchen-exact-alarm-system-permission")
-    shell("appops", "set", "com.deepcook.app", "SCHEDULE_EXACT_ALARM", "allow")
     shell("input", "keyevent", "4")
     time.sleep(1)
     tap("开始计时")

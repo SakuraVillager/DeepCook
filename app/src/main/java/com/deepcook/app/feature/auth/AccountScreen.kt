@@ -8,6 +8,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.EventAvailable
 import androidx.compose.material.icons.rounded.History
+import androidx.compose.material.icons.automirrored.rounded.Logout
 import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material.icons.rounded.Logout
 import androidx.compose.material.icons.rounded.PhoneAndroid
@@ -69,7 +70,7 @@ fun AccountScreen(
             PreferenceRow(
                 "退出登录",
                 "返回登录页，本机收藏与设置保留",
-                Icons.Rounded.Logout,
+                Icons.AutoMirrored.Rounded.Logout,
                 onClick = { confirmSignOut = true },
             )
             message?.let { text ->

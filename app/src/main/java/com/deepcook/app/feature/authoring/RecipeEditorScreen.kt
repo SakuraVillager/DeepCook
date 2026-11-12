@@ -23,6 +23,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.*
 import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -640,7 +641,7 @@ private fun StringListSection(
     addLabel: String,
     onChange: (List<String>) -> Unit,
 ) {
-    EditorGroup(title, Icons.Rounded.Notes, hint) {
+    EditorGroup(title, Icons.AutoMirrored.Rounded.Notes, hint) {
         values.forEachIndexed { index, value ->
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 OutlinedTextField(

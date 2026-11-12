@@ -1,11 +1,14 @@
 package com.deepcook.app.feature.cooking
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
 import android.media.AudioFormat
 import android.media.AudioRecord
 import android.media.MediaRecorder
 import android.os.Handler
 import android.os.Looper
+import androidx.core.content.ContextCompat
 import com.k2fsa.sherpa.onnx.EndpointConfig
 import com.k2fsa.sherpa.onnx.EndpointRule
 import com.k2fsa.sherpa.onnx.FeatureConfig
@@ -118,6 +121,14 @@ class OfflineSpeechInput(private val context: Context) {
         onFinal: (String) -> Unit,
         onError: (String) -> Unit,
     ) {
+        // 没有权限时直接说清楚，否则 AudioRecord 构造失败会被下面的 catch 归成「被占用」。
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) !=
+            PackageManager.PERMISSION_GRANTED
+        ) {
+            active = false
+            post { onError("没有麦克风权限，请在系统设置里允许使用麦克风") }
+            return
+        }
         val engine = streamingOrNull()
         if (engine == null) {
             active = false
