@@ -121,6 +121,7 @@
         "date": "2026-11-03",
         "paths": [
           "photos/step-shrimp-03.jpg",
+          "photos/step-shrimp-04.jpg",
           "photos/step-shrimp-06.jpg"
         ]
       }
@@ -365,6 +366,7 @@
         "tool": "OpenAI image generation",
         "date": "2026-11-03",
         "paths": [
+          "photos/step-htc-9c598d5ae0973cc3-01.jpg",
           "photos/step-htc-9c598d5ae0973cc3-04.jpg"
         ]
       }
@@ -760,6 +762,7 @@
         "tool": "OpenAI image generation",
         "date": "2026-11-03",
         "paths": [
+          "photos/step-htc-515e68668fde3909-02.jpg",
           "photos/step-htc-515e68668fde3909-06.jpg"
         ]
       }
@@ -822,6 +825,7 @@
         "tool": "OpenAI image generation",
         "date": "2026-11-03",
         "paths": [
+          "photos/step-htc-a27c91703f1aaf05-02.jpg",
           "photos/step-htc-a27c91703f1aaf05-04.jpg"
         ]
       }
@@ -1138,6 +1142,7 @@
         "tool": "OpenAI image generation",
         "date": "2026-11-03",
         "paths": [
+          "photos/step-htc-53fc0a69484a797c-01.jpg",
           "photos/step-htc-53fc0a69484a797c-05.jpg"
         ]
       }
@@ -1161,6 +1166,7 @@
         "tool": "OpenAI image generation",
         "date": "2026-11-03",
         "paths": [
+          "photos/step-htc-fc61a88b7e007735-02.jpg",
           "photos/step-htc-fc61a88b7e007735-03.jpg"
         ]
       }
@@ -1523,7 +1529,8 @@
         "tool": "OpenAI image generation",
         "date": "2026-11-03",
         "paths": [
-          "photos/step-htc-989ccdcae7af8a8f-02.jpg"
+          "photos/step-htc-989ccdcae7af8a8f-02.jpg",
+          "photos/step-htc-989ccdcae7af8a8f-05.jpg"
         ]
       }
     },
@@ -1634,6 +1641,7 @@
         "tool": "OpenAI image generation",
         "date": "2026-11-03",
         "paths": [
+          "photos/step-htc-ed29771026e7eed6-01.jpg",
           "photos/step-htc-ed29771026e7eed6-04.jpg"
         ]
       }
@@ -1738,6 +1746,7 @@
         "tool": "OpenAI image generation",
         "date": "2026-11-03",
         "paths": [
+          "photos/step-htc-3a181639cf9138dd-01.jpg",
           "photos/step-htc-3a181639cf9138dd-04.jpg"
         ]
       }
@@ -2052,6 +2061,7 @@
         "tool": "OpenAI image generation",
         "date": "2026-11-03",
         "paths": [
+          "photos/step-htc-3a892c884d6f39e0-01.jpg",
           "photos/step-htc-3a892c884d6f39e0-03.jpg"
         ]
       }
@@ -2103,7 +2113,8 @@
         "tool": "OpenAI image generation",
         "date": "2026-11-03",
         "paths": [
-          "photos/step-htc-e21f5bfb5fe6ef44-07.jpg"
+          "photos/step-htc-e21f5bfb5fe6ef44-07.jpg",
+          "photos/step-htc-e21f5bfb5fe6ef44-08.jpg"
         ]
       }
     },
@@ -2471,7 +2482,8 @@
         "tool": "OpenAI image generation",
         "date": "2026-11-03",
         "paths": [
-          "photos/step-htc-ca670c5a113ea88e-02.jpg"
+          "photos/step-htc-ca670c5a113ea88e-02.jpg",
+          "photos/step-htc-ca670c5a113ea88e-04.jpg"
         ]
       }
     },
@@ -2687,7 +2699,8 @@
         "tool": "OpenAI image generation",
         "date": "2026-11-03",
         "paths": [
-          "photos/step-htc-abe023d49637389d-05.jpg"
+          "photos/step-htc-abe023d49637389d-05.jpg",
+          "photos/step-htc-abe023d49637389d-08.jpg"
         ]
       }
     },
@@ -3384,6 +3397,7 @@
         "tool": "OpenAI image generation",
         "date": "2026-11-03",
         "paths": [
+          "photos/step-htc-ba3ce0d2e7674607-02.jpg",
           "photos/step-htc-ba3ce0d2e7674607-06.jpg"
         ]
       }
@@ -3770,7 +3784,8 @@
         "tool": "OpenAI image generation",
         "date": "2026-11-03",
         "paths": [
-          "photos/step-htc-f20a63e1bd7e9c71-01.jpg"
+          "photos/step-htc-f20a63e1bd7e9c71-01.jpg",
+          "photos/step-htc-f20a63e1bd7e9c71-02.jpg"
         ]
       }
     },
@@ -3998,6 +4013,8 @@
         "tool": "OpenAI image generation",
         "date": "2026-11-03",
         "paths": [
+          "photos/step-htc-95d7b404d04ee264-02.jpg",
+          "photos/step-htc-95d7b404d04ee264-03.jpg",
           "photos/step-htc-95d7b404d04ee264-04.jpg"
         ]
       }
@@ -4339,6 +4356,7 @@
         "tool": "OpenAI image generation",
         "date": "2026-11-03",
         "paths": [
+          "photos/step-htc-414f79bd9c044d7a-02.jpg",
           "photos/step-htc-414f79bd9c044d7a-04.jpg"
         ]
       }
@@ -4571,6 +4589,7 @@
         "tool": "OpenAI image generation",
         "date": "2026-11-03",
         "paths": [
+          "photos/step-htc-1a5309d32c90a9a3-02.jpg",
           "photos/step-htc-1a5309d32c90a9a3-08.jpg"
         ]
       }
@@ -5597,6 +5616,7 @@
         "tool": "OpenAI image generation",
         "date": "2026-11-03",
         "paths": [
+          "photos/step-three-treasures-09.jpg",
           "photos/step-three-treasures-11.jpg",
           "photos/step-three-treasures-18.jpg",
           "photos/step-three-treasures-20.jpg"
@@ -5961,6 +5981,7 @@
         "date": "2026-11-03",
         "paths": [
           "photos/step-greens-05.jpg",
+          "photos/step-greens-06.jpg",
           "photos/step-greens-07.jpg"
         ]
       }
@@ -6176,6 +6197,7 @@
         "tool": "OpenAI image generation",
         "date": "2026-11-03",
         "paths": [
+          "photos/step-htc-35b2e221aa1e478b-04.jpg",
           "photos/step-htc-35b2e221aa1e478b-06.jpg"
         ]
       }
@@ -6227,6 +6249,7 @@
         "tool": "OpenAI image generation",
         "date": "2026-11-03",
         "paths": [
+          "photos/step-htc-5086f352be3eacfd-02.jpg",
           "photos/step-htc-5086f352be3eacfd-06.jpg"
         ]
       }
@@ -6590,6 +6613,7 @@
         "date": "2026-11-03",
         "paths": [
           "photos/step-world-spanish-tortilla-04.jpg",
+          "photos/step-world-spanish-tortilla-10.jpg",
           "photos/step-world-spanish-tortilla-11.jpg"
         ]
       }
@@ -7000,6 +7024,7 @@
         "tool": "OpenAI image generation",
         "date": "2026-11-03",
         "paths": [
+          "photos/step-cn-donggua-paigu-tang-01.jpg",
           "photos/step-cn-donggua-paigu-tang-02.jpg"
         ]
       }
@@ -7098,6 +7123,7 @@
         "tool": "OpenAI image generation",
         "date": "2026-11-03",
         "paths": [
+          "photos/step-cn-jiachang-doufu-02.jpg",
           "photos/step-cn-jiachang-doufu-04.jpg"
         ]
       }
@@ -7166,7 +7192,8 @@
         "tool": "OpenAI image generation",
         "date": "2026-11-03",
         "paths": [
-          "photos/step-cn-ganbian-sijidou-03.jpg"
+          "photos/step-cn-ganbian-sijidou-03.jpg",
+          "photos/step-cn-ganbian-sijidou-05.jpg"
         ]
       }
     },
@@ -7286,6 +7313,7 @@
         "tool": "OpenAI image generation",
         "date": "2026-11-03",
         "paths": [
+          "photos/step-cn-pidan-shourou-zhou-01.jpg",
           "photos/step-cn-pidan-shourou-zhou-03.jpg"
         ]
       }
@@ -7447,7 +7475,8 @@
         "tool": "OpenAI image generation",
         "date": "2026-11-03",
         "paths": [
-          "photos/step-cn-suanrong-xilanhua-04.jpg"
+          "photos/step-cn-suanrong-xilanhua-04.jpg",
+          "photos/step-cn-suanrong-xilanhua-05.jpg"
         ]
       }
     },
@@ -7471,6 +7500,7 @@
         "tool": "OpenAI image generation",
         "date": "2026-11-03",
         "paths": [
+          "photos/step-cn-mayi-shangshu-03.jpg",
           "photos/step-cn-mayi-shangshu-04.jpg"
         ]
       }
@@ -7710,7 +7740,9 @@
         "tool": "OpenAI image generation",
         "date": "2026-11-03",
         "paths": [
-          "photos/step-cn-yangchun-mian-02.jpg"
+          "photos/step-cn-yangchun-mian-01.jpg",
+          "photos/step-cn-yangchun-mian-02.jpg",
+          "photos/step-cn-yangchun-mian-03.jpg"
         ]
       }
     },
@@ -7871,6 +7903,7 @@
         "tool": "OpenAI image generation",
         "date": "2026-11-03",
         "paths": [
+          "photos/step-jp-oyakodon-02.jpg",
           "photos/step-jp-oyakodon-04.jpg"
         ]
       }
@@ -7960,6 +7993,7 @@
         "tool": "OpenAI image generation",
         "date": "2026-11-03",
         "paths": [
+          "photos/step-jp-okonomiyaki-01.jpg",
           "photos/step-jp-okonomiyaki-04.jpg"
         ]
       }
@@ -8086,6 +8120,7 @@
         "tool": "OpenAI image generation",
         "date": "2026-11-03",
         "paths": [
+          "photos/step-jp-tonkatsu-03.jpg",
           "photos/step-jp-tonkatsu-04.jpg"
         ]
       }
@@ -8335,7 +8370,8 @@
         "tool": "OpenAI image generation",
         "date": "2026-11-03",
         "paths": [
-          "photos/step-kr-tteokbokki-02.jpg"
+          "photos/step-kr-tteokbokki-02.jpg",
+          "photos/step-kr-tteokbokki-03.jpg"
         ]
       }
     },
@@ -8661,7 +8697,8 @@
         "tool": "OpenAI image generation",
         "date": "2026-11-03",
         "paths": [
-          "photos/step-eu-carbonara-02.jpg"
+          "photos/step-eu-carbonara-02.jpg",
+          "photos/step-eu-carbonara-04.jpg"
         ]
       }
     },
@@ -8884,6 +8921,7 @@
         "tool": "OpenAI image generation",
         "date": "2026-11-03",
         "paths": [
+          "photos/step-sea-tomyum-02.jpg",
           "photos/step-sea-tomyum-03.jpg"
         ]
       }
@@ -9029,6 +9067,7 @@
         "tool": "OpenAI image generation",
         "date": "2026-11-03",
         "paths": [
+          "photos/step-other-hummus-03.jpg",
           "photos/step-other-hummus-04.jpg"
         ]
       }
@@ -9049,7 +9088,8 @@
         "tool": "OpenAI image generation",
         "date": "2026-11-03",
         "paths": [
-          "photos/step-other-butter-chicken-03.jpg"
+          "photos/step-other-butter-chicken-03.jpg",
+          "photos/step-other-butter-chicken-05.jpg"
         ]
       }
     },

@@ -25,7 +25,7 @@ interface Avatars {
     suspend fun decode(uri: String): Bitmap?
 
     /** @return a `file:` URI string for the new picture, or null when it cannot be written. */
-    suspend fun save(bitmap: Bitmap, previous: String?): String?
+    suspend fun save(bitmap: Bitmap): String?
 
     /** Removes a stored picture; ignores anything that is not one of ours. */
     suspend fun delete(avatar: String?)
@@ -41,7 +41,7 @@ class AvatarStore(context: Context) : Avatars {
         runCatching { PickedPhoto.decode(context, uri.toUri(), maxEdge = SOURCE_EDGE) }.getOrNull()
     }
 
-    override suspend fun save(bitmap: Bitmap, previous: String?): String? = withContext(Dispatchers.IO) {
+    override suspend fun save(bitmap: Bitmap): String? = withContext(Dispatchers.IO) {
         var square: Bitmap? = null
         var prepared: Bitmap? = null
         var destination: File? = null
@@ -59,9 +59,7 @@ class AvatarStore(context: Context) : Avatars {
                 output.fd.sync()
             }
             complete = true
-            // The old file is only dropped once the new one is safely on disk; failing to clean
-            // it up must not fail the save.
-            runCatching { delete(previous) }
+            // The caller removes the old file only after committing the profile reference.
             Uri.fromFile(file).toString()
         } catch (_: IOException) {
             null

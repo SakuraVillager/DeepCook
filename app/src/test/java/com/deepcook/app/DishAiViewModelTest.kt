@@ -2,6 +2,7 @@ package com.deepcook.app
 
 import com.deepcook.app.core.model.AiOverlay
 import com.deepcook.app.core.model.DishNote
+import com.deepcook.app.core.model.FoodSetup
 import com.deepcook.app.core.model.Ingredient
 import com.deepcook.app.core.model.Recipe
 import com.deepcook.app.core.model.RecipeStep
@@ -185,6 +186,7 @@ class DishAiViewModelTest {
         override suspend fun clearRecent() = Unit
         override suspend fun clearFavorites() = Unit
         override suspend fun resetPreferences() = Unit
+        override suspend fun updateFoodSetup(transform: (FoodSetup) -> FoodSetup) = Unit
         override suspend fun forget(id: String) = Unit
     }
 

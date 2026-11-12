@@ -42,6 +42,7 @@ data class UserData(
     val favorites: List<SavedRecipe> = emptyList(),
     val recent: List<SavedRecipe> = emptyList(),
     val preferences: UserPreferences = UserPreferences(),
+    val foodSetup: FoodSetup = FoodSetup(),
     /** Name, picture and taste tags; defaulted so a file written before this field still loads. */
     val profile: UserProfile = UserProfile(),
     /** Per-dish corrections the user asked to remember; defaulted for older files. */

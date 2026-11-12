@@ -8,6 +8,8 @@ import androidx.datastore.core.Serializer
 import androidx.datastore.dataStoreFile
 import com.deepcook.app.BuildConfig
 import com.deepcook.app.core.model.DishNote
+import com.deepcook.app.core.model.FoodProfile
+import com.deepcook.app.core.model.FoodSetup
 import com.deepcook.app.core.model.Recipe
 import com.deepcook.app.core.model.RecipeFilter
 import com.deepcook.app.core.model.UserData
@@ -30,6 +32,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.jsonObject
 import java.io.InputStream
 import java.io.OutputStream
 
@@ -71,6 +74,7 @@ interface UserDataRepository {
     suspend fun clearRecent()
     suspend fun clearFavorites()
     suspend fun resetPreferences()
+    suspend fun updateFoodSetup(transform: (FoodSetup) -> FoodSetup)
 
     /** Drops [id] from both collections; used when a user recipe is deleted. */
     suspend fun forget(id: String)
@@ -79,7 +83,19 @@ interface UserDataRepository {
 object UserDataSerializer : Serializer<UserData> {
     override val defaultValue = UserData()
     override suspend fun readFrom(input: InputStream): UserData = try {
-        json.decodeFromString(input.readBytes().decodeToString())
+        val text = input.readBytes().decodeToString()
+        val decoded = json.decodeFromString<UserData>(text)
+        // Existing installations predate this field: upgrades keep browsing uninterrupted.
+        if ("foodSetup" !in json.parseToJsonElement(text).jsonObject) {
+            decoded.copy(
+                foodSetup = FoodSetup(
+                    profile = FoodProfile(tastes = decoded.profile.likes, avoided = decoded.profile.avoids),
+                    completed = true,
+                ),
+            )
+        } else {
+            decoded
+        }
     } catch (error: SerializationException) {
         // Preserve the unreadable file; never silently replace the user's collections.
         throw CorruptionException("本地数据无法读取", error)
@@ -135,6 +151,10 @@ class LocalUserDataRepository(private val store: DataStore<UserData>) : UserData
         store.updateData { it.copy(preferences = UserPreferences()) }
     }
 
+    override suspend fun updateFoodSetup(transform: (FoodSetup) -> FoodSetup) {
+        store.updateData { it.copy(foodSetup = transform(it.foodSetup)) }
+    }
+
     override suspend fun forget(id: String) {
         store.updateData {
             it.copy(
@@ -147,7 +167,14 @@ class LocalUserDataRepository(private val store: DataStore<UserData>) : UserData
 }
 
 class AppContainer(context: Context) {
+    val kitchenDatabase = KitchenDatabase(context)
+    val kitchen = KitchenStore(kitchenDatabase)
+    val timers = TimerManager(context, kitchenDatabase)
     val recipes: RecipeRepository = AssetRecipeRepository(context)
+    // Accounts are their own file so a broken or removed account never touches the recipe data.
+    val auth: AuthRepository = LocalAuthRepository(
+        DataStoreFactory.create(serializer = AuthStateSerializer) { context.dataStoreFile("account.json") },
+    )
     val userData: UserDataRepository = LocalUserDataRepository(
         DataStoreFactory.create(serializer = UserDataSerializer) { context.dataStoreFile("user_data.json") },
     )

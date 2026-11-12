@@ -2,6 +2,7 @@
 
 package com.deepcook.app.core.designsystem
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -15,8 +16,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
@@ -24,6 +25,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -33,6 +36,7 @@ import coil3.compose.AsyncImage
 import com.deepcook.app.R
 import com.deepcook.app.core.model.Recipe
 import com.deepcook.app.core.model.RecipeStep
+import com.deepcook.app.core.model.compactCount
 import com.deepcook.app.core.model.isMine
 
 @Composable
@@ -94,70 +98,49 @@ fun FavoriteButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     iconSize: Dp = 24.dp,
-    iconOffset: Dp = 0.dp,
+    count: Int? = null,
 ) {
-    IconToggleButton(checked = selected, onCheckedChange = { onClick() }, modifier = modifier) {
-        Icon(
-            if (selected) Icons.Rounded.Star else Icons.Rounded.StarBorder,
-            stringResource(if (selected) R.string.remove_favorite else R.string.add_favorite),
-            modifier = Modifier.size(iconSize).offset(x = iconOffset),
-            tint = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
-        )
+    val description = stringResource(if (selected) R.string.remove_favorite else R.string.add_favorite)
+    IconToggleButton(
+        checked = selected,
+        onCheckedChange = { onClick() },
+        modifier = modifier.semantics {
+            contentDescription = description
+            stateDescription = (if (selected) "已收藏" else "未收藏") + if (count == null) "" else "，收藏数 $count"
+        },
+    ) {
+        FavoriteGlyph(selected, count?.let(::compactCount), iconSize = iconSize)
     }
 }
 
 @Composable
-fun RecipeMetadata(recipe: Recipe, modifier: Modifier = Modifier, compact: Boolean = false, onImage: Boolean = false) {
-    val color = if (onImage) Color.White else MaterialTheme.colorScheme.onSurfaceVariant
-    val time = recipe.minutes?.toString() ?: "无"
+fun RecipeMetadata(
+    recipe: Recipe,
+    modifier: Modifier = Modifier,
+    compact: Boolean = false,
+    showRegion: Boolean = true,
+) {
+    val color = MaterialTheme.colorScheme.onSurfaceVariant
+    val time = recipe.minutes?.let { "$it min" } ?: "无"
     val difficulty = recipe.difficulty?.let { "$it/5" } ?: "无"
     val timeDescription = recipe.minutes?.let { "用时 $it 分钟" } ?: "用时无"
     val difficultyDescription = recipe.difficulty?.let { "难度 $it/5" } ?: "难度无"
-    if (onImage) {
-        Row(
-            modifier,
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Metadata(Icons.Rounded.Restaurant, difficulty, compact, color, difficultyDescription)
-            Metadata(Icons.Rounded.Schedule, time, compact, color, timeDescription)
-        }
-    } else {
-        FlowRow(
-            modifier,
-            horizontalArrangement = Arrangement.spacedBy(if (compact) 8.dp else 12.dp),
-            verticalArrangement = Arrangement.spacedBy(4.dp),
-        ) {
-            Metadata(Icons.Rounded.Schedule, time, compact, color, timeDescription)
-            Metadata(Icons.Rounded.Restaurant, difficulty, compact, color, difficultyDescription)
+    FlowRow(
+        modifier,
+        horizontalArrangement = Arrangement.spacedBy(if (compact) 8.dp else 12.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+    ) {
+        Metadata(Icons.Rounded.Schedule, time, compact, color, timeDescription)
+        Metadata(Icons.Rounded.Restaurant, difficulty, compact, color, difficultyDescription)
+        if (showRegion) {
             Metadata(Icons.Rounded.Public, recipe.region, compact, color, "地域 ${recipe.region}")
         }
     }
 }
 
 /**
- * Region tag shown on top of a card cover, where the metadata row has no space for a third item.
- * The visible label is the region itself; screen readers get the "地域" prefix.
- */
-@Composable
-fun RegionBadge(region: String, modifier: Modifier = Modifier) {
-    Surface(
-        modifier = modifier.clearAndSetSemantics { contentDescription = "地域 $region" },
-        shape = RoundedCornerShape(8.dp),
-        color = MaterialTheme.colorScheme.surface.copy(alpha = .88f),
-    ) {
-        Text(
-            region,
-            Modifier.padding(horizontal = 8.dp, vertical = 3.dp),
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurface,
-        )
-    }
-}
-
-/**
  * Marks a recipe the user wrote, so their own dishes stay recognisable inside the shared
- * catalog. Same shape and weight as [RegionBadge] but on the opposite corner of a cover.
+ * catalog without adding a region label to the cover.
  */
 @Composable
 fun MineBadge(modifier: Modifier = Modifier) {
@@ -203,55 +186,62 @@ fun Metadata(
 }
 
 @Composable
-fun RecipeCard(recipe: Recipe, favorite: Boolean, onOpen: () -> Unit, onFavorite: () -> Unit) {
-    // Match the title's font scaling while keeping the full touch target.
-    // Offset only the glyph to align its visible edge with the title's inset.
-    val favoriteIconSize = with(LocalDensity.current) { 16.sp.toDp() }
-    val favoriteIconOffset = (16.dp - favoriteIconSize / 2).coerceAtLeast(0.dp)
+fun RecipeCard(recipe: Recipe, favorite: Boolean, onOpen: () -> Unit, onFavorite: () -> Unit, favoriteCount: Int = 0) {
+    val favoriteIconSize = with(LocalDensity.current) { 20.sp.toDp() }.coerceAtMost(24.dp)
+    val favoriteBackdropSize = if (LocalDensity.current.fontScale > 1.3f) 48.dp else (favoriteIconSize + 12.dp)
     Card(
         onClick = onOpen,
         shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+        colors = CardDefaults.cardColors(containerColor = recipeContainerColor()),
+        border = recipeBorder(),
     ) {
         Box(Modifier.fillMaxWidth().aspectRatio(4f / 3)) {
             RecipeImage(recipe.cover, Modifier.matchParentSize())
             Box(
-                Modifier.matchParentSize().background(
-                    Brush.verticalGradient(
-                        0f to Color.Transparent,
-                        .45f to Color.Transparent,
-                        1f to Color.Black.copy(alpha = .9f),
-                    ),
-                ),
-            )
-            RegionBadge(recipe.region, Modifier.align(Alignment.TopStart).padding(8.dp))
-            if (recipe.isMine) MineBadge(Modifier.align(Alignment.TopEnd).padding(8.dp))
-            RecipeMetadata(
-                recipe,
-                Modifier.align(Alignment.BottomCenter).fillMaxWidth().padding(horizontal = 10.dp, vertical = 8.dp),
-                compact = true,
-                onImage = true,
-            )
-        }
-        Column(Modifier.padding(start = 12.dp, end = 4.dp, bottom = 4.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    recipe.title,
-                    Modifier.weight(1f),
-                    style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Normal),
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
-                )
+                Modifier.align(Alignment.TopEnd).padding(4.dp).size(48.dp),
+                contentAlignment = Alignment.Center,
+            ) {
+                Surface(
+                    modifier = Modifier.size(favoriteBackdropSize),
+                    shape = CircleShape,
+                    color = recipeContainerColor().copy(alpha = .95f),
+                ) {}
                 FavoriteButton(
                     favorite,
                     onFavorite,
-                    modifier = Modifier.size(48.dp),
+                    modifier = Modifier.matchParentSize(),
                     iconSize = favoriteIconSize,
-                    iconOffset = favoriteIconOffset,
+                    count = favoriteCount,
                 )
             }
         }
+        Column(
+            Modifier.fillMaxWidth().padding(12.dp),
+            verticalArrangement = Arrangement.spacedBy(6.dp),
+        ) {
+            Text(
+                recipe.title,
+                style = MaterialTheme.typography.bodyLarge,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+            )
+            RecipeMetadata(recipe, compact = true, showRegion = false)
+            if (recipe.isMine) MineBadge()
+        }
     }
+}
+
+@Composable
+private fun recipeContainerColor(): Color {
+    val colors = MaterialTheme.colorScheme
+    return if (colors.background.luminance() > .5f) Color.White else colors.surfaceContainerLow
+}
+
+@Composable
+private fun recipeBorder(): BorderStroke {
+    val colors = MaterialTheme.colorScheme
+    val color = if (colors.background.luminance() > .5f) Color(0xFFDDDDDD) else colors.outlineVariant
+    return BorderStroke(1.dp, color)
 }
 
 @Composable
@@ -261,16 +251,19 @@ fun RecipeRow(
     onOpen: () -> Unit,
     onFavorite: () -> Unit,
     modifier: Modifier = Modifier,
+    favoriteCount: Int = 0,
     trailing: (@Composable () -> Unit)? = null,
+    outlined: Boolean = true,
 ) {
     Surface(
         onClick = onOpen,
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
-        color = MaterialTheme.colorScheme.surfaceContainerLow,
+        shape = RoundedCornerShape(if (outlined) 16.dp else 0.dp),
+        color = if (outlined) recipeContainerColor() else Color.Transparent,
+        border = if (outlined) recipeBorder() else null,
     ) {
         Row(
-            Modifier.padding(10.dp),
+            Modifier.padding(horizontal = if (outlined) 10.dp else 0.dp, vertical = if (outlined) 10.dp else 12.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp),
         ) {
@@ -280,12 +273,14 @@ fun RecipeRow(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
-                    Text(recipe.title, Modifier.weight(1f, fill = false), style = MaterialTheme.typography.titleMedium)
+                    Text(recipe.title, Modifier.weight(1f, fill = false), style = MaterialTheme.typography.bodyLarge)
                     if (recipe.isMine) MineBadge()
                 }
                 RecipeMetadata(recipe)
             }
-            if (trailing != null) trailing() else FavoriteButton(favorite, onFavorite)
+            Box(Modifier.align(Alignment.Top)) {
+                if (trailing != null) trailing() else FavoriteButton(favorite, onFavorite, count = favoriteCount)
+            }
         }
     }
 }
@@ -323,7 +318,11 @@ fun BackButton(onBack: () -> Unit) {
 
 @Composable
 fun PageTitle(title: String, onBack: (() -> Unit)? = null, actions: @Composable RowScope.() -> Unit = {}) {
-    TopAppBar(title = { Text(title) }, navigationIcon = { onBack?.let { BackButton(it) } }, actions = actions)
+    TopAppBar(
+        title = { Text(title, style = MaterialTheme.typography.titleLarge) },
+        navigationIcon = { onBack?.let { BackButton(it) } },
+        actions = actions,
+    )
 }
 
 @Composable

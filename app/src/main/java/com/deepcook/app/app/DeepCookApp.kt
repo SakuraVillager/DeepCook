@@ -35,6 +35,11 @@ import com.deepcook.app.data.AppContainer
 import com.deepcook.app.feature.authoring.MyRecipesScreen
 import com.deepcook.app.feature.authoring.RecipeEditorScreen
 import com.deepcook.app.feature.authoring.RecipeEditorViewModel
+import com.deepcook.app.feature.auth.AccountScreen
+import com.deepcook.app.feature.auth.AuthFormState
+import com.deepcook.app.feature.auth.AuthHost
+import com.deepcook.app.feature.auth.AuthSessionState
+import com.deepcook.app.feature.auth.AuthViewModel
 import com.deepcook.app.feature.browse.*
 import com.deepcook.app.feature.cooking.CookingScreen
 import com.deepcook.app.feature.cooking.CookingViewModel
@@ -45,6 +50,8 @@ import com.deepcook.app.feature.profile.ProfileInfoScreen
 import com.deepcook.app.feature.recipe.*
 import com.deepcook.app.feature.search.SearchViewModel
 import com.deepcook.app.feature.settings.SettingsScreen
+import com.deepcook.app.feature.onboarding.FoodProfileScreen
+import com.deepcook.app.feature.onboarding.FoodProfileViewModel
 import kotlinx.serialization.Serializable
 import soup.compose.material.motion.animation.materialSharedAxisXIn
 import soup.compose.material.motion.animation.materialSharedAxisXOut
@@ -63,7 +70,8 @@ import java.util.UUID
 
 @Serializable data class RecipeDetail(val recipeId: String)
 
-@Serializable data class Reader(val recipeId: String, val initialStepId: String? = null)
+@Serializable
+data class Reader(val recipeId: String, val initialStepId: String? = null, val showTimers: Boolean = false)
 
 /** The cooking view: one step at a time, with the timer and (later) the assistant. */
 @Serializable data class Cooking(val recipeId: String)
@@ -78,8 +86,14 @@ import java.util.UUID
 /** Every remembered dish correction, with hand editing. */
 @Serializable data object Notes
 
+@Serializable data object FoodPreferences
+
+
 /** Name, picture, and taste tags; reached by tapping the heading on the profile page. */
 @Serializable data object ProfileInfo
+
+/** Phone number, password and sign-out; reached from 用户信息. */
+@Serializable data object AccountSecurity
 
 /** [recipeId] null means "a new recipe"; an id means "edit that one". */
 @Serializable data class RecipeEditor(val recipeId: String? = null)
@@ -87,10 +101,42 @@ import java.util.UUID
 @Serializable data class Settings(val section: String = "main")
 
 @Composable
-fun DeepCookApp(vm: AppViewModel, state: AppUiState, container: AppContainer) {
+fun DeepCookApp(
+    vm: AppViewModel,
+    state: AppUiState,
+    container: AppContainer,
+    auth: AuthViewModel,
+    authSession: AuthSessionState,
+    authForm: AuthFormState,
+    timerRecipe: String? = null,
+    onTimerHandled: () -> Unit = {},
+) {
     // The previous version used a flat root graph. Do not restore its transient
     // navigation bundle into this new home-container graph on an APK upgrade.
-    val nav = key("root-navigation-v2") { rememberNavController() }
+    // A different account also gets a fresh stack, so signing out never comes back
+    // to the page the previous person was reading.
+    val nav = key("root-navigation-v2", authSession.session?.accountId) { rememberNavController() }
+    LaunchedEffect(
+        timerRecipe,
+        state.loading,
+        state.recipes,
+        state.userLoaded,
+        state.user.foodSetup.completed,
+        authSession.isSignedIn,
+    ) {
+        // A timer can fire while the phone is logged out; wait for the next sign-in instead of
+        // navigating a graph that is not on screen yet.
+        if (timerRecipe != null && !state.loading && state.userLoaded && authSession.isSignedIn &&
+            state.user.foodSetup.completed && state.recipes.isNotEmpty()
+        ) {
+            if (state.recipes.any { it.id == timerRecipe }) {
+                nav.navigate(Reader(timerRecipe, showTimers = true)) {
+                    launchSingleTop = true
+                }
+            }
+            onTimerHandled()
+        }
+    }
     val entry by nav.currentBackStackEntryAsState()
     val activity = LocalActivity.current
     val light = MaterialTheme.colorScheme.background.luminance() > .5
@@ -112,6 +158,7 @@ fun DeepCookApp(vm: AppViewModel, state: AppUiState, container: AppContainer) {
                 message.text,
                 actionLabel = if (message.undo != null) "撤销" else null,
                 withDismissAction = true,
+                duration = SnackbarDuration.Short,
             )
             if (result == SnackbarResult.ActionPerformed) message.undo?.let(vm::undo)
         }
@@ -151,8 +198,14 @@ fun DeepCookApp(vm: AppViewModel, state: AppUiState, container: AppContainer) {
                     }
                 }
             }
-            if (state.loading) {
+            if (state.loading || (!state.userLoaded && state.userError == null) || !authSession.loaded) {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
+            } else if (!authSession.isSignedIn) {
+                // The account gate sits in front of the whole shell: onboarding, browsing and
+                // everything else is unreachable until a number is signed in.
+                AuthHost(auth, authForm)
+            } else if (state.userLoaded && !state.user.foodSetup.completed) {
+                FoodSetupHost(container, editing = false)
             } else if (state.contentError != null) {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     EmptyState("菜谱暂不可用", state.contentError, "重试", vm::loadRecipes)
@@ -181,7 +234,7 @@ fun DeepCookApp(vm: AppViewModel, state: AppUiState, container: AppContainer) {
                             onSettings = { openPage(Settings()) },
                             onRecent = { openPage(Recent) },
                             onMyRecipes = { openPage(MyRecipes) },
-                            onAddRecipe = { openPage(RecipeEditor()) },
+                            onFoodPreferences = { openPage(FoodPreferences) },
                             onProfile = { openPage(ProfileInfo) },
                             onNotes = { openPage(Notes) },
                         )
@@ -191,13 +244,22 @@ fun DeepCookApp(vm: AppViewModel, state: AppUiState, container: AppContainer) {
                             profile = state.user.profile,
                             onBack = { nav.popBackStack() },
                             onName = { name -> vm.updateProfile { it.copy(displayName = name) } },
-                            onToggleLike = { tag, on -> vm.updateProfile { it.withLike(tag, on) } },
-                            onToggleAvoid = { tag, on -> vm.updateProfile { it.withAvoid(tag, on) } },
-                            onClearLikes = { vm.updateProfile { it.copy(likes = emptySet()) } },
-                            onClearAvoids = { vm.updateProfile { it.copy(avoids = emptySet()) } },
+                            foodProfile = state.user.foodSetup.profile,
+                            onFoodPreferences = { openPage(FoodPreferences) },
+                            savingAvatar = state.avatarSaving,
                             loadPhoto = vm::avatarSource,
                             onSaveAvatar = vm::saveAvatar,
                             onRemoveAvatar = vm::removeAvatar,
+                            phone = authSession.session?.phone,
+                            onAccount = { openPage(AccountSecurity) },
+                        )
+                    }
+                    composable<AccountSecurity> {
+                        AccountScreen(
+                            state = authSession,
+                            onBack = { nav.popBackStack() },
+                            changePassword = auth::changePassword,
+                            signOut = auth::signOut,
                         )
                     }
                     composable<Recent> {
@@ -205,6 +267,9 @@ fun DeepCookApp(vm: AppViewModel, state: AppUiState, container: AppContainer) {
                             nav.getBackStackEntry<Home>().savedStateHandle["findRequest"] = System.nanoTime()
                             nav.popBackStack<Home>(inclusive = false)
                         }, { openPage(RecipeDetail(it)) }, vm::removeVisit)
+                    }
+                    composable<FoodPreferences> {
+                        FoodSetupHost(container, editing = true, onCancel = { nav.popBackStack() })
                     }
                     composable<RecipeDetail> { detailEntry ->
                         val args = detailEntry.toRoute<RecipeDetail>()
@@ -226,6 +291,20 @@ fun DeepCookApp(vm: AppViewModel, state: AppUiState, container: AppContainer) {
                                     }
                                 },
                             )
+                            val community: CommunityViewModel = viewModel(
+                                key = "community-${recipe.id}",
+                                factory = viewModelFactory {
+                                    initializer {
+                                        CommunityViewModel(
+                                            recipe.id,
+                                            createSavedStateHandle(),
+                                            container.kitchen,
+                                            container.covers,
+                                        )
+                                    }
+                                },
+                            )
+                            val communityState by community.state.collectAsStateWithLifecycle()
                             DetailScreen(
                                 recipe = recipe,
                                 favorite = state.user.favorites.any { it.recipeId == recipe.id },
@@ -238,14 +317,27 @@ fun DeepCookApp(vm: AppViewModel, state: AppUiState, container: AppContainer) {
                                 onCook = { openPage(Cooking(recipe.id)) },
                                 onVisit = { vm.visit(recipe.id) },
                                 onPhotoVisibilityChange = { detailPhotoVisible = it },
+                                favoriteCount =
+                                (state.favoriteExamples[recipe.id] ?: 0) +
+                                    if (state.user.favorites.any { it.recipeId == recipe.id }) 1 else 0,
+                                ratingContent = { RatingSummary(communityState) { community.open("rating") } },
+                                nutritionContent = { NutritionSection(communityState) { community.open("nutrition") } },
+                                communityContent = { CommunitySection(communityState, community) },
                             )
+                            CommunityDialogs(communityState, community)
                         }
                     }
                     composable<Reader> { readerEntry ->
                         val args = readerEntry.toRoute<Reader>()
                         val recipe = state.recipes.find { it.id == args.recipeId }
                         if (recipe != null) {
-                            ReaderScreen(recipe, args.initialStepId, state.user.preferences) { step ->
+                            ReaderScreen(
+                                recipe,
+                                args.initialStepId,
+                                state.user.preferences,
+                                container.timers,
+                                args.showTimers,
+                            ) { step ->
                                 nav.previousBackStackEntry?.savedStateHandle?.set("readStep", step)
                                 nav.popBackStack()
                             }
@@ -401,7 +493,7 @@ private fun HomeScreen(
     onSettings: () -> Unit,
     onRecent: () -> Unit,
     onMyRecipes: () -> Unit,
-    onAddRecipe: () -> Unit,
+    onFoodPreferences: () -> Unit,
     onProfile: () -> Unit,
     onNotes: () -> Unit,
 ) {
@@ -458,7 +550,7 @@ private fun HomeScreen(
         ) { padding ->
             Row(Modifier.fillMaxSize().padding(padding).consumeWindowInsets(padding)) {
                 if (rail) {
-                    NavigationRail {
+                    NavigationRail(containerColor = MaterialTheme.colorScheme.surfaceContainer) {
                         labels.forEachIndexed { index, label ->
                             NavigationRailItem(
                                 selected = selected == index,
@@ -511,12 +603,33 @@ private fun HomeScreen(
                     }
                     composable<Profile> {
                         ProfileScreen(
-                            state, onSettings, { selectTab(1) }, onRecent, onMyRecipes, onAddRecipe,
-                            onOpen, vm::favorite, { selectTab(0) }, onProfile, onNotes,
+                            state = state,
+                            onSettings = onSettings,
+                            onRecent = onRecent,
+                            onMyRecipes = onMyRecipes,
+                            onFoodPreferences = onFoodPreferences,
+                            onOpen = onOpen,
+                            onFavorite = vm::favorite,
+                            onFind = { selectTab(0) },
+                            onProfile = onProfile,
+                            onNotes = onNotes,
                         )
                     }
                 }
             }
         }
     }
+}
+
+@Composable
+private fun FoodSetupHost(container: AppContainer, editing: Boolean, onCancel: () -> Unit = {}) {
+    val setup: FoodProfileViewModel = viewModel(
+        key = if (editing) "edit-food-preferences" else "first-food-preferences",
+        factory = viewModelFactory {
+            initializer { FoodProfileViewModel(container.userData, createSavedStateHandle(), editing) }
+        },
+    )
+    val state by setup.state.collectAsStateWithLifecycle()
+    LaunchedEffect(state.done) { if (state.done && editing) onCancel() }
+    FoodProfileScreen(setup, state, onCancel)
 }

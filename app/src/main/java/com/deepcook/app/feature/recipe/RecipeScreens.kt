@@ -27,9 +27,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -41,6 +43,8 @@ import androidx.lifecycle.withResumed
 import com.deepcook.app.R
 import com.deepcook.app.core.designsystem.*
 import com.deepcook.app.core.model.*
+import com.deepcook.app.data.TimerManager
+import com.deepcook.app.feature.timer.*
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
@@ -57,15 +61,26 @@ fun DetailScreen(
     onCook: () -> Unit,
     onVisit: () -> Unit,
     onPhotoVisibilityChange: (Boolean) -> Unit,
+    favoriteCount: Int = 0,
+    ratingContent: @Composable () -> Unit = {},
+    nutritionContent: @Composable () -> Unit = {},
+    communityContent: @Composable () -> Unit = {},
 ) {
     val dishState by dishAi.state.collectAsStateWithLifecycle()
     val listState = rememberLazyListState()
     val density = LocalDensity.current
-    val statusBarHeight = WindowInsets.statusBars.getTop(density)
+    val topInset = WindowInsets.safeDrawing.getTop(density)
+    val coverVisible by remember(listState, topInset) {
+        derivedStateOf {
+            val cover = listState.layoutInfo.visibleItemsInfo.firstOrNull { it.key == "cover" }
+            listState.firstVisibleItemIndex == 0 &&
+                (cover == null || cover.offset + cover.size > topInset)
+        }
+    }
     var tabHeight by remember(density) { mutableIntStateOf(with(density) { 48.dp.roundToPx() }) }
     val scope = rememberCoroutineScope()
-    LaunchedEffect(listState) {
-        snapshotFlow { listState.firstVisibleItemIndex == 0 }
+    LaunchedEffect(listState, topInset) {
+        snapshotFlow { coverVisible }
             .distinctUntilChanged()
             .collect(onPhotoVisibilityChange)
     }
@@ -108,11 +123,18 @@ fun DetailScreen(
             }
         }
     }
-    val sectionPinned by remember { derivedStateOf { listState.firstVisibleItemIndex >= 2 } }
-    val activeSection by remember(sections, statusBarHeight) {
+    // Shift only the tab placement as it approaches the safe area. The lazy item's
+    // measured height stays constant, so pinning never changes the scroll geometry.
+    val tabInset by remember(topInset) {
+        derivedStateOf {
+            val offset = listState.layoutInfo.visibleItemsInfo.firstOrNull { it.key == "sections" }?.offset
+            if (offset == null) 0 else (topInset - offset).coerceIn(0, topInset)
+        }
+    }
+    val activeSection by remember(sections, topInset) {
         derivedStateOf {
             val visible = listState.layoutInfo.visibleItemsInfo
-            val stickyHeight = tabHeight + if (sectionPinned) statusBarHeight else 0
+            val stickyHeight = tabHeight + if (tabInset > 0) topInset else 0
             val anchor = visible.firstOrNull { it.index >= 3 && it.offset + it.size > stickyHeight }?.index ?: 3
             if (!listState.canScrollForward && listState.firstVisibleItemIndex > 0) {
                 sections.lastIndex
@@ -127,7 +149,7 @@ fun DetailScreen(
             val target = sectionIndices.getValue("步骤") + 1 + stepIndex
             // Position once, with the height the header will have when pinned.
             // Scrolling once with the unpinned height hides the section title.
-            listState.scrollToItem(target, -(tabHeight + statusBarHeight))
+            listState.scrollToItem(target, -(tabHeight + topInset))
         }
     }
     var imageLinkError by remember { mutableStateOf(false) }
@@ -136,7 +158,7 @@ fun DetailScreen(
         fontSize = preferences.readingSize.detailSp.sp,
         lineHeight = (
             preferences.readingSize.detailSp *
-                1.6
+                1.5
             ).sp,
     )
     Scaffold(bottomBar = {
@@ -149,7 +171,10 @@ fun DetailScreen(
                     Modifier.widthIn(max = 840.dp).fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
-                    Button(onClick = onCook, modifier = Modifier.weight(1f).heightIn(min = 52.dp)) {
+                    Button(
+                        onClick = onCook,
+                        modifier = Modifier.testTag("bottom-cooking-mode").weight(1f).heightIn(min = 52.dp),
+                    ) {
                         Icon(Icons.Rounded.PlayArrow, null)
                         Spacer(Modifier.width(8.dp))
                         Text("开始做菜")
@@ -190,7 +215,7 @@ fun DetailScreen(
                                 Icon(Icons.AutoMirrored.Rounded.ArrowBack, stringResource(R.string.back))
                             }
                             Surface(shape = CircleShape, color = MaterialTheme.colorScheme.surface) {
-                                FavoriteButton(favorite, onFavorite)
+                                FavoriteButton(favorite, onFavorite, count = favoriteCount)
                             }
                         }
                     }
@@ -221,15 +246,15 @@ fun DetailScreen(
                             color = MaterialTheme.colorScheme.primary,
                             style = MaterialTheme.typography.labelLarge,
                         )
+                        ratingContent()
+                        nutritionContent()
                     }
                 }
                 stickyHeader(key = "sections") {
-                    Surface(
-                        color = MaterialTheme.colorScheme.surface,
-                        tonalElevation = 2.dp,
-                    ) {
-                        Column {
-                            if (sectionPinned) Spacer(Modifier.windowInsetsTopHeight(WindowInsets.statusBars))
+                    Layout(content = {
+                        Surface(
+                            color = MaterialTheme.colorScheme.surface,
+                        ) {
                             PrimaryScrollableTabRow(
                                 selectedTabIndex = activeSection,
                                 edgePadding = 8.dp,
@@ -241,12 +266,20 @@ fun DetailScreen(
                                         scope.launch {
                                             listState.animateScrollToItem(
                                                 sectionIndices.getValue(label),
-                                                -(tabHeight + statusBarHeight),
+                                                -(tabHeight + topInset),
                                             )
                                         }
                                     }, text = { Text(label) })
                                 }
                             }
+                        }
+                    }, modifier = Modifier.fillMaxWidth().testTag("detail-section-header")) { children, constraints ->
+                        val tabs = children.single().measure(constraints)
+                        // Reserve the safe area from the first measure. The tabs
+                        // always remain inside their parent, including on tall
+                        // cutouts, so drawing, touch and accessibility agree.
+                        layout(tabs.width, tabs.height + topInset) {
+                            tabs.placeRelative(0, tabInset)
                         }
                     }
                 }
@@ -317,11 +350,22 @@ fun DetailScreen(
                     }
                 }
                 item(key = "步骤") {
-                    Text(
-                        "烹饪步骤 · 共 ${recipe.steps.size} 步",
-                        Modifier.padding(20.dp),
-                        style = MaterialTheme.typography.titleLarge,
-                    )
+                    Row(
+                        Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 12.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(
+                            "烹饪步骤 · 共 ${recipe.steps.size} 步",
+                            Modifier.weight(1f),
+                            style = MaterialTheme.typography.titleLarge,
+                        )
+                        TextButton(onClick = { onRead(null) }, modifier = Modifier.testTag("step-cooking-mode")) {
+                            Text(stringResource(R.string.cooking_mode))
+                            Spacer(Modifier.width(4.dp))
+                            Icon(Icons.AutoMirrored.Rounded.ArrowForward, null, Modifier.size(18.dp))
+                        }
+                    }
                 }
                 items(recipe.steps.size, key = { recipe.steps[it].id }) { index ->
                     val step = recipe.steps[index]
@@ -355,11 +399,6 @@ fun DetailScreen(
                             }
                             Text(step.text, style = textStyle)
                             step.visibleCue?.let { InfoCard("观察提示", it) }
-                            TextButton(onClick = { onRead(step.id) }) {
-                                Icon(Icons.Rounded.OpenInFull, null, Modifier.size(18.dp))
-                                Spacer(Modifier.width(8.dp))
-                                Text("放大阅读 · 第 ${index + 1} 步")
-                            }
                         }
                     }
                     if (index < recipe.steps.lastIndex) HorizontalDivider(Modifier.padding(vertical = 12.dp))
@@ -392,6 +431,15 @@ fun DetailScreen(
                         if (imageLinkError) Text("暂时无法打开链接，请检查是否安装浏览器。", color = MaterialTheme.colorScheme.error)
                     }
                 }
+                item(key = "community") { communityContent() }
+            }
+            if (!coverVisible) {
+                // Draw outside the scrolling content without consuming any new inset.
+                Surface(
+                    modifier = Modifier.fillMaxWidth().windowInsetsTopHeight(WindowInsets.safeDrawing)
+                        .testTag("detail-status-bar-background"),
+                    color = MaterialTheme.colorScheme.surface,
+                ) {}
             }
         }
     }
@@ -436,12 +484,20 @@ private fun ObservationNote(text: String) {
 }
 
 @Composable
-fun ReaderScreen(recipe: Recipe, initialStep: String?, preferences: UserPreferences, onBack: (String) -> Unit) {
+fun ReaderScreen(
+    recipe: Recipe,
+    initialStep: String?,
+    preferences: UserPreferences,
+    timerManager: TimerManager,
+    showTimers: Boolean = false,
+    onBack: (String) -> Unit,
+) {
     var index by rememberSaveable(recipe.id, recipe.version) {
         mutableIntStateOf(recipe.steps.indexOfFirst { it.id == initialStep }.coerceAtLeast(0))
     }
     var showDirectory by remember { mutableStateOf(false) }
     val step = recipe.steps[index.coerceIn(recipe.steps.indices)]
+    val timerUi = rememberCookingTimers(recipe, timerManager, showTimers)
     androidx.activity.compose.BackHandler { onBack(step.id) }
     KeepAwake(preferences.keepScreenOn)
     Scaffold(
@@ -457,6 +513,7 @@ fun ReaderScreen(recipe: Recipe, initialStep: String?, preferences: UserPreferen
                 },
                 navigationIcon = { BackButton { onBack(step.id) } },
                 actions = {
+                    CookingTimerButton(timerUi)
                     IconButton(onClick = {
                         showDirectory = true
                     }) { Icon(Icons.Rounded.FormatListNumbered, stringResource(R.string.step_directory)) }
@@ -549,6 +606,7 @@ fun ReaderScreen(recipe: Recipe, initialStep: String?, preferences: UserPreferen
                                             1.5
                                         ).sp,
                                 )
+                                StepTimerSection(timerUi, step)
                             }
                         }
                         val ingredients = recipe.ingredients.filter { it.id in step.ingredientRefs }
@@ -577,6 +635,7 @@ fun ReaderScreen(recipe: Recipe, initialStep: String?, preferences: UserPreferen
             }
         }
     }
+    CookingTimerDialogs(timerUi)
     if (showDirectory) {
         ModalBottomSheet(onDismissRequest = { showDirectory = false }) {
             LazyColumn(contentPadding = PaddingValues(bottom = 32.dp)) {

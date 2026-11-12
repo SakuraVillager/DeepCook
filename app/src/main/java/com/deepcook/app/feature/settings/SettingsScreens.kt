@@ -122,7 +122,7 @@ fun SettingsScreen(
                             }
                             PreferenceRow(
                                 "即时预览",
-                                "暖黄厨房使用奶油底色与焦糖金棕。系统动态色会跟随壁纸配色，支持 Android 12 及以上系统。",
+                                "暖黄厨房使用淡黄色底色与焦糖金棕强调色。系统动态色跟随壁纸配色，支持 Android 12 及以上系统。",
                                 Icons.Rounded.Palette,
                             )
                         }
@@ -162,7 +162,7 @@ fun SettingsScreen(
                             }
                             SwitchPreference(
                                 "显示步骤图片",
-                                "在菜谱详情与分步阅读中显示步骤配图。",
+                                "在菜谱详情与烹饪模式中显示步骤配图。",
                                 Icons.Rounded.Image,
                                 preferences.showStepImages,
                             ) { value ->
@@ -171,7 +171,7 @@ fun SettingsScreen(
                             PreferenceGroupHeader("专注阅读")
                             SwitchPreference(
                                 "阅读时保持亮屏",
-                                "仅在分步阅读页处于前台时生效。",
+                                "仅在烹饪模式页处于前台时生效。",
                                 Icons.Rounded.LightMode,
                                 preferences.keepScreenOn,
                             ) { value ->
@@ -424,7 +424,7 @@ private fun DataPreferences(
     PreferenceRow("恢复默认设置", "重置外观和阅读偏好，保留收藏与浏览记录。", Icons.Rounded.RestartAlt, onClick = {
         confirmation = "preferences"
     })
-    PreferenceRow("本地保存", "本版没有账号与云端同步。卸载或清除应用数据后无法恢复。", Icons.Rounded.PhoneAndroid)
+    PreferenceRow("本地保存", "账号、收藏与本机设置没有云端同步。卸载或清除应用数据后无法恢复。", Icons.Rounded.PhoneAndroid)
     if (confirmation != null) {
         val title = when (confirmation) {
             "recent" -> "清除最近浏览？"

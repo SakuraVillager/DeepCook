@@ -45,7 +45,7 @@ fun AvatarCropDialog(source: Bitmap, onCancel: () -> Unit, onConfirm: (Bitmap) -
     Dialog(onDismissRequest = onCancel, properties = DialogProperties(usePlatformDefaultWidth = false)) {
         Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.surface) {
             Column(
-                Modifier.fillMaxSize().padding(24.dp),
+                Modifier.fillMaxSize().safeDrawingPadding().padding(24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text("调整头像", style = MaterialTheme.typography.titleLarge)

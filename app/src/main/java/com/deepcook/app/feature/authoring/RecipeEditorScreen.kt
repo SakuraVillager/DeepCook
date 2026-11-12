@@ -9,11 +9,16 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -21,13 +26,17 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -84,110 +93,127 @@ fun RecipeEditorScreen(editor: RecipeEditorViewModel, onBack: () -> Unit) {
     }
 
     Scaffold(
+        modifier = Modifier.imePadding(),
         topBar = {
             PageTitle(
                 stringResource(if (state.editing) R.string.edit_recipe else R.string.add_recipe),
                 ::requestBack,
                 actions = {
-                    TextButton(onClick = ::save, enabled = !state.looking && !state.importingCover && !state.saving) {
-                        Text(if (state.saving) "正在保存…" else "保存")
+                    FilledTonalButton(
+                        onClick = ::save,
+                        enabled = !state.looking && !state.importingCover && !state.saving,
+                        modifier = Modifier.padding(end = 8.dp),
+                        contentPadding = PaddingValues(horizontal = 14.dp, vertical = 8.dp),
+                    ) {
+                        if (state.saving) {
+                            CircularProgressIndicator(Modifier.size(18.dp), strokeWidth = 2.dp)
+                        } else {
+                            Icon(Icons.Rounded.Check, null, Modifier.size(18.dp))
+                        }
+                        Spacer(Modifier.width(6.dp))
+                        Text(if (state.saving) "保存中" else "保存")
                     }
                 },
             )
         },
     ) { padding ->
-        LazyColumn(
-            Modifier.padding(padding).fillMaxSize(),
-            state = listState,
-            contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-        ) {
-            item {
-                NameSection(
-                    draft = draft,
-                    state = state,
-                    nameFocus = nameFocus,
-                    onName = { name -> editor.edit { it.copy(title = name) } },
-                    onLookup = {
-                        focus.clearFocus()
-                        editor.prefill()
-                    },
-                )
-            }
-            item {
-                CoverSection(
-                    cover = draft.cover,
-                    importing = state.importingCover,
-                    onPick = {
-                        pickCover.launch(
-                            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly),
+        Box(Modifier.padding(padding).fillMaxSize(), contentAlignment = Alignment.TopCenter) {
+            LazyColumn(
+                Modifier.widthIn(max = 720.dp).fillMaxSize(),
+                state = listState,
+                contentPadding = PaddingValues(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+            ) {
+                item(key = "name") {
+                    EditorGroup("菜谱信息", Icons.Rounded.RestaurantMenu) {
+                        NameSection(
+                            draft = draft,
+                            state = state,
+                            nameFocus = nameFocus,
+                            onName = { name -> editor.edit { it.copy(title = name) } },
+                            onLookup = {
+                                focus.clearFocus()
+                                editor.prefill()
+                            },
                         )
-                    },
-                    onRemove = editor::removeCover,
-                )
-            }
-            item {
-                BasicsSection(draft = draft, edit = editor::edit)
-            }
-            item {
-                FieldBlock("简介", "一两句话说明这道菜是什么味道。") {
-                    OutlinedTextField(
-                        value = draft.description,
-                        label = { Text("简介") },
-                        onValueChange = { text -> editor.edit { it.copy(description = text) } },
-                        modifier = Modifier.fillMaxWidth(),
-                        minLines = 2,
-                        maxLines = 5,
-                        placeholder = { Text("例如：酸甜开胃，15 分钟就能上桌。") },
+                    }
+                }
+                item(key = "cover") {
+                    CoverSection(
+                        cover = draft.cover,
+                        importing = state.importingCover,
+                        onPick = {
+                            pickCover.launch(
+                                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly),
+                            )
+                        },
+                        onRemove = editor::removeCover,
                     )
                 }
-            }
-            item {
-                StringListSection(
-                    title = "准备事项",
-                    hint = "开火前要先做好的事，没有可以留空。",
-                    values = draft.preparation,
-                    addLabel = "添加准备事项",
-                    onChange = { list -> editor.edit { it.copy(preparation = list) } },
-                )
-            }
-            item {
-                IngredientsSection(
-                    ingredients = draft.ingredients,
-                    onChange = { list -> editor.edit { it.copy(ingredients = list) } },
-                )
-            }
-            item {
-                StepsSection(
-                    steps = draft.steps,
-                    onChange = { list -> editor.edit { it.copy(steps = list) } },
-                )
-            }
-            item {
-                StringListSection(
-                    title = "注意事项",
-                    hint = "容易做坏的地方，写在最后提醒自己。",
-                    values = draft.notes,
-                    addLabel = "添加注意事项",
-                    onChange = { list -> editor.edit { it.copy(notes = list) } },
-                )
-            }
-            if (draft.sourceUrl != null) {
                 item {
-                    val sourceLicense = draft.originalSource?.license ?: "HowToCook · Unlicense"
-                    InfoCard(
-                        "资料来源",
-                        "资料来自 ${draft.sourceName ?: "来源菜谱"}。$sourceLicense" +
-                            "请按自己的做法核对后保存。",
+                    BasicsSection(draft = draft, edit = editor::edit)
+                }
+                item {
+                    FieldBlock("简介", "一两句话说明这道菜是什么味道。") {
+                        OutlinedTextField(
+                            shape = RoundedCornerShape(12.dp),
+                            value = draft.description,
+                            label = { Text("简介") },
+                            onValueChange = { text -> editor.edit { it.copy(description = text) } },
+                            modifier = Modifier.fillMaxWidth(),
+                            minLines = 2,
+                            maxLines = 5,
+                            placeholder = { Text("例如：酸甜开胃，15 分钟就能上桌。") },
+                        )
+                    }
+                }
+                item {
+                    StringListSection(
+                        title = "准备事项",
+                        hint = "开火前要先做好的事，没有可以留空。",
+                        values = draft.preparation,
+                        addLabel = "添加准备事项",
+                        onChange = { list -> editor.edit { it.copy(preparation = list) } },
                     )
                 }
-            }
-            item {
-                Text(
-                    "保存后，这道菜会出现在首页和搜索里，也能收藏。",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
+                item {
+                    IngredientsSection(
+                        ingredients = draft.ingredients,
+                        onChange = { list -> editor.edit { it.copy(ingredients = list) } },
+                    )
+                }
+                item {
+                    StepsSection(
+                        steps = draft.steps,
+                        onChange = { list -> editor.edit { it.copy(steps = list) } },
+                    )
+                }
+                item {
+                    StringListSection(
+                        title = "注意事项",
+                        hint = "容易做坏的地方，写在最后提醒自己。",
+                        values = draft.notes,
+                        addLabel = "添加注意事项",
+                        onChange = { list -> editor.edit { it.copy(notes = list) } },
+                    )
+                }
+                if (draft.sourceUrl != null) {
+                    item {
+                        val sourceLicense = draft.originalSource?.license ?: "HowToCook · Unlicense"
+                        InfoCard(
+                            "资料来源",
+                            "资料来自 ${draft.sourceName ?: "来源菜谱"}。$sourceLicense" +
+                                "请按自己的做法核对后保存。",
+                        )
+                    }
+                }
+                item {
+                    Text(
+                        "保存在我的菜谱，随时回来修改。",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
             }
         }
     }
@@ -218,11 +244,13 @@ private fun NameSection(
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         OutlinedTextField(
+            shape = RoundedCornerShape(12.dp),
             value = draft.title,
             onValueChange = onName,
             modifier = Modifier.fillMaxWidth().focusRequester(nameFocus),
             label = { Text("菜名") },
             singleLine = true,
+            isError = state.errors.any { it == "菜名不能为空" },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
             keyboardActions = KeyboardActions(onDone = { onLookup() }),
             trailingIcon = {
@@ -265,73 +293,65 @@ private fun NameSection(
 
 @Composable
 private fun CoverSection(cover: String?, importing: Boolean, onPick: () -> Unit, onRemove: () -> Unit) {
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text("封面", style = MaterialTheme.typography.titleMedium)
-        Box(
-            Modifier.fillMaxWidth().aspectRatio(4f / 3).clip(RoundedCornerShape(16.dp))
-                .background(MaterialTheme.colorScheme.surfaceContainerHighest),
-            contentAlignment = Alignment.Center,
-        ) {
-            RecipeImage(cover, Modifier.matchParentSize(), description = "菜谱封面")
-            if (importing) {
-                CircularProgressIndicator()
+    EditorGroup("封面", Icons.Rounded.PhotoCamera) {
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+            Surface(
+                onClick = onPick,
+                enabled = !importing,
+                modifier = Modifier.width(112.dp).aspectRatio(4f / 3),
+                shape = RoundedCornerShape(12.dp),
+                color = MaterialTheme.colorScheme.surfaceContainerLow,
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = .6f)),
+            ) {
+                Box(contentAlignment = Alignment.Center) {
+                    if (cover == null) {
+                        Icon(
+                            Icons.Rounded.AddPhotoAlternate,
+                            "选择菜谱封面",
+                            Modifier.size(28.dp),
+                            tint = MaterialTheme.colorScheme.primary,
+                        )
+                    } else {
+                        RecipeImage(cover, Modifier.fillMaxSize(), description = "菜谱封面")
+                    }
+                    if (importing) CircularProgressIndicator(Modifier.size(24.dp))
+                }
+            }
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text(
+                    "可选，随时可以更换",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                TextButton(onClick = onPick, enabled = !importing, contentPadding = PaddingValues(horizontal = 0.dp)) {
+                    Text(if (cover == null) stringResource(R.string.pick_cover) else "更换封面")
+                }
+                if (cover != null) {
+                    TextButton(
+                        onClick = onRemove,
+                        enabled = !importing,
+                        contentPadding = PaddingValues(horizontal = 0.dp),
+                    ) {
+                        Text(stringResource(R.string.remove_cover))
+                    }
+                }
             }
         }
-        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            FilledTonalButton(onClick = onPick, enabled = !importing) {
-                Icon(Icons.Rounded.PhotoLibrary, null, Modifier.size(18.dp))
-                Spacer(Modifier.width(6.dp))
-                Text(if (cover == null) stringResource(R.string.pick_cover) else "更换封面")
-            }
-            if (cover != null) {
-                TextButton(onClick = onRemove, enabled = !importing) { Text(stringResource(R.string.remove_cover)) }
-            }
-        }
-        Text(
-            "不选也可以，会显示占位图。图片裁成 4:3 后存在应用内。",
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
     }
 }
 
 @Composable
 private fun BasicsSection(draft: RecipeDraft, edit: ((RecipeDraft) -> RecipeDraft) -> Unit) {
-    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        Text("基本信息", style = MaterialTheme.typography.titleMedium)
+    EditorGroup("基本信息", Icons.Rounded.Tune) {
         Picker(
             label = "地域",
             value = draft.region,
             options = RecipeRegions,
             onChoose = { region -> edit { it.copy(region = region) } },
         )
-        Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            Text("分类（可多选）", style = MaterialTheme.typography.labelLarge)
-            FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                RecipeCategories.forEach { category ->
-                    val selected = category in draft.categories
-                    FilterChip(
-                        selected = selected,
-                        onClick = {
-                            edit {
-                                it.copy(
-                                    categories = if (selected) {
-                                        it.categories - category
-                                    } else {
-                                        it.categories + category
-                                    },
-                                )
-                            }
-                        },
-                        label = { Text(category) },
-                    )
-                }
-            }
-        }
-        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            var minutes by remember(draft.minutes) {
-                mutableStateOf(draft.minutes?.toString().orEmpty())
-            }
+        CategoryPicker(draft.categories) { categories -> edit { it.copy(categories = categories) } }
+        var minutes by remember(draft.minutes) { mutableStateOf(draft.minutes?.toString().orEmpty()) }
+        EditorFieldPair(first = { modifier ->
             OutlinedTextField(
                 value = minutes,
                 onValueChange = { text ->
@@ -339,23 +359,26 @@ private fun BasicsSection(draft: RecipeDraft, edit: ((RecipeDraft) -> RecipeDraf
                     minutes = digits
                     edit { it.copy(minutes = digits.toIntOrNull()) }
                 },
-                modifier = Modifier.weight(1f),
-                label = { Text("用时（分钟）") },
+                modifier = modifier,
+                shape = RoundedCornerShape(12.dp),
+                label = { Text("用时（min）") },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Next),
             )
+        }, second = { modifier ->
             Picker(
                 label = "难度",
                 value = draft.difficulty?.let { "$it/5" } ?: "未标注",
                 options = listOf("未标注") + (1..5).map { "$it/5" },
-                modifier = Modifier.weight(1f),
+                modifier = modifier,
                 onChoose = { label -> edit { it.copy(difficulty = label.substringBefore('/').toIntOrNull()) } },
             )
-        }
+        })
         OutlinedTextField(
             value = draft.servings,
             onValueChange = { text -> edit { it.copy(servings = text) } },
             modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(12.dp),
             label = { Text("份量") },
             singleLine = true,
             placeholder = { Text("例如：2 人份") },
@@ -376,60 +399,169 @@ private fun Picker(
     onChoose: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var expanded by remember { mutableStateOf(false) }
-    Column(modifier, verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        Text(label, style = MaterialTheme.typography.labelLarge)
-        Box {
-            OutlinedButton(onClick = { expanded = true }, modifier = Modifier.fillMaxWidth()) {
-                Text(value, Modifier.weight(1f), maxLines = 1)
-                Icon(Icons.Rounded.ExpandMore, null)
+    var expanded by rememberSaveable { mutableStateOf(false) }
+    val focus = LocalFocusManager.current
+    Surface(
+        onClick = {
+            focus.clearFocus()
+            expanded = true
+        },
+        modifier = modifier,
+        shape = RoundedCornerShape(12.dp),
+        color = MaterialTheme.colorScheme.surfaceContainerLow,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = .7f)),
+    ) {
+        Row(
+            Modifier.fillMaxWidth().heightIn(min = 64.dp).padding(horizontal = 14.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                Text(
+                    label,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                Text(value, style = MaterialTheme.typography.bodyLarge)
             }
-            DropdownMenu(expanded, onDismissRequest = { expanded = false }) {
-                options.forEach { option ->
-                    DropdownMenuItem(
-                        text = { Text(option) },
-                        onClick = {
-                            onChoose(option)
-                            expanded = false
-                        },
-                    )
-                }
-            }
+            Icon(Icons.Rounded.ExpandMore, null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
         }
+    }
+    if (expanded) {
+        AlertDialog(
+            onDismissRequest = { expanded = false },
+            title = { Text("选择$label") },
+            text = {
+                LazyColumn(Modifier.heightIn(max = 360.dp).selectableGroup()) {
+                    items(options) { option ->
+                        Row(
+                            Modifier.fillMaxWidth().selectable(
+                                selected = value == option,
+                                role = Role.RadioButton,
+                                onClick = {
+                                    onChoose(option)
+                                    expanded = false
+                                },
+                            ).padding(vertical = 8.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        ) {
+                            RadioButton(selected = value == option, onClick = null)
+                            Text(option, Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge)
+                        }
+                    }
+                }
+            },
+            confirmButton = { TextButton(onClick = { expanded = false }) { Text("取消") } },
+        )
+    }
+}
+
+@Composable
+private fun CategoryPicker(categories: List<String>, onChoose: (List<String>) -> Unit) {
+    var expanded by rememberSaveable { mutableStateOf(false) }
+    val focus = LocalFocusManager.current
+    Surface(
+        onClick = {
+            focus.clearFocus()
+            expanded = true
+        },
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(12.dp),
+        color = MaterialTheme.colorScheme.surfaceContainerLow,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = .7f)),
+    ) {
+        Row(
+            Modifier.fillMaxWidth().heightIn(min = 64.dp).padding(horizontal = 14.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                Text(
+                    "分类",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                Text(
+                    if (categories.isEmpty()) {
+                        "选择分类，可多选"
+                    } else {
+                        categories.take(3).joinToString("、") +
+                            if (categories.size > 3) " 等 ${categories.size} 项" else ""
+                    },
+                    style = MaterialTheme.typography.bodyLarge,
+                )
+            }
+            Icon(Icons.Rounded.ExpandMore, null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+    }
+    if (expanded) {
+        var pending by rememberSaveable { mutableStateOf(categories.toList()) }
+        AlertDialog(
+            onDismissRequest = { expanded = false },
+            title = { Text("选择分类") },
+            text = {
+                LazyColumn(Modifier.heightIn(max = 360.dp)) {
+                    items(RecipeCategories) { category ->
+                        val checked = category in pending
+                        Row(
+                            Modifier.fillMaxWidth().toggleable(
+                                value = checked,
+                                role = Role.Checkbox,
+                                onValueChange = { chosen ->
+                                    pending =
+                                        if (chosen) pending + category else pending - category
+                                },
+                            ).padding(vertical = 8.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        ) {
+                            Checkbox(checked, onCheckedChange = null)
+                            Text(category, Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge)
+                        }
+                    }
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    onChoose(pending)
+                    expanded = false
+                }, enabled = pending.isNotEmpty()) { Text("确定") }
+            },
+            dismissButton = { TextButton(onClick = { expanded = false }) { Text("取消") } },
+        )
     }
 }
 
 @Composable
 private fun IngredientsSection(ingredients: List<DraftIngredient>, onChange: (List<DraftIngredient>) -> Unit) {
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text("材料", style = MaterialTheme.typography.titleMedium)
-        Text(
-            "用量可以写「200 克」「2 个」「适量」——按你自己的手写。",
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
+    EditorGroup("材料", Icons.Rounded.ShoppingBasket, "用量可填写克、个或适量。", ingredients.size) {
         ingredients.forEachIndexed { index, ingredient ->
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            EditorFieldPair(firstWeight = 1.5f, first = { modifier ->
                 OutlinedTextField(
                     value = ingredient.name,
                     onValueChange = { text -> onChange(ingredients.replaced(index, ingredient.copy(name = text))) },
-                    modifier = Modifier.weight(2f),
+                    modifier = modifier,
+                    shape = RoundedCornerShape(12.dp),
                     label = { Text("材料 ${index + 1}") },
                     singleLine = true,
                 )
+            }, second = { modifier ->
                 OutlinedTextField(
                     value = ingredient.amount,
                     onValueChange = { text -> onChange(ingredients.replaced(index, ingredient.copy(amount = text))) },
-                    modifier = Modifier.weight(1f),
+                    modifier = modifier,
+                    shape = RoundedCornerShape(12.dp),
                     label = { Text("用量") },
                     singleLine = true,
                 )
+            }, trailing = {
                 IconButton(onClick = { onChange(ingredients.filterIndexed { at, _ -> at != index }) }) {
-                    Icon(Icons.Rounded.RemoveCircleOutline, "删除这项材料")
+                    Icon(Icons.Rounded.DeleteOutline, "删除这项材料")
                 }
-            }
+            })
         }
-        TextButton(onClick = { onChange(ingredients + DraftIngredient()) }) {
+        OutlinedButton(onClick = {
+            onChange(ingredients + DraftIngredient())
+        }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp)) {
             Icon(Icons.Rounded.Add, null, Modifier.size(18.dp))
             Spacer(Modifier.width(6.dp))
             Text("添加材料")
@@ -439,22 +571,28 @@ private fun IngredientsSection(ingredients: List<DraftIngredient>, onChange: (Li
 
 @Composable
 private fun StepsSection(steps: List<DraftStep>, onChange: (List<DraftStep>) -> Unit) {
-    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        Text("步骤", style = MaterialTheme.typography.titleMedium)
+    EditorGroup("步骤", Icons.Rounded.FormatListNumbered, count = steps.size) {
         steps.forEachIndexed { index, step ->
             Surface(
                 color = MaterialTheme.colorScheme.surfaceContainerLow,
                 shape = RoundedCornerShape(16.dp),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = .45f)),
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text("第 ${index + 1} 步", Modifier.weight(1f), style = MaterialTheme.typography.titleSmall)
+                        Text(
+                            "第 ${index + 1} 步",
+                            Modifier.weight(1f),
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.primary,
+                        )
                         IconButton(onClick = { onChange(steps.filterIndexed { at, _ -> at != index }) }) {
-                            Icon(Icons.Rounded.RemoveCircleOutline, "删除第 ${index + 1} 步")
+                            Icon(Icons.Rounded.DeleteOutline, "删除第 ${index + 1} 步")
                         }
                     }
                     OutlinedTextField(
+                        shape = RoundedCornerShape(12.dp),
                         value = step.title,
                         onValueChange = { text -> onChange(steps.replaced(index, step.copy(title = text))) },
                         modifier = Modifier.fillMaxWidth(),
@@ -463,6 +601,7 @@ private fun StepsSection(steps: List<DraftStep>, onChange: (List<DraftStep>) -> 
                         placeholder = { Text("例如：处理西红柿") },
                     )
                     OutlinedTextField(
+                        shape = RoundedCornerShape(12.dp),
                         value = step.text,
                         onValueChange = { text -> onChange(steps.replaced(index, step.copy(text = text))) },
                         modifier = Modifier.fillMaxWidth(),
@@ -472,6 +611,7 @@ private fun StepsSection(steps: List<DraftStep>, onChange: (List<DraftStep>) -> 
                         placeholder = { Text("这一步具体怎么做。") },
                     )
                     OutlinedTextField(
+                        shape = RoundedCornerShape(12.dp),
                         value = step.cue,
                         onValueChange = { text -> onChange(steps.replaced(index, step.copy(cue = text))) },
                         modifier = Modifier.fillMaxWidth(),
@@ -482,7 +622,9 @@ private fun StepsSection(steps: List<DraftStep>, onChange: (List<DraftStep>) -> 
                 }
             }
         }
-        TextButton(onClick = { onChange(steps + DraftStep()) }) {
+        OutlinedButton(onClick = {
+            onChange(steps + DraftStep())
+        }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp)) {
             Icon(Icons.Rounded.Add, null, Modifier.size(18.dp))
             Spacer(Modifier.width(6.dp))
             Text("添加步骤")
@@ -498,12 +640,11 @@ private fun StringListSection(
     addLabel: String,
     onChange: (List<String>) -> Unit,
 ) {
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text(title, style = MaterialTheme.typography.titleMedium)
-        Text(hint, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    EditorGroup(title, Icons.Rounded.Notes, hint) {
         values.forEachIndexed { index, value ->
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 OutlinedTextField(
+                    shape = RoundedCornerShape(12.dp),
                     value = value,
                     onValueChange = { text -> onChange(values.replaced(index, text)) },
                     modifier = Modifier.weight(1f),
@@ -511,11 +652,13 @@ private fun StringListSection(
                     singleLine = true,
                 )
                 IconButton(onClick = { onChange(values.filterIndexed { at, _ -> at != index }) }) {
-                    Icon(Icons.Rounded.RemoveCircleOutline, "删除第 ${index + 1} 项")
+                    Icon(Icons.Rounded.DeleteOutline, "删除第 ${index + 1} 项")
                 }
             }
         }
-        TextButton(onClick = { onChange(values + "") }) {
+        OutlinedButton(onClick = {
+            onChange(values + "")
+        }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp)) {
             Icon(Icons.Rounded.Add, null, Modifier.size(18.dp))
             Spacer(Modifier.width(6.dp))
             Text(addLabel)
@@ -525,10 +668,75 @@ private fun StringListSection(
 
 @Composable
 private fun FieldBlock(title: String, hint: String, content: @Composable () -> Unit) {
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text(title, style = MaterialTheme.typography.titleMedium)
-        Text(hint, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        content()
+    EditorGroup(title, Icons.Rounded.Description, hint) { content() }
+}
+
+@Composable
+private fun EditorGroup(
+    title: String,
+    icon: ImageVector,
+    description: String? = null,
+    count: Int? = null,
+    content: @Composable ColumnScope.() -> Unit,
+) {
+    Surface(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(20.dp),
+        color = MaterialTheme.colorScheme.surfaceContainerLowest,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = .6f)),
+    ) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                Icon(icon, null, Modifier.size(22.dp), tint = MaterialTheme.colorScheme.primary)
+                Text(title, Modifier.weight(1f), style = MaterialTheme.typography.titleMedium)
+                if (count !=
+                    null
+                ) {
+                    Text(
+                        "$count 项",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            }
+            if (description !=
+                null
+            ) {
+                Text(
+                    description,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+            content()
+        }
+    }
+}
+
+@Composable
+private fun EditorFieldPair(
+    first: @Composable (Modifier) -> Unit,
+    second: @Composable (Modifier) -> Unit,
+    firstWeight: Float = 1f,
+    trailing: (@Composable () -> Unit)? = null,
+) {
+    val fontScale = LocalDensity.current.fontScale
+    BoxWithConstraints {
+        if (maxWidth < 280.dp || fontScale > 1.3f) {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    first(Modifier.weight(1f))
+                    trailing?.invoke()
+                }
+                second(Modifier.fillMaxWidth())
+            }
+        } else {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                first(Modifier.weight(firstWeight))
+                second(Modifier.weight(1f))
+                trailing?.invoke()
+            }
+        }
     }
 }
 
