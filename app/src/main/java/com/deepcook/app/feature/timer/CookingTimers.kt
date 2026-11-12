@@ -5,7 +5,6 @@ package com.deepcook.app.feature.timer
 import android.Manifest
 import android.content.Intent
 import android.os.Build
-import android.os.SystemClock
 import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -25,14 +24,14 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
+import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.deepcook.app.core.model.*
-import com.deepcook.app.data.TimerManager
+import com.deepcook.app.data.CookSessionStore
+import com.deepcook.app.data.CookTimerService
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -40,13 +39,23 @@ import kotlinx.coroutines.launch
 
 data class TimerDraft(val label: String, val seconds: Long, val stepId: String?, val detected: String? = null)
 
+/**
+ * Timers started from the reader.
+ *
+ * There is exactly one timer engine in the app: [CookSessionStore] holds the deadlines and
+ * [CookTimerService] rings them in a foreground service. This class is the reader's view of that
+ * engine — it never keeps its own copy, so a timer started here also shows up on the cooking
+ * screen and in the «计时十分钟» voice path.
+ */
 class CookingTimerUi(
     val recipe: Recipe,
-    val manager: TimerManager,
+    private val sessions: CookSessionStore,
     private val scope: CoroutineScope,
+    val canNotify: () -> Boolean,
+    private val startService: () -> Unit,
     initiallyOpen: Boolean,
 ) {
-    var timers by mutableStateOf<List<CookingTimer>>(emptyList())
+    var timers by mutableStateOf<List<CookTimer>>(emptyList())
     var showManager by mutableStateOf(initiallyOpen)
     var draft by mutableStateOf<TimerDraft?>(null)
     var needsPermission by mutableStateOf(false)
@@ -73,17 +82,32 @@ class CookingTimerUi(
 
     fun start(value: TimerDraft) {
         draft = value
-        if (!manager.exactAllowed() || !manager.notificationsAllowed()) {
+        if (!canNotify()) {
             needsPermission = true
             return
         }
         perform {
-            manager.start(recipe, value.stepId, value.label, value.seconds)
+            // The reader may be the first screen that starts a timer, so make sure the session
+            // belongs to this dish before adding to it.
+            sessions.ensure(recipe.id, recipe.title)
+            sessions.addTimer(
+                recipeId = recipe.id,
+                seconds = value.seconds.coerceIn(1, MAX_SECONDS),
+                label = value.label,
+                stepId = value.stepId,
+            )
+            startService()
             draft = null
             needsPermission = false
             showManager = true
         }
     }
+
+    fun toggle(timer: CookTimer) = perform {
+        if (timer.paused) sessions.resumeTimer(timer.id) else sessions.pauseTimer(timer.id)
+    }
+
+    fun remove(timer: CookTimer) = perform { sessions.removeTimer(timer.id) }
 
     fun perform(action: suspend () -> Unit) {
         if (busy) return
@@ -100,28 +124,30 @@ class CookingTimerUi(
             }
         }
     }
+
+    private companion object {
+        const val MAX_SECONDS = 7L * 86400
+    }
 }
 
 @Composable
-fun rememberCookingTimers(recipe: Recipe, manager: TimerManager, initiallyOpen: Boolean): CookingTimerUi {
+fun rememberCookingTimers(recipe: Recipe, sessions: CookSessionStore, initiallyOpen: Boolean): CookingTimerUi {
     val scope = rememberCoroutineScope()
-    val ui = remember(recipe.id, manager) { CookingTimerUi(recipe, manager, scope, initiallyOpen) }
-    val timers = manager.timers.collectAsStateWithLifecycle().value
-    val error by manager.error.collectAsStateWithLifecycle()
-    SideEffect { ui.timers = timers }
-    LaunchedEffect(error) { if (error != null) ui.error = error }
-    val lifecycle = LocalLifecycleOwner.current
-    DisposableEffect(lifecycle) {
-        val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_RESUME) {
-                ui.permissionEpoch++
-                scope.launch { runCatching { manager.restore() }.onFailure { ui.error = "保存的计时器暂时无法恢复，请重试。" } }
-            }
-        }
-        lifecycle.lifecycle.addObserver(observer)
-        onDispose { lifecycle.lifecycle.removeObserver(observer) }
+    val context = LocalContext.current
+    val ui = remember(recipe.id, sessions) {
+        CookingTimerUi(
+            recipe = recipe,
+            sessions = sessions,
+            scope = scope,
+            canNotify = { NotificationManagerCompat.from(context).areNotificationsEnabled() },
+            startService = { context.let(CookTimerService::start) },
+            initiallyOpen = initiallyOpen,
+        )
     }
-    LaunchedEffect(manager) { runCatching { manager.restore() }.onFailure { ui.error = "计时数据暂时无法读取，请重试。" } }
+    val session by sessions.session.collectAsStateWithLifecycle(initialValue = null)
+    SideEffect {
+        ui.timers = session?.takeIf { it.recipeId == recipe.id }?.timers.orEmpty()
+    }
     return ui
 }
 
@@ -137,7 +163,7 @@ fun CookingTimerButton(ui: CookingTimerUi) {
 @Composable
 fun StepTimerSection(ui: CookingTimerUi, step: RecipeStep) {
     val detected = remember(step.text) { StepDurations.parse(step.text) }
-    val timers = ui.timers.filter { it.recipeId == ui.recipe.id && it.stepId == step.id }
+    val timers = ui.timers.filter { it.stepId == step.id }
     if (detected.isNotEmpty() || timers.isNotEmpty()) {
         Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             if (detected.isNotEmpty()) {
@@ -166,18 +192,19 @@ fun StepTimerSection(ui: CookingTimerUi, step: RecipeStep) {
 }
 
 @Composable
-private fun TimerItem(timer: CookingTimer, ui: CookingTimerUi) {
-    var now by remember { mutableLongStateOf(SystemClock.elapsedRealtime()) }
+private fun TimerItem(timer: CookTimer, ui: CookingTimerUi) {
+    var now by remember { mutableLongStateOf(System.currentTimeMillis()) }
     val owner = LocalLifecycleOwner.current
     LaunchedEffect(owner) {
         owner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
             while (true) {
-                now = SystemClock.elapsedRealtime()
+                now = System.currentTimeMillis()
                 delay(500)
             }
         }
     }
-    val left = timer.remaining(System.currentTimeMillis(), now, ui.manager.bootCount())
+    val left = timer.remainingMs(now)
+    val finished = !timer.paused && left <= 0
     Surface(shape = MaterialTheme.shapes.medium, color = MaterialTheme.colorScheme.surfaceContainerLow) {
         Row(Modifier.fillMaxWidth().padding(start = 12.dp), verticalAlignment = Alignment.CenterVertically) {
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -188,41 +215,31 @@ private fun TimerItem(timer: CookingTimer, ui: CookingTimerUi) {
                     overflow = TextOverflow.Ellipsis,
                 )
                 Text(
-                    timer.recipeTitle,
+                    ui.recipe.title,
                     style = MaterialTheme.typography.bodySmall,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
                 Text(
-                    when (timer.status) {
-                        TimerStatus.FINISHED -> "时间到"
-                        TimerStatus.PAUSED -> "已暂停 · ${countdownLabel(left)}"
-                        TimerStatus.RUNNING -> countdownLabel(left)
+                    when {
+                        timer.paused -> "已暂停 · ${countdownLabel(left)}"
+                        finished -> "时间到"
+                        else -> countdownLabel(left)
                     },
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.primary,
                 )
             }
-            if (timer.status != TimerStatus.FINISHED) {
-                IconButton(onClick = {
-                    ui.perform {
-                        if (timer.status ==
-                            TimerStatus.PAUSED
-                        ) {
-                            ui.manager.resume(timer.id)
-                        } else {
-                            ui.manager.pause(timer.id)
-                        }
-                    }
-                }, enabled = !ui.busy) {
+            if (!finished) {
+                IconButton(onClick = { ui.toggle(timer) }, enabled = !ui.busy) {
                     Icon(
-                        if (timer.status == TimerStatus.PAUSED) Icons.Rounded.PlayArrow else Icons.Rounded.Pause,
-                        if (timer.status == TimerStatus.PAUSED) "继续计时" else "暂停计时",
+                        if (timer.paused) Icons.Rounded.PlayArrow else Icons.Rounded.Pause,
+                        if (timer.paused) "继续计时" else "暂停计时",
                     )
                 }
             }
-            IconButton(onClick = { ui.perform { ui.manager.remove(timer.id) } }, enabled = !ui.busy) {
-                Icon(Icons.Rounded.Close, if (timer.status == TimerStatus.FINISHED) "停止提醒" else "取消计时")
+            IconButton(onClick = { ui.remove(timer) }, enabled = !ui.busy) {
+                Icon(Icons.Rounded.Close, if (finished) "停止提醒" else "取消计时")
             }
         }
     }
@@ -233,9 +250,7 @@ fun CookingTimerDialogs(ui: CookingTimerUi) {
     val context = LocalContext.current
     val notifications =
         rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { ui.permissionEpoch++ }
-    val settings =
-        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { ui.permissionEpoch++ }
-    ui.permissionEpoch // Recheck special access when returning from system settings.
+    ui.permissionEpoch // Recheck the notification permission when coming back from settings.
     if (ui.showManager) {
         ModalBottomSheet(onDismissRequest = { ui.showManager = false }) {
             Column(
@@ -252,13 +267,13 @@ fun CookingTimerDialogs(ui: CookingTimerUi) {
                     }
                 }
                 Text(
-                    "系统闹钟负责到点提醒，进程退出不影响已安排的闹钟；重启后恢复。手动强行停止应用或关闭提醒权限后，需要重新打开应用检查计时器。",
+                    "计时由做菜前台服务维持，切到后台或锁屏也会到点提醒；从最近任务里划掉应用会结束本次做菜。",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
-                if (!ui.manager.exactAllowed() || !ui.manager.notificationsAllowed()) {
-                    Text("后台提醒权限未完整开启。", color = MaterialTheme.colorScheme.error)
-                    TextButton(onClick = { ui.needsPermission = true }) { Text("设置提醒权限") }
+                if (!ui.canNotify()) {
+                    Text("没有通知权限，计时到点时不会有提醒。", color = MaterialTheme.colorScheme.error)
+                    TextButton(onClick = { ui.needsPermission = true }) { Text("开启通知") }
                 }
                 if (ui.timers.isEmpty()) Text("还没有计时器。可以从步骤下方快速添加。", style = MaterialTheme.typography.bodyMedium)
                 ui.timers.forEach { TimerItem(it, ui) }
@@ -269,45 +284,30 @@ fun CookingTimerDialogs(ui: CookingTimerUi) {
     if (ui.needsPermission) {
         AlertDialog(
             onDismissRequest = { ui.needsPermission = false },
-            title = { Text("启用计时提醒") },
+            title = { Text("开启计时提醒") },
             text = {
                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Text("通知用于显示倒计时和到点提醒；精确闹钟允许系统在锁屏或应用退出后准时触发。")
+                    Text("通知用于显示倒计时和到点提醒；关掉通知后，计时仍会走完，但不会响铃。")
                     OutlinedButton(onClick = {
                         runCatching {
-                            if (Build.VERSION.SDK_INT >= 33 &&
-                                !ui.manager.notificationsAllowed()
-                            ) {
+                            if (Build.VERSION.SDK_INT >= 33 && !ui.canNotify()) {
                                 notifications.launch(Manifest.permission.POST_NOTIFICATIONS)
                             } else {
-                                settings.launch(
-                                    Intent(
-                                        Settings.ACTION_APP_NOTIFICATION_SETTINGS,
-                                    ).putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName),
+                                context.startActivity(
+                                    Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+                                        .putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName),
                                 )
                             }
                         }.onFailure { ui.error = "无法打开通知设置，请在系统设置中开启。" }
-                    }) { Text(if (ui.manager.notificationsAllowed()) "通知已开启" else "开启通知") }
+                    }) { Text(if (ui.canNotify()) "通知已开启" else "开启通知") }
                     TextButton(onClick = {
-                        settings.launch(
-                            Intent(
-                                Settings.ACTION_APP_NOTIFICATION_SETTINGS,
-                            ).putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName),
-                        )
+                        runCatching {
+                            context.startActivity(
+                                Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+                                    .putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName),
+                            )
+                        }.onFailure { ui.error = "无法打开通知设置。" }
                     }) { Text("系统通知设置") }
-                    if (Build.VERSION.SDK_INT >= 31) {
-                        OutlinedButton(onClick = {
-                            runCatching {
-                                settings.launch(
-                                    Intent(
-                                        Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM,
-                                        "package:${context.packageName}".toUri(),
-                                    ),
-                                )
-                            }
-                                .onFailure { ui.error = "无法打开精确闹钟设置。" }
-                        }) { Text(if (ui.manager.exactAllowed()) "精确闹钟已开启" else "允许精确闹钟") }
-                    }
                     ui.error?.let { Text(it, color = MaterialTheme.colorScheme.error) }
                 }
             },
@@ -315,7 +315,7 @@ fun CookingTimerDialogs(ui: CookingTimerUi) {
                 TextButton(onClick = {
                     val draft = ui.draft
                     if (draft != null) ui.start(draft) else ui.needsPermission = false
-                }, enabled = ui.manager.exactAllowed() && ui.manager.notificationsAllowed() && !ui.busy) {
+                }, enabled = ui.canNotify() && !ui.busy) {
                     Text(if (ui.draft != null) "开始计时" else "完成")
                 }
             },

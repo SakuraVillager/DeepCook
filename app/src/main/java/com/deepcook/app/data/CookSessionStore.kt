@@ -30,7 +30,26 @@ interface CookSessionStore {
 
     suspend fun setStep(recipeId: String, index: Int)
 
+    /** A whole-minute timer, the shape the voice command 「计时十分钟」 produces. */
     suspend fun addTimer(recipeId: String, minutes: Int, now: Long = System.currentTimeMillis()): CookTimer
+
+    /**
+     * A timer with an arbitrary length and an optional step, used by the reader's per-step chips.
+     * [label] is what the notification and the list row show instead of "N 分钟".
+     */
+    suspend fun addTimer(
+        recipeId: String,
+        seconds: Long,
+        label: String,
+        stepId: String?,
+        now: Long = System.currentTimeMillis(),
+    ): CookTimer
+
+    /** Freezes the countdown and remembers what was left; a paused timer never rings. */
+    suspend fun pauseTimer(timerId: String, now: Long = System.currentTimeMillis())
+
+    /** Restarts a paused timer from the value it was paused at. */
+    suspend fun resumeTimer(timerId: String, now: Long = System.currentTimeMillis())
 
     suspend fun removeTimer(timerId: String)
 
@@ -80,12 +99,22 @@ class LocalCookSessionStore(private val store: DataStore<CookSessionFile>) : Coo
         }
     }
 
-    override suspend fun addTimer(recipeId: String, minutes: Int, now: Long): CookTimer {
+    override suspend fun addTimer(recipeId: String, minutes: Int, now: Long): CookTimer =
+        addTimer(recipeId, minutes * 60L, "$minutes 分钟", null, now)
+
+    override suspend fun addTimer(
+        recipeId: String,
+        seconds: Long,
+        label: String,
+        stepId: String?,
+        now: Long,
+    ): CookTimer {
         val timer = CookTimer(
             id = UUID.randomUUID().toString(),
-            label = "$minutes 分钟",
-            endsAt = now + minutes * 60_000L,
-            minutes = minutes,
+            label = label.ifBlank { "${(seconds / 60).coerceAtLeast(1)} 分钟" },
+            endsAt = now + seconds * 1000L,
+            minutes = ((seconds + 59) / 60).toInt().coerceAtLeast(1),
+            stepId = stepId,
         )
         store.updateData { file ->
             val current = file.session
@@ -96,6 +125,41 @@ class LocalCookSessionStore(private val store: DataStore<CookSessionFile>) : Coo
             }
         }
         return timer
+    }
+
+    override suspend fun pauseTimer(timerId: String, now: Long) {
+        store.updateData { file ->
+            val current = file.session ?: return@updateData file
+            file.copy(
+                session = current.copy(
+                    timers = current.timers.map { timer ->
+                        if (timer.id != timerId || timer.paused) {
+                            timer
+                        } else {
+                            timer.copy(pausedRemainingMs = (timer.endsAt - now).coerceAtLeast(0))
+                        }
+                    },
+                ),
+            )
+        }
+    }
+
+    override suspend fun resumeTimer(timerId: String, now: Long) {
+        store.updateData { file ->
+            val current = file.session ?: return@updateData file
+            file.copy(
+                session = current.copy(
+                    timers = current.timers.map { timer ->
+                        val left = timer.pausedRemainingMs
+                        if (timer.id != timerId || left == null) {
+                            timer
+                        } else {
+                            timer.copy(endsAt = now + left, pausedRemainingMs = null)
+                        }
+                    },
+                ),
+            )
+        }
     }
 
     override suspend fun removeTimer(timerId: String) {

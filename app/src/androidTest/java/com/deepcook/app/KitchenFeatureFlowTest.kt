@@ -17,11 +17,10 @@ class KitchenFeatureFlowTest {
     private val container get() = (compose.activity.application as DeepCookApplication).container
 
     @Before fun prepare() {
-        grantTimerPermissions(compose.activity)
+        grantNotificationPermission(compose.activity)
         container.signInForTest()
         runBlocking {
-            container.timers.restore()
-            container.timers.timers.value.forEach { container.timers.remove(it.id) }
+            container.cookSessions.clear()
             container.userData.resetPreferences()
             container.userData.updateFoodSetup { com.deepcook.app.core.model.FoodSetup(completed = true) }
             kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
@@ -129,7 +128,7 @@ class KitchenFeatureFlowTest {
             }
         } catch (failure: ComposeTimeoutException) {
             throw AssertionError(
-                "timers=${container.timers.timers.value}; error=${container.timers.error.value}\n" +
+                "session=${runBlocking { container.cookSessions.session.first() }}\n" +
                     compose.onAllNodes(isRoot()).printToString(),
                 failure,
             )
@@ -140,7 +139,7 @@ class KitchenFeatureFlowTest {
         }
         compose.onNodeWithText("已暂停", substring = true).assertIsDisplayed()
         compose.activityRule.scenario.recreate()
-        runBlocking { assertEquals(1, container.timers.timers.value.size) }
+        runBlocking { assertEquals(1, container.cookSessions.session.first()?.timers?.size) }
         compose.onNodeWithContentDescription("计时器").performClick()
         compose.onNodeWithText("已暂停", substring = true).assertIsDisplayed()
         compose.onNodeWithContentDescription("继续计时").performClick()

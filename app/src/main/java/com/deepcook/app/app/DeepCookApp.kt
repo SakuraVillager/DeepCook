@@ -335,7 +335,7 @@ fun DeepCookApp(
                                 recipe,
                                 args.initialStepId,
                                 state.user.preferences,
-                                container.timers,
+                                container.cookSessions,
                                 args.showTimers,
                             ) { step ->
                                 nav.previousBackStackEntry?.savedStateHandle?.set("readStep", step)

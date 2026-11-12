@@ -43,7 +43,7 @@ import androidx.lifecycle.withResumed
 import com.deepcook.app.R
 import com.deepcook.app.core.designsystem.*
 import com.deepcook.app.core.model.*
-import com.deepcook.app.data.TimerManager
+import com.deepcook.app.data.CookSessionStore
 import com.deepcook.app.feature.timer.*
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
@@ -488,7 +488,7 @@ fun ReaderScreen(
     recipe: Recipe,
     initialStep: String?,
     preferences: UserPreferences,
-    timerManager: TimerManager,
+    sessions: CookSessionStore,
     showTimers: Boolean = false,
     onBack: (String) -> Unit,
 ) {
@@ -497,7 +497,7 @@ fun ReaderScreen(
     }
     var showDirectory by remember { mutableStateOf(false) }
     val step = recipe.steps[index.coerceIn(recipe.steps.indices)]
-    val timerUi = rememberCookingTimers(recipe, timerManager, showTimers)
+    val timerUi = rememberCookingTimers(recipe, sessions, showTimers)
     androidx.activity.compose.BackHandler { onBack(step.id) }
     KeepAwake(preferences.keepScreenOn)
     Scaffold(

@@ -47,6 +47,17 @@ class AvatarTransactionTest {
         },
         covers = CoverStore(ApplicationProvider.getApplicationContext()),
         avatars = photos,
+        aiOverlays = object : AiOverlayStore {
+            override val entries = MutableStateFlow(emptyMap<String, AiOverlay>())
+            override suspend fun get(recipeId: String): AiOverlay? = null
+            override suspend fun put(overlay: AiOverlay) {}
+            override suspend fun clear() {}
+        },
+        coverOverrides = object : CoverOverrides {
+            override val entries = MutableStateFlow(emptyMap<String, String>())
+            override suspend fun put(recipeId: String, cover: String) {}
+            override suspend fun remove(recipeId: String) {}
+        },
     )
 
     @Test fun failedProfileWriteRemovesOnlyNewFileAndKeepsOriginalAvatar() = runBlocking {

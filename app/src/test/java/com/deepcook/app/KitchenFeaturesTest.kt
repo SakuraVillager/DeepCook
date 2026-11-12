@@ -37,13 +37,15 @@ class KitchenFeaturesTest {
         assertTrue(StepDurations.parse("20 minced vegetables").isEmpty())
     }
 
-    @Test fun elapsedClockSurvivesWallClockChangesAndRebootUsesSavedWallDeadline() {
-        val timer = CookingTimer("a", "r", "菜", null, "测试", 60_000, 160_000, 70_000, 1, 60_000, TimerStatus.RUNNING)
-        assertEquals(50_000L, timer.remaining(999_999, 20_000, 1))
-        assertEquals(40_000L, timer.remaining(120_000, 1_000, 2))
-        assertEquals(0L, timer.remaining(170_000, 1_000, 2))
-        assertEquals(60_000L, timer.copy(status = TimerStatus.PAUSED).remaining(999_999, 999_999, 2))
-        assertEquals(0L, timer.copy(status = TimerStatus.FINISHED).remaining(0, 0, 1))
+    @Test fun cookTimerKeepsWallDeadlineAndFreezesWhilePaused() {
+        val running = CookTimer(id = "a", label = "测试", endsAt = 160_000, minutes = 1)
+        assertEquals(50_000L, running.remainingMs(110_000))
+        assertEquals(0L, running.remainingMs(170_000))
+        assertFalse(running.paused)
+        val paused = running.copy(pausedRemainingMs = 40_000)
+        assertTrue(paused.paused)
+        // A paused timer ignores the wall clock, so a night in the background cannot eat it.
+        assertEquals(40_000L, paused.remainingMs(999_999))
     }
 
     @Test fun countdownAndCompactFavoriteCountsRemainReadable() {

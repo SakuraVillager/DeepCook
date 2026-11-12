@@ -2,18 +2,12 @@ package com.deepcook.app
 
 import android.app.Application
 import com.deepcook.app.data.AppContainer
-import kotlinx.coroutines.launch
 
+/**
+ * Timers need no restore step: [com.deepcook.app.core.model.CookTimer.endsAt] is wall-clock time,
+ * so a deadline saved before the process died or the phone rebooted is still correct when the
+ * cooking screen or the foreground service reads it back.
+ */
 class DeepCookApplication : Application() {
     val container by lazy { AppContainer(this) }
-
-    override fun onCreate() {
-        super.onCreate()
-        kotlinx.coroutines.CoroutineScope(
-            kotlinx.coroutines.SupervisorJob() + kotlinx.coroutines.Dispatchers.IO,
-        ).launch {
-            runCatching { container.timers.restore() }
-                .onFailure { android.util.Log.e("CookingTimer", "Unable to restore saved timers", it) }
-        }
-    }
 }

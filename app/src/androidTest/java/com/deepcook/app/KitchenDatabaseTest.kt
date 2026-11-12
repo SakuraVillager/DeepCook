@@ -1,10 +1,8 @@
 package com.deepcook.app
 
-import android.app.AlarmManager
 import android.content.Context
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.deepcook.app.core.model.TimerStatus
 import com.deepcook.app.data.*
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -93,60 +91,13 @@ class KitchenDatabaseTest {
         }
     }
 
-    @Test fun multipleTimerPauseResumeAndRestorationUseSavedDeadlines() = runBlocking {
-        grantTimerPermissions(context)
-        val name = "timer-test-${UUID.randomUUID()}.db"
-        val database = KitchenDatabase(context, name)
-        val manager = TimerManager(context, database)
-        try {
-            val recipe = AssetRecipeRepository(context).recipes().first()
-            manager.start(recipe, recipe.steps.first().id, "计时 A", 120)
-            manager.start(recipe, null, "计时 B", 180)
-            assertEquals(2, manager.timers.value.size)
-            val timer = manager.timers.value.first()
-            assertNotNull(context.getSystemService(AlarmManager::class.java).nextAlarmClock)
-            manager.deliver(timer.id, timer.revision)
-            assertEquals(TimerStatus.RUNNING, manager.timers.value.first { it.id == timer.id }.status)
-            manager.pause(timer.id)
-            val paused = manager.timers.value.first { it.id == timer.id }
-            assertEquals(TimerStatus.PAUSED, paused.status)
-            assertTrue(paused.pausedMs in 1..120_000)
-            val reopened = TimerManager(context, database)
-            reopened.restore()
-            assertEquals(2, reopened.timers.value.size)
-            assertEquals(paused.pausedMs, reopened.timers.value.first { it.id == timer.id }.pausedMs)
-            reopened.resume(timer.id)
-            val resumed = reopened.timers.value.first { it.id == timer.id }
-            reopened.deliver(timer.id, timer.revision) // A stale delivery must not finish a resumed timer.
-            assertEquals(TimerStatus.RUNNING, reopened.timers.value.first { it.id == timer.id }.status)
-            assertTrue(resumed.revision > timer.revision)
-            reopened.timers.value.forEach { reopened.remove(it.id) }
-            assertTrue(reopened.timers.value.isEmpty())
-        } finally {
-            runCatching {
-                manager.restore()
-                manager.timers.value.forEach { manager.remove(it.id) }
-            }
-            database.close()
-            context.deleteDatabase(name)
-        }
-    }
 }
 
-internal fun grantTimerPermissions(context: Context) {
+internal fun grantNotificationPermission(context: Context) {
     val automation = InstrumentationRegistry.getInstrumentation().uiAutomation
     if (android.os.Build.VERSION.SDK_INT >=
         33
     ) {
         automation.grantRuntimePermission(context.packageName, android.Manifest.permission.POST_NOTIFICATIONS)
-    }
-    if (android.os.Build.VERSION.SDK_INT >=
-        31
-    ) {
-        automation.executeShellCommand(
-            "appops set ${context.packageName} SCHEDULE_EXACT_ALARM allow",
-        ).use { descriptor ->
-            java.io.FileInputStream(descriptor.fileDescriptor).use { it.readBytes() }
-        }
     }
 }

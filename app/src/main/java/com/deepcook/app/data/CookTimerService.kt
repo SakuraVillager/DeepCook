@@ -35,6 +35,9 @@ import kotlinx.coroutines.launch
 class CookTimerService : Service() {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     private val ringJobs = mutableMapOf<String, Job>()
+
+    /** Deadline each running job was scheduled for, so a resume reschedules instead of ghosting. */
+    private val scheduledEnds = mutableMapOf<String, Long>()
     private lateinit var sessions: CookSessionStore
     private lateinit var notifications: NotificationManager
     private var current: CookSession? = null
@@ -73,23 +76,37 @@ class CookTimerService : Service() {
         current = session
         if (session == null) {
             ringJobs.keys.toList().forEach { id -> ringJobs.remove(id)?.cancel() }
+            scheduledEnds.clear()
             stopForeground(STOP_FOREGROUND_REMOVE)
             stopSelf()
             return
         }
-        val live = session.timers.associateBy { it.id }
-        ringJobs.keys.filterNot { it in live }.forEach { id -> ringJobs.remove(id)?.cancel() }
-        live.values.filterNot { it.id in ringJobs }.forEach(::schedule)
+        // A paused timer must not ring; a resumed one has a new deadline. Both need a fresh job,
+        // which is why the scheduled deadline is compared and not just the id.
+        val live = session.timers.filterNot { it.paused }.associateBy { it.id }
+        ringJobs.keys.filterNot { it in live }.forEach { id ->
+            ringJobs.remove(id)?.cancel()
+            scheduledEnds.remove(id)
+        }
+        live.values.forEach { timer ->
+            val scheduled = scheduledEnds[timer.id]
+            if (scheduled == null || scheduled != timer.endsAt) {
+                ringJobs.remove(timer.id)?.cancel()
+                schedule(timer)
+            }
+        }
         notifications.notify(FOREGROUND_ID, sessionNotification(session))
     }
 
     private fun schedule(timer: CookTimer) {
+        scheduledEnds[timer.id] = timer.endsAt
         ringJobs[timer.id] = scope.launch {
             val wait = timer.endsAt - System.currentTimeMillis()
             if (wait > 0) delay(wait)
             notifications.notify(timer.id.hashCode(), alarmNotification(timer))
             // Drop the entry before the store emits, so applySession does not cancel this job.
             ringJobs.remove(timer.id)
+            scheduledEnds.remove(timer.id)
             runCatching { sessions.removeTimer(timer.id) }
         }
     }
@@ -108,9 +125,12 @@ class CookTimerService : Service() {
         }
         val step = "第 ${session.stepIndex + 1} 步"
         val next = session.pendingTimers(System.currentTimeMillis()).firstOrNull()
+        val paused = session.timers.count { it.paused }
         builder.setContentTitle(session.recipeTitle.ifBlank { "正在做菜" })
         if (next == null) {
-            builder.setContentText("$step · 没有计时器")
+            builder.setContentText(
+                if (paused > 0) "$step · $paused 个计时已暂停" else "$step · 没有计时器",
+            )
         } else {
             builder.setContentText("$step · ${session.timers.size} 个计时器")
                 .setWhen(next.endsAt)

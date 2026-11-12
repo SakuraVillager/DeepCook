@@ -16,7 +16,7 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import java.util.UUID
 
-/** Separate from the existing DataStores: social examples and timer deadlines are transactional. */
+/** Separate from the existing DataStores: ratings, posts and favourite examples are transactional. */
 class KitchenDatabase(private val context: Context, name: String = "kitchen.db") :
     SQLiteOpenHelper(
         context,
@@ -40,7 +40,6 @@ class KitchenDatabase(private val context: Context, name: String = "kitchen.db")
             "CREATE TABLE posts(id TEXT PRIMARY KEY, recipe_id TEXT NOT NULL, submission INTEGER NOT NULL, text TEXT NOT NULL, photo TEXT, author TEXT NOT NULL, sample INTEGER NOT NULL, created_at INTEGER NOT NULL)",
         )
         db.execSQL("CREATE INDEX posts_recipe ON posts(recipe_id,created_at DESC)")
-        db.execSQL("CREATE TABLE timers(id TEXT PRIMARY KEY, payload TEXT NOT NULL)")
         // Local fixtures can be replaced by a content database. No food facts are inferred.
         val recipes = context.assets.open("recipes.json").bufferedReader().use {
             json.decodeFromString<List<Recipe>>(it.readText())
