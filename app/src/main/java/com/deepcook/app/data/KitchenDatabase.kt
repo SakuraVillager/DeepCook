@@ -31,6 +31,16 @@ class KitchenDatabase(private val context: Context, name: String = "kitchen.db")
         setWriteAheadLoggingEnabled(true)
     }
 
+    private val nutritionCatalog by lazy {
+        NutritionCatalog.decode(context.assets.open("nutrition_estimates.json").bufferedReader().use { it.readText() })
+    }
+    private val bundledRecipes by lazy {
+        context.assets.open("recipes.json").bufferedReader().use {
+            json.decodeFromString<List<Recipe>>(it.readText()).associateBy { recipe -> recipe.id }
+        }
+    }
+    fun nutritionFor(id: String): Nutrition? = bundledRecipes[id]?.let(nutritionCatalog::estimate)
+
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL("CREATE TABLE recipe_social(recipe_id TEXT PRIMARY KEY, favorites INTEGER NOT NULL, nutrition TEXT)")
         db.execSQL(
@@ -46,7 +56,7 @@ class KitchenDatabase(private val context: Context, name: String = "kitchen.db")
         }
         recipes.forEachIndexed { index, recipe ->
             val example = index < 12 || recipe.featured
-            val nutrition = if (example) Nutrition(480, 22.0, 26.0, 44.0, 3.5, 650) else null
+            val nutrition = nutritionCatalog.estimate(recipe)
             db.insertOrThrow(
                 "recipe_social",
                 null,
@@ -158,12 +168,11 @@ class KitchenStore(val database: KitchenDatabase) : KitchenCommunity {
 
     private fun readCommunity(id: String): RecipeCommunity {
         val db = database.readableDatabase
-        var nutrition: Nutrition? = null
+        val nutrition = database.nutritionFor(id)
         var favorites = 0
         db.rawQuery("SELECT favorites,nutrition FROM recipe_social WHERE recipe_id=?", arrayOf(id)).use {
             if (it.moveToFirst()) {
                 favorites = it.getInt(0)
-                nutrition = it.getString(1)?.let { value -> json.decodeFromString<Nutrition>(value) }
             }
         }
         var own: Int? = null

@@ -1,0 +1,788 @@
+{
+  "schema": 1,
+  "source": {
+    "title": "CoFID 2021 — Public Health England",
+    "url": "https://www.gov.uk/government/publications/composition-of-foods-integrated-dataset-cofid",
+    "downloadUrl": "https://assets.publishing.service.gov.uk/media/60538b91e90e07527df82ae4/McCance_Widdowsons_Composition_of_Foods_Integrated_Dataset_2021..xlsx",
+    "sha256": "436e9445ef2adb2a75f3d7edd51302de3adad25385f9795fc94ba58bd030e97d",
+    "licence": "Open Government Licence v3.0",
+    "licenceUrl": "https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/",
+    "unit": "per100g; alcoholic drinks per100ml",
+    "additionalSource": {
+      "title": "USDA FoodData Central SR Legacy, April 2018",
+      "url": "https://fdc.nal.usda.gov/download-datasets/",
+      "downloadUrl": "https://fdc.nal.usda.gov/fdc-datasets/FoodData_Central_sr_legacy_food_csv_2018-04.zip",
+      "sha256": "b80817294b8850530aaedf2e515c02593b1824f763a0ff356e5c2081643e6fd0",
+      "licence": "Public domain"
+    }
+  },
+  "recipes": {
+    "silky-eggs": {
+      "title": "葱香滑蛋",
+      "recipeKey": [
+        "无",
+        "鸡蛋",
+        "4 颗",
+        "牛奶",
+        "30ml",
+        "食用油",
+        "10ml"
+      ],
+      "values": {
+        "calories": 339,
+        "fat": 26.9,
+        "protein": 23.2,
+        "carbs": 1.4,
+        "fiber": 0.0,
+        "sodium": 284,
+        "basis": "recipe",
+        "servings": null,
+        "note": "营养数据为大致估算，仅供饮食参考；实际数值随食材、份量和烹饪方式变化。"
+      },
+      "foodCodes": [
+        "12-596",
+        "12-937",
+        "17-041"
+      ],
+      "assumptions": {
+        "volumeApproximation": true,
+        "standardPieceWeight": true,
+        "rangeMidpoint": false,
+        "excludedIngredients": []
+      }
+    },
+    "htc-8d02690da7199d2d": {
+      "title": "凉拌豆腐",
+      "recipeKey": [
+        "1 人份",
+        "豆腐",
+        "250 g （约 1 块常见大小的豆腐）",
+        "小葱",
+        "10 g",
+        "大蒜",
+        "2-3 瓣",
+        "生抽",
+        "15 ml",
+        "香油",
+        "5 ml",
+        "醋",
+        "5 ml（可选）",
+        "白糖",
+        "2 g（可选）",
+        "辣椒油",
+        "5 ml（可选）"
+      ],
+      "values": {
+        "calories": 249,
+        "fat": 15.6,
+        "protein": 21.5,
+        "carbs": 6.0,
+        "fiber": null,
+        "sodium": 836,
+        "basis": "serving",
+        "servings": 1.0,
+        "note": "营养数据为大致估算，仅供饮食参考；实际数值随食材、份量和烹饪方式变化。"
+      },
+      "foodCodes": [
+        "13-244",
+        "13-352",
+        "13-570",
+        "17-043",
+        "17-721"
+      ],
+      "assumptions": {
+        "volumeApproximation": true,
+        "standardPieceWeight": true,
+        "rangeMidpoint": true,
+        "excludedIngredients": [
+          "醋",
+          "白糖",
+          "辣椒油"
+        ]
+      }
+    },
+    "htc-a4fb0751e1704362": {
+      "title": "凉拌金针菇",
+      "recipeKey": [
+        "1 人份",
+        "金针菇",
+        "150 g （约 1 小包）",
+        "小葱",
+        "5 g",
+        "大蒜",
+        "2 瓣",
+        "生抽",
+        "15 ml",
+        "醋",
+        "10 ml",
+        "白糖",
+        "3 g（可选）",
+        "香油",
+        "5 ml（可选）",
+        "辣椒油",
+        "5 ml（可选）"
+      ],
+      "values": {
+        "calories": 77,
+        "fat": 0.5,
+        "protein": 5.1,
+        "carbs": 15.6,
+        "fiber": null,
+        "sodium": 831,
+        "basis": "serving",
+        "servings": 1.0,
+        "note": "营养数据为大致估算，仅供饮食参考；实际数值随食材、份量和烹饪方式变化。"
+      },
+      "foodCodes": [
+        "13-244",
+        "13-352",
+        "17-339",
+        "17-721",
+        "usda-169382"
+      ],
+      "assumptions": {
+        "volumeApproximation": true,
+        "standardPieceWeight": true,
+        "rangeMidpoint": false,
+        "excludedIngredients": [
+          "白糖",
+          "香油",
+          "辣椒油"
+        ]
+      }
+    },
+    "htc-e53cc385a1a0a9b7": {
+      "title": "反沙芋头",
+      "recipeKey": [
+        "无",
+        "荔浦芋头",
+        "200g",
+        "白砂糖",
+        "30g",
+        "水",
+        "15g",
+        "葱",
+        "无"
+      ],
+      "values": {
+        "calories": 342,
+        "fat": 0.4,
+        "protein": 3.0,
+        "carbs": 84.4,
+        "fiber": 8.2,
+        "sodium": 24,
+        "basis": "recipe",
+        "servings": null,
+        "note": "营养数据为大致估算，仅供饮食参考；实际数值随食材、份量和烹饪方式变化。"
+      },
+      "foodCodes": [
+        "17-063",
+        "usda-169308"
+      ],
+      "assumptions": {
+        "volumeApproximation": false,
+        "standardPieceWeight": false,
+        "rangeMidpoint": false,
+        "excludedIngredients": [
+          "葱"
+        ]
+      }
+    },
+    "htc-e0ef10c6e905370a": {
+      "title": "微波炉荷包蛋",
+      "recipeKey": [
+        "无",
+        "鸡蛋",
+        "2 个",
+        "饮用水",
+        "35ml",
+        "芝麻油",
+        "3ml",
+        "盐",
+        "0.8g"
+      ],
+      "values": {
+        "calories": 142,
+        "fat": 10.9,
+        "protein": 11.1,
+        "carbs": 0.0,
+        "fiber": 0.0,
+        "sodium": 450,
+        "basis": "recipe",
+        "servings": null,
+        "note": "营养数据为大致估算，仅供饮食参考；实际数值随食材、份量和烹饪方式变化。"
+      },
+      "foodCodes": [
+        "12-937",
+        "17-043",
+        "17-367"
+      ],
+      "assumptions": {
+        "volumeApproximation": true,
+        "standardPieceWeight": true,
+        "rangeMidpoint": false,
+        "excludedIngredients": []
+      }
+    },
+    "htc-ecae5220671c39af": {
+      "title": "微波炉鸡蛋羹",
+      "recipeKey": [
+        "1 人份",
+        "鸡蛋",
+        "2 个 * 份数",
+        "水",
+        "200ml * 份数",
+        "虾皮",
+        "10 个 * 份数（可选）",
+        "葱",
+        "5g *份数（可选）",
+        "盐",
+        "3g * 份数",
+        "酱油（可选）",
+        "无",
+        "芝麻油（香油）",
+        "1ml（可选）"
+      ],
+      "values": {
+        "calories": 115,
+        "fat": 7.9,
+        "protein": 11.1,
+        "carbs": 0.0,
+        "fiber": 0.0,
+        "sodium": 1315,
+        "basis": "serving",
+        "servings": 1.0,
+        "note": "营养数据为大致估算，仅供饮食参考；实际数值随食材、份量和烹饪方式变化。"
+      },
+      "foodCodes": [
+        "12-937",
+        "17-367"
+      ],
+      "assumptions": {
+        "volumeApproximation": false,
+        "standardPieceWeight": true,
+        "rangeMidpoint": false,
+        "excludedIngredients": [
+          "虾皮",
+          "葱",
+          "酱油（可选）",
+          "芝麻油（香油）"
+        ]
+      }
+    },
+    "htc-4378c05c5f7be12d": {
+      "title": "拔丝土豆",
+      "recipeKey": [
+        "无",
+        "土豆",
+        "2 个",
+        "食用油",
+        "300 ml （土豆能浮在油上面即可）",
+        "淀粉",
+        "30 g",
+        "白砂糖",
+        "120 g （要多放糖，这是为了在土豆上面裹上一层厚厚的糖浆，从而产生拔丝的效果）",
+        "水",
+        "100 ml",
+        "芝麻",
+        "5 g"
+      ],
+      "values": {
+        "calories": 3655,
+        "fat": 303.2,
+        "protein": 9.2,
+        "carbs": 237.1,
+        "fiber": null,
+        "sodium": 19,
+        "basis": "recipe",
+        "servings": null,
+        "note": "营养数据为大致估算，仅供饮食参考；实际数值随食材、份量和烹饪方式变化。"
+      },
+      "foodCodes": [
+        "11-1045",
+        "13-489",
+        "14-844",
+        "17-041",
+        "17-063"
+      ],
+      "assumptions": {
+        "volumeApproximation": true,
+        "standardPieceWeight": true,
+        "rangeMidpoint": false,
+        "excludedIngredients": []
+      }
+    },
+    "htc-bb2673fc51ecaad3": {
+      "title": "朱雀汤",
+      "recipeKey": [
+        "1 人份",
+        "鸡蛋",
+        "一个",
+        "水",
+        "500ml",
+        "白糖（根据个人口味调整）",
+        "20 克",
+        "香油",
+        "2ml"
+      ],
+      "values": {
+        "calories": 154,
+        "fat": 6.0,
+        "protein": 5.5,
+        "carbs": 21.0,
+        "fiber": 0.0,
+        "sodium": 69,
+        "basis": "serving",
+        "servings": 1.0,
+        "note": "营养数据为大致估算，仅供饮食参考；实际数值随食材、份量和烹饪方式变化。"
+      },
+      "foodCodes": [
+        "12-937",
+        "17-043",
+        "17-063"
+      ],
+      "assumptions": {
+        "volumeApproximation": true,
+        "standardPieceWeight": true,
+        "rangeMidpoint": false,
+        "excludedIngredients": []
+      }
+    },
+    "htc-11b4b5d7abe0bafa": {
+      "title": "洋葱炒鸡蛋",
+      "recipeKey": [
+        "无",
+        "鸡蛋",
+        "2 个",
+        "洋葱",
+        "50 g",
+        "食用油",
+        "50 ml",
+        "盐",
+        "2 g",
+        "葱",
+        "半 根",
+        "料酒",
+        "2 ml"
+      ],
+      "values": {
+        "calories": 582,
+        "fat": 57.9,
+        "protein": 11.6,
+        "carbs": 4.0,
+        "fiber": 1.1,
+        "sodium": null,
+        "basis": "recipe",
+        "servings": null,
+        "note": "营养数据为大致估算，仅供饮食参考；实际数值随食材、份量和烹饪方式变化。"
+      },
+      "foodCodes": [
+        "12-937",
+        "13-499",
+        "17-041",
+        "17-367"
+      ],
+      "assumptions": {
+        "volumeApproximation": true,
+        "standardPieceWeight": true,
+        "rangeMidpoint": false,
+        "excludedIngredients": [
+          "葱",
+          "料酒"
+        ]
+      }
+    },
+    "htc-d1ede91e3649f27a": {
+      "title": "清蒸南瓜",
+      "recipeKey": [
+        "1-2 人份",
+        "南瓜",
+        "300 g",
+        "饮用水",
+        "1000 ml （用于蒸锅）"
+      ],
+      "values": {
+        "calories": 26,
+        "fat": 0.4,
+        "protein": 1.4,
+        "carbs": 4.4,
+        "fiber": null,
+        "sodium": 0,
+        "basis": "serving",
+        "servings": 1.5,
+        "note": "营养数据为大致估算，仅供饮食参考；实际数值随食材、份量和烹饪方式变化。"
+      },
+      "foodCodes": [
+        "13-326"
+      ],
+      "assumptions": {
+        "volumeApproximation": false,
+        "standardPieceWeight": false,
+        "rangeMidpoint": false,
+        "excludedIngredients": []
+      }
+    },
+    "htc-f26c5646a21a3d7e": {
+      "title": "糖醋汁",
+      "recipeKey": [
+        "无",
+        "清水",
+        "50ml)",
+        "生抽",
+        "40ml)",
+        "白糖",
+        "30g)",
+        "白醋",
+        "20ml)",
+        "料酒",
+        "10ml)"
+      ],
+      "values": {
+        "calories": 154,
+        "fat": 0.0,
+        "protein": 1.3,
+        "carbs": 38.8,
+        "fiber": 0.0,
+        "sodium": null,
+        "basis": "recipe",
+        "servings": null,
+        "note": "营养数据为大致估算，仅供饮食参考；实际数值随食材、份量和烹饪方式变化。"
+      },
+      "foodCodes": [
+        "17-063",
+        "17-339",
+        "17-721"
+      ],
+      "assumptions": {
+        "volumeApproximation": true,
+        "standardPieceWeight": false,
+        "rangeMidpoint": false,
+        "excludedIngredients": [
+          "料酒"
+        ]
+      }
+    },
+    "htc-20f6144a04ec886a": {
+      "title": "菠菜炒鸡蛋",
+      "recipeKey": [
+        "无",
+        "菠菜",
+        "350g",
+        "鸡蛋",
+        "2 个",
+        "食用油",
+        "15ml",
+        "食用盐",
+        "5g"
+      ],
+      "values": {
+        "calories": 338,
+        "fat": 25.7,
+        "protein": 20.9,
+        "carbs": 5.6,
+        "fiber": null,
+        "sodium": 2591,
+        "basis": "recipe",
+        "servings": null,
+        "note": "营养数据为大致估算，仅供饮食参考；实际数值随食材、份量和烹饪方式变化。"
+      },
+      "foodCodes": [
+        "12-937",
+        "13-572",
+        "17-041",
+        "17-367"
+      ],
+      "assumptions": {
+        "volumeApproximation": true,
+        "standardPieceWeight": true,
+        "rangeMidpoint": false,
+        "excludedIngredients": []
+      }
+    },
+    "htc-e1c93933b3fdd167": {
+      "title": "蔗糖糖浆",
+      "recipeKey": [
+        "无",
+        "水",
+        "100 克",
+        "白砂糖",
+        "100 克"
+      ],
+      "values": {
+        "calories": 394,
+        "fat": 0.0,
+        "protein": 0.0,
+        "carbs": 105.0,
+        "fiber": 0.0,
+        "sodium": 5,
+        "basis": "recipe",
+        "servings": null,
+        "note": "营养数据为大致估算，仅供饮食参考；实际数值随食材、份量和烹饪方式变化。"
+      },
+      "foodCodes": [
+        "17-063"
+      ],
+      "assumptions": {
+        "volumeApproximation": false,
+        "standardPieceWeight": false,
+        "rangeMidpoint": false,
+        "excludedIngredients": []
+      }
+    },
+    "htc-322c053e9c0d5664": {
+      "title": "虎皮青椒",
+      "recipeKey": [
+        "无",
+        "青椒",
+        "5 个，长度在 10-15cm 的最为合适",
+        "大蒜",
+        "2-3 瓣",
+        "油",
+        "20ml",
+        "白糖",
+        "15g",
+        "生抽",
+        "15ml",
+        "香醋",
+        "15ml",
+        "盐",
+        "4g"
+      ],
+      "values": {
+        "calories": 351,
+        "fat": 21.8,
+        "protein": 5.9,
+        "carbs": 35.2,
+        "fiber": null,
+        "sodium": 2423,
+        "basis": "recipe",
+        "servings": null,
+        "note": "营养数据为大致估算，仅供饮食参考；实际数值随食材、份量和烹饪方式变化。"
+      },
+      "foodCodes": [
+        "13-244",
+        "13-318",
+        "17-041",
+        "17-063",
+        "17-339",
+        "17-367",
+        "17-721"
+      ],
+      "assumptions": {
+        "volumeApproximation": true,
+        "standardPieceWeight": true,
+        "rangeMidpoint": true,
+        "excludedIngredients": []
+      }
+    },
+    "htc-9aafc1145d54a0f4": {
+      "title": "蚝油生菜",
+      "recipeKey": [
+        "无",
+        "生菜",
+        "1 棵( 200 g ± 50 )",
+        "蚝油",
+        "6-8 ml",
+        "大蒜",
+        "4-5 瓣（做成蒜泥或切碎）",
+        "生抽",
+        "6 ml",
+        "盐",
+        "0.5 g",
+        "白糖",
+        "1 g",
+        "食用油",
+        "5-8 ml"
+      ],
+      "values": {
+        "calories": 106,
+        "fat": 6.8,
+        "protein": 3.7,
+        "carbs": 7.9,
+        "fiber": null,
+        "sodium": 736,
+        "basis": "recipe",
+        "servings": null,
+        "note": "营养数据为大致估算，仅供饮食参考；实际数值随食材、份量和烹饪方式变化。"
+      },
+      "foodCodes": [
+        "13-244",
+        "13-520",
+        "17-041",
+        "17-063",
+        "17-367",
+        "17-721",
+        "usda-174529"
+      ],
+      "assumptions": {
+        "volumeApproximation": true,
+        "standardPieceWeight": true,
+        "rangeMidpoint": true,
+        "excludedIngredients": []
+      }
+    },
+    "htc-4d2ca8f35f3b92a5": {
+      "title": "西葫芦炒鸡蛋",
+      "recipeKey": [
+        "无",
+        "西葫芦",
+        "500g",
+        "西红柿",
+        "100g",
+        "鸡蛋",
+        "3 个",
+        "食用油",
+        "10-20ml",
+        "食用盐",
+        "6g"
+      ],
+      "values": {
+        "calories": 402,
+        "fat": 28.0,
+        "protein": 23.6,
+        "carbs": 14.5,
+        "fiber": 3.5,
+        "sodium": 2563,
+        "basis": "recipe",
+        "servings": null,
+        "note": "营养数据为大致估算，仅供饮食参考；实际数值随食材、份量和烹饪方式变化。"
+      },
+      "foodCodes": [
+        "12-937",
+        "13-517",
+        "13-627",
+        "17-041",
+        "17-367"
+      ],
+      "assumptions": {
+        "volumeApproximation": true,
+        "standardPieceWeight": true,
+        "rangeMidpoint": true,
+        "excludedIngredients": []
+      }
+    },
+    "htc-cf76d9b00d1d4cfd": {
+      "title": "韭菜炒蛋",
+      "recipeKey": [
+        "1 人份",
+        "韭菜",
+        "100g * 份数",
+        "鸡蛋",
+        "2 个 * 份数",
+        "食用油",
+        "10ml * 份数",
+        "盐",
+        "2g * 份数"
+      ],
+      "values": {
+        "calories": 235,
+        "fat": 18.6,
+        "protein": 14.4,
+        "carbs": 4.3,
+        "fiber": 2.5,
+        "sodium": 925,
+        "basis": "serving",
+        "servings": 1.0,
+        "note": "营养数据为大致估算，仅供饮食参考；实际数值随食材、份量和烹饪方式变化。"
+      },
+      "foodCodes": [
+        "12-937",
+        "17-041",
+        "17-367",
+        "usda-169994"
+      ],
+      "assumptions": {
+        "volumeApproximation": true,
+        "standardPieceWeight": true,
+        "rangeMidpoint": false,
+        "excludedIngredients": []
+      }
+    },
+    "htc-b8edc500b99e3e9c": {
+      "title": "韭菜盒子",
+      "recipeKey": [
+        "2 人份",
+        "韭菜",
+        "500g",
+        "虾仁",
+        "100g",
+        "鸡蛋",
+        "3 枚",
+        "香油",
+        "10ml",
+        "盐",
+        "5g",
+        "面粉",
+        "250g"
+      ],
+      "values": {
+        "calories": 685,
+        "fat": 14.9,
+        "protein": 36.7,
+        "carbs": 112.0,
+        "fiber": 11.2,
+        "sodium": 1202,
+        "basis": "serving",
+        "servings": 2.0,
+        "note": "营养数据为大致估算，仅供饮食参考；实际数值随食材、份量和烹饪方式变化。"
+      },
+      "foodCodes": [
+        "11-886",
+        "12-937",
+        "16-387",
+        "17-043",
+        "17-367",
+        "usda-169994"
+      ],
+      "assumptions": {
+        "volumeApproximation": true,
+        "standardPieceWeight": true,
+        "rangeMidpoint": false,
+        "excludedIngredients": []
+      }
+    },
+    "eu-crepe": {
+      "title": "法式可丽饼",
+      "recipeKey": [
+        "原始份量 · 3 人份",
+        "低筋面粉",
+        "150 克",
+        "鸡蛋",
+        "2 个",
+        "牛奶",
+        "350 毫升",
+        "细砂糖",
+        "20 克",
+        "黄油",
+        "30 克",
+        "盐",
+        "2 克"
+      ],
+      "values": {
+        "calories": 389,
+        "fat": 15.8,
+        "protein": 12.3,
+        "carbs": 52.9,
+        "fiber": 2.0,
+        "sodium": 358,
+        "basis": "serving",
+        "servings": 3.0,
+        "note": "营养数据为大致估算，仅供饮食参考；实际数值随食材、份量和烹饪方式变化。"
+      },
+      "foodCodes": [
+        "11-886",
+        "12-596",
+        "12-937",
+        "17-063",
+        "17-367",
+        "17-661"
+      ],
+      "assumptions": {
+        "volumeApproximation": true,
+        "standardPieceWeight": true,
+        "rangeMidpoint": false,
+        "excludedIngredients": []
+      }
+    }
+  }
+}

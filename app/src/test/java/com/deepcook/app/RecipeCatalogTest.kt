@@ -28,7 +28,7 @@ class RecipeCatalogTest {
             assertEquals((1..recipe.steps.size).toList(), recipe.steps.map { it.order })
             assertTrue(recipe.steps.all { it.text.isNotBlank() })
             assertTrue(recipe.minutes == null || recipe.minutes > 0)
-            if (recipe.collection != "DeepCook 自编示例") {
+            if (recipe.collection != "DeepCook 自编菜谱") {
                 assertTrue(recipe.source.url?.startsWith("https://github.com/") == true)
             }
             recipe.cover?.let { assertTrue("Missing image: $it", File(assets, it).isFile) }

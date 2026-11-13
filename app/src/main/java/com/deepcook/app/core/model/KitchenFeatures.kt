@@ -10,6 +10,9 @@ data class Nutrition(
     val carbs: Double?,
     val fiber: Double? = null,
     val sodium: Int? = null,
+    val basis: String = "serving",
+    val servings: Double? = null,
+    val note: String = "营养数据为大致估算，仅供饮食参考；实际数值随食材、份量和烹饪方式变化。",
 )
 
 data class KitchenPost(

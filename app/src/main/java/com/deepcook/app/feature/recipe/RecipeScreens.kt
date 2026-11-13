@@ -236,8 +236,8 @@ fun DetailScreen(
                         Text(
                             if (recipe.isMine) {
                                 "我的菜谱 · 原始份量"
-                            } else if (recipe.collection == "DeepCook 自编示例") {
-                                "自编示例 · 未经试做验证"
+                            } else if (recipe.collection == "DeepCook 自编菜谱") {
+                                "DeepCook 自编 · 参考配方"
                             } else {
                                 "${recipe.collection.ifBlank {
                                     "菜谱"

@@ -188,16 +188,16 @@ fun SettingsScreen(
                         PreferenceRow(
                             "${recipes.size} 道菜谱 · ${recipes.count { it.id.startsWith("world-") }} 道国际菜中文译文",
                             "HowToCook 中文原文、Based Cooking 中文译文，以及 ${recipes.count {
-                                it.collection == "DeepCook 自编示例"
-                            }} 道项目自编示例。示例已单独标识。未经团队逐道试做；缺失、未核实或口径冲突的用时和难度显示“无”，不根据步骤数猜测。",
+                                it.collection == "DeepCook 自编菜谱"
+                            }} 道项目自编菜谱。用时、难度等未提供或口径不明确的参数显示“无”。",
                             Icons.AutoMirrored.Rounded.MenuBook,
                         )
                         PreferenceRow(
                             "图片与来源",
-                            "来源菜谱按 HowToCook、Based Cooking 的 Unlicense 声明使用。项目示例的新增配图来自 FoodiesFeed（CC0 等效许可）和 HowToCook。所有配图随包提供；未找到图片时使用餐具占位。具体授权、固定版本与校验值见清单。",
+                            "来源菜谱按 HowToCook、Based Cooking 的 Unlicense 声明使用。自编菜谱的配图来自 FoodiesFeed（CC0 等效许可）和 HowToCook。所有配图随包提供；未找到图片时使用餐具占位。具体授权、固定版本与校验值见清单。",
                             Icons.Rounded.PhotoLibrary,
                         )
-                        PreferenceRow("原始份量", "材料用量仅展示菜谱原始份量。本版不进行人数换算，也不修改配方。", Icons.Rounded.Restaurant)
+                        PreferenceRow("原始份量", "默认展示菜谱原始份量；有明确份量时可按人数换算材料用量，调味请按口味调整。", Icons.Rounded.Restaurant)
                         PreferenceRow("菜谱与配图来源清单", "查看每道菜谱、图片的来源路径与固定版本。", Icons.Rounded.Description, onClick = {
                             onNavigate("photo_sources")
                         })
@@ -464,7 +464,7 @@ private fun LicenseContent() {
     AssetText("HOWTOCOOK-LICENSE.txt")
     PreferenceGroupHeader("Based Cooking 菜谱与图片 · Unlicense")
     AssetText("BASED-COOKING-LICENSE.txt")
-    PreferenceGroupHeader("FoodiesFeed 示例配图")
+    PreferenceGroupHeader("FoodiesFeed 菜谱配图")
     PreferenceRow(
         "CC0 等效许可",
         "允许复制、修改和随应用分发；不将图片作为图库或独立素材售卖。授权：https://www.foodiesfeed.com/license",

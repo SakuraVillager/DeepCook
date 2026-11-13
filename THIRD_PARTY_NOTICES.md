@@ -161,3 +161,11 @@ Permissions declared by the app and why:
 The app does not bundle network image-loading components: covers are local assets or
 files in the app's private storage. Gallery covers use Android's photo picker without
 broad media storage permissions.
+
+## Nutrition reference data
+
+Nutrition estimates use selected records from Public Health England's CoFID 2021 (Open Government Licence v3.0) and USDA FoodData Central SR Legacy, April 2018 (public domain). Contains public sector information licensed under the Open Government Licence v3.0. Original food identifiers and source checksums are retained with the selected data.
+
+- CoFID: https://www.gov.uk/government/publications/composition-of-foods-integrated-dataset-cofid
+- OGL: https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/
+- USDA: https://fdc.nal.usda.gov/download-datasets/

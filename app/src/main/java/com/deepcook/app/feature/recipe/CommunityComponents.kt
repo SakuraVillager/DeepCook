@@ -113,7 +113,7 @@ fun NutritionSection(state: CommunityUiState, onAll: () -> Unit) {
     val nutrition = state.content.nutrition
     Column(Modifier.fillMaxWidth().padding(top = 4.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            Text("每份营养", Modifier.weight(1f), style = MaterialTheme.typography.titleLarge)
+            Text(if (nutrition?.basis == "recipe") "整道菜营养估算" else "每份营养估算", Modifier.weight(1f), style = MaterialTheme.typography.titleLarge)
             TextButton(onClick = onAll) { Text("查看全部") }
         }
         Row(Modifier.fillMaxWidth().height(IntrinsicSize.Min).padding(vertical = 4.dp)) {
@@ -143,12 +143,12 @@ fun NutritionSection(state: CommunityUiState, onAll: () -> Unit) {
 }
 
 private fun nutritionValues(n: Nutrition?): List<Pair<String, String>> = listOf(
-    "热量" to (n?.calories?.let { "$it kcal" } ?: "无"),
-    "脂肪" to (n?.fat?.let { "$it g" } ?: "无"),
-    "蛋白质" to (n?.protein?.let { "$it g" } ?: "无"),
-    "碳水" to (n?.carbs?.let { "$it g" } ?: "无"),
-    "膳食纤维" to (n?.fiber?.let { "$it g" } ?: "无"),
-    "钠" to (n?.sodium?.let { "$it mg" } ?: "无"),
+    "热量" to (n?.calories?.let { "$it kcal" } ?: "—"),
+    "脂肪" to (n?.fat?.let { "$it g" } ?: "—"),
+    "蛋白质" to (n?.protein?.let { "$it g" } ?: "—"),
+    "碳水" to (n?.carbs?.let { "$it g" } ?: "—"),
+    "膳食纤维" to (n?.fiber?.let { "$it g" } ?: "—"),
+    "钠" to (n?.sodium?.let { "$it mg" } ?: "—"),
 )
 
 @Composable
@@ -271,7 +271,7 @@ fun CommunityDialogs(state: CommunityUiState, viewModel: CommunityViewModel) {
         title = {
             Text(
                 when (mode) {
-                    "nutrition" -> "每份营养成分"
+                    "nutrition" -> if (state.content.nutrition?.basis == "recipe") "整道菜营养成分估算" else "每份营养成分估算"
                     "rating" -> "给这道菜评分"
                     "submission" -> "交一份作业"
                     else -> "写评论"
@@ -291,7 +291,7 @@ fun CommunityDialogs(state: CommunityUiState, viewModel: CommunityViewModel) {
                                 Text(value)
                             }
                         }
-                        Text(if (state.content.nutrition == null) "未提供实际营养信息。" else "以上为每份示例数据，非实际菜品营养测算。")
+                        Text(state.content.nutrition?.note ?: "营养数据为大致估算，仅供饮食参考；实际数值随食材、份量和烹饪方式变化。")
                     }
                     rating -> {
                         Text("${state.score} / 10", style = MaterialTheme.typography.headlineMedium)

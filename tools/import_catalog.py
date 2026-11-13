@@ -419,18 +419,18 @@ def build():
             r = dict(original)
             if r['id'] in existing_ids:
                 continue
-            r.update(collection='DeepCook 自编示例', featured=False, minutes=None, difficulty=None)
-            r['notes'] = [n for n in r.get('notes', []) if n != '无'] + ['项目自编示例，未经逐道试做；总用时与难度未核实，显示“无”。']
+            r.update(collection='DeepCook 自编菜谱', featured=False, minutes=None, difficulty=None)
+            r['notes'] = [n for n in r.get('notes', []) if n != '无'] + ['项目自编菜谱。总用时与难度以实际操作为准，未提供的数据不作推断。']
             source_url = f"https://github.com/{cloud['repository']}/blob/{cloud['commit']}/app/src/main/assets/recipes.json"
             r['source'] = dict(r['source'], license='项目自编演示配方，未经独立试做验证；外部链接仅作参考。')
             catalog.append(r)
             photo = image_by_asset.get(r.get('cover'), {})
             provenance.append(dict(recipeId=r['id'], repository=cloud['repository'], commit=cloud['commit'], path='app/src/main/assets/recipes.json',
-                url=source_url, license='项目自编示例', originalSha256=hashlib.sha256(json.dumps(original, ensure_ascii=False, sort_keys=True).encode()).hexdigest(),
+                url=source_url, license='项目自编内容', originalSha256=hashlib.sha256(json.dumps(original, ensure_ascii=False, sort_keys=True).encode()).hexdigest(),
                 imagePath=photo.get('path') or photo.get('page'), bundled=r.get('cover'), imageUrl=photo.get('url') or photo.get('download') or photo.get('page'), imageLicense=photo.get('license')))
     write_json(ASSETS/'recipes.json',catalog)
     write_json(ASSETS/'catalog_sources.json',dict(sources=[{k:t[k] for k in ['repository','commit']} for t in [htc,based]],recipes=provenance))
-    write_json(CACHE/'import-report.json',dict(total=len(catalog),chinese=sum(r['collection']=='HowToCook' for r in catalog),international=sum(r['collection']=='Based Cooking' for r in catalog),cloudExamples=sum(r['collection']=='DeepCook 自编示例' for r in catalog),withPhotos=sum(bool(r['cover']) for r in catalog),missingTime=sum(r['minutes'] is None for r in catalog),missingDifficulty=sum(r['difficulty'] is None for r in catalog),excluded=excluded,photoErrors=photo_errors,legacyMissing=sorted(set(order)-{r['id'] for r in catalog})))
+    write_json(CACHE/'import-report.json',dict(total=len(catalog),chinese=sum(r['collection']=='HowToCook' for r in catalog),international=sum(r['collection']=='Based Cooking' for r in catalog),cloudExamples=sum(r['collection']=='DeepCook 自编菜谱' for r in catalog),withPhotos=sum(bool(r['cover']) for r in catalog),missingTime=sum(r['minutes'] is None for r in catalog),missingDifficulty=sum(r['difficulty'] is None for r in catalog),excluded=excluded,photoErrors=photo_errors,legacyMissing=sorted(set(order)-{r['id'] for r in catalog})))
     print(json.dumps({k:v for k,v in read_json(CACHE/'import-report.json').items() if k not in ['excluded','photoErrors']},ensure_ascii=False),flush=True)
 
 

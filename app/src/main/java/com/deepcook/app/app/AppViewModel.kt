@@ -94,7 +94,7 @@ class AppViewModel(
         viewModelScope.launch {
             kitchen?.favoriteExamples?.catch { error ->
                 if (error is CancellationException) throw error
-                messageChannel.send(AppMessage("互动示例数据库暂时无法读取，原数据未被清除。"))
+                messageChannel.send(AppMessage("互动记录暂时无法读取，原数据已保留。"))
             }?.collect { counts -> mutableState.value = mutableState.value.copy(favoriteExamples = counts) }
         }
     }

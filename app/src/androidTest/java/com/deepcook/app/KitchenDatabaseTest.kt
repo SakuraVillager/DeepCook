@@ -38,7 +38,7 @@ class KitchenDatabaseTest {
         try {
             var store = KitchenStore(database)
             val original = store.observe("braised-pork").first()
-            assertNotNull(original.nutrition)
+            assertNull(original.nutrition)
             assertEquals(3, original.ratings.size)
             assertTrue(original.posts.all { it.sample })
             assertTrue(original.favoriteExamples > 0)

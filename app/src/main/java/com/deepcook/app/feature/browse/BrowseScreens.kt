@@ -102,14 +102,6 @@ fun DiscoverScreen(
                     favoriteCount = state.favoriteCount(recipe.id),
                 )
             }
-            item(span = { GridItemSpan(maxLineSpan) }) {
-                Text(
-                    "收藏数为本地示例，新增收藏会在本机同步。",
-                    Modifier.padding(vertical = 16.dp),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
         }
     }
 }
