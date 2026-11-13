@@ -14,6 +14,14 @@ val localProperties = Properties().apply {
 }
 val aiKey = localProperties.getProperty("DEEPCOOK_AI_KEY").orEmpty()
 
+// Release signing material stays outside the checkout and CI artifacts.
+val releaseSigningPath = System.getenv("DEEPCOOK_SIGNING_PROPERTIES")
+    ?: "${System.getProperty("user.home")}/.config/deepcook-signing/release-signing.properties"
+val releaseSigningFile = file(releaseSigningPath)
+val releaseSigning = Properties().apply {
+    if (releaseSigningFile.isFile) releaseSigningFile.inputStream().use { load(it) }
+}
+
 android {
     namespace = "com.deepcook.app"
     compileSdk = 36
@@ -21,8 +29,8 @@ android {
         applicationId = "com.deepcook.app"
         minSdk = 26
         targetSdk = 36
-        versionCode = 23
-        versionName = "0.6.0"
+        versionCode = 24
+        versionName = "0.6.1"
         testInstrumentationRunner = "com.deepcook.app.LocalDataTestRunner"
         buildConfigField("String", "DEEPCOOK_AI_KEY", "\"" + aiKey.replace("\\", "\\\\").replace("\"", "\\\"") + "\"")
         // The keyword spotter ships native libs; phones are all arm64 or armv7.
@@ -32,8 +40,19 @@ android {
         compose = true
         buildConfig = true
     }
+    signingConfigs {
+        if (releaseSigningFile.isFile) create("official") {
+            storeFile = file(releaseSigning.getProperty("storeFile"))
+            storePassword = releaseSigning.getProperty("storePassword")
+            keyAlias = releaseSigning.getProperty("keyAlias")
+            keyPassword = releaseSigning.getProperty("keyPassword")
+        }
+    }
     buildTypes {
         getByName("release") {
+            signingConfig = signingConfigs.findByName("official")
+            // Distributed packages must never contain a developer's AI service credential.
+            buildConfigField("String", "DEEPCOOK_AI_KEY", "\"\"")
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(

@@ -9,3 +9,9 @@ artifacts/
 __pycache__/
 # SenseVoice model (228 MB) is copied in locally; GitHub rejects files over 100 MB.
 app/src/main/assets/models/
+
+# Release signing material must remain private.
+*.jks
+*.keystore
+*.p12
+release-signing.properties

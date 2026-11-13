@@ -31,7 +31,7 @@ Debug APK：`app/build/outputs/apk/debug/app-debug.apk`。最低系统 Android 8
 >
 > 没有这份缓存时，从 sherpa-onnx 发布包 `sherpa-onnx-sense-voice-zh-en-ja-ko-yue-int8-2024-07-17.tar.bz2` 解出同名两个文件即可。
 
-日常体验与性能检查使用 `app/build/outputs/apk/preview/app-preview.apk`：关闭调试、开启 R8 与资源缩减，使用本机 Debug 密钥签名，方便直接安装覆盖开发版。正式 `release` 的发布签名另行配置。Compose 与 AndroidX 附带的基线配置会合并进入优化构建；Debug 构建保留调试工具，仅用于开发与自动测试。
+日常体验与性能检查使用 `app/build/outputs/apk/preview/app-preview.apk`：关闭调试、开启 R8 与资源缩减，使用本机 Debug 密钥签名，方便直接安装覆盖开发版。网站分发使用 `release` 优化构建和独立正式签名，签名密钥与口令配置保存在仓库之外。Compose 与 AndroidX 附带的基线配置会合并进入优化构建；Debug 构建保留调试工具，仅用于开发与自动测试。
 
 使用 AGP 9.3 / Gradle 9.5、内置 Kotlin 和 Kotlin 2.4.10 Compose/Serialization 插件。
 Compose BOM 2025.12.01、Lifecycle 2.10、Coil 3.3 保持与 SDK 36 兼容；较新版本要求 SDK 37，因此本阶段未升级。
