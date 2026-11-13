@@ -6,6 +6,7 @@ import com.deepcook.app.core.model.Account
 import com.deepcook.app.core.model.PasswordPolicy
 import com.deepcook.app.core.model.PhoneNumber
 import com.deepcook.app.core.model.Session
+import com.deepcook.app.core.model.Username
 import com.deepcook.app.data.AuthRepository
 import com.deepcook.app.data.AuthResult
 import kotlinx.coroutines.CancellationException
@@ -42,10 +43,11 @@ data class AuthSessionState(
 ) {
     val isSignedIn: Boolean get() = session != null
 
-    val maskedPhone: String get() = session?.phone?.let { PhoneNumber.masked(it) }.orEmpty()
+    val maskedPhone: String get() = session?.phone?.let { if (account?.cloud == true) it else PhoneNumber.masked(it) }.orEmpty()
 }
 
 class AuthViewModel(private val auth: AuthRepository) : ViewModel() {
+    val cloudAccounts: Boolean get() = auth.cloudAccounts
     private val mutableForm = MutableStateFlow(AuthFormState())
     val form = mutableForm.asStateFlow()
 
@@ -74,21 +76,22 @@ class AuthViewModel(private val auth: AuthRepository) : ViewModel() {
     fun show(page: AuthPage) = editForm {
         AuthFormState(
             page = page,
+            accepted = cloudAccounts && page == AuthPage.REGISTER,
             phone = it.phone,
             notice = if (page == AuthPage.LOGIN) it.notice else null,
         )
     }
 
     fun phone(value: String) = editForm {
-        it.copy(phone = PhoneNumber.normalize(value).take(PHONE_DIGITS), phoneError = null, formError = null)
+        it.copy(phone = if (cloudAccounts) value.take(24) else PhoneNumber.normalize(value).take(PHONE_DIGITS), phoneError = null, formError = null)
     }
 
     fun password(value: String) = editForm {
-        it.copy(password = value.take(PasswordPolicy.MAX_LENGTH), passwordError = null, formError = null)
+        it.copy(password = value, passwordError = null, formError = null)
     }
 
     fun confirm(value: String) = editForm {
-        it.copy(confirm = value.take(PasswordPolicy.MAX_LENGTH), confirmError = null, formError = null)
+        it.copy(confirm = value, confirmError = null, formError = null)
     }
 
     fun accept(value: Boolean) = editForm { it.copy(accepted = value, formError = null) }
@@ -96,8 +99,10 @@ class AuthViewModel(private val auth: AuthRepository) : ViewModel() {
     fun submit() {
         val state = mutableForm.value
         if (state.submitting) return
-        val number = PhoneNumber.normalize(state.phone)
-        val phoneError = if (PhoneNumber.isValid(number)) null else "请输入 11 位手机号"
+        val number = if (cloudAccounts) state.phone.trim() else PhoneNumber.normalize(state.phone)
+        val phoneError = if (cloudAccounts) {
+            if (Username.isValid(number)) null else "用户名需为 3–24 位字母、数字或下划线。"
+        } else if (PhoneNumber.isValid(number)) null else "请输入 11 位手机号"
         val passwordError = when {
             state.password.isEmpty() -> "请输入密码"
             state.page == AuthPage.LOGIN -> null
@@ -106,7 +111,7 @@ class AuthViewModel(private val auth: AuthRepository) : ViewModel() {
         val confirmError =
             if (state.page != AuthPage.LOGIN && state.confirm != state.password) "两次输入的密码不一致" else null
         val formError =
-            if (state.page == AuthPage.REGISTER && !state.accepted) "请先确认账号只保存在这台手机上" else null
+            if (!cloudAccounts && state.page == AuthPage.REGISTER && !state.accepted) "请先确认账号只保存在这台手机上" else null
         if (phoneError != null || passwordError != null || confirmError != null || formError != null) {
             editForm {
                 it.copy(
@@ -121,8 +126,8 @@ class AuthViewModel(private val auth: AuthRepository) : ViewModel() {
         viewModelScope.launch {
             editForm { it.copy(submitting = true, formError = null, notice = null) }
             val result = when (state.page) {
-                AuthPage.LOGIN -> auth.login(number, state.password)
-                AuthPage.REGISTER -> auth.register(number, state.password)
+                AuthPage.LOGIN -> auth.authenticate(number, state.password, false, state.accepted)
+                AuthPage.REGISTER -> auth.authenticate(number, state.password, true, state.accepted)
                 AuthPage.RESET -> auth.resetPassword(number, state.password)
             }
             when (result) {
@@ -152,6 +157,11 @@ class AuthViewModel(private val auth: AuthRepository) : ViewModel() {
         PasswordPolicy.problemOf(next)?.let { return "新密码$it" }
         if (current == next) return "新密码不能与当前密码相同"
         val result = auth.changePassword(current, next)
+        return if (result is AuthResult.Failure) result.reason.message else null
+    }
+
+    suspend fun importLocal(): String? {
+        val result = auth.importLocal()
         return if (result is AuthResult.Failure) result.reason.message else null
     }
 

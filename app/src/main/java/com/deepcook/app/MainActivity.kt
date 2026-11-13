@@ -39,6 +39,8 @@ class MainActivity : ComponentActivity() {
                                 aiOverlays = container.aiOverlays,
                                 coverOverrides = container.coverOverrides,
                                 kitchen = container.kitchen,
+                                cloudErrors = container.cloudKitchen?.syncError,
+                                cloudAccount = container.cloudKitchen?.active,
                             )
                         }
                     },
@@ -62,6 +64,11 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (application as DeepCookApplication).container.refreshCloud()
     }
 
     override fun onNewIntent(intent: Intent) {

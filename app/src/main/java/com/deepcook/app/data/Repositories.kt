@@ -7,6 +7,11 @@ import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.core.Serializer
 import androidx.datastore.dataStoreFile
 import com.deepcook.app.BuildConfig
+import com.deepcook.app.data.cloud.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
+import java.io.File
 import com.deepcook.app.core.model.DishNote
 import com.deepcook.app.core.model.FoodProfile
 import com.deepcook.app.core.model.FoodSetup
@@ -166,31 +171,41 @@ class LocalUserDataRepository(private val store: DataStore<UserData>) : UserData
     }
 }
 
-class AppContainer(context: Context) {
+class AppContainer(context: Context, cloudEnabled: Boolean = true) {
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    val cloudApi = if (cloudEnabled) CloudApi(EncryptedCloudCredentialStore(context)) else null
     val kitchenDatabase = KitchenDatabase(context)
-    val kitchen = KitchenStore(kitchenDatabase)
+    private val localKitchen = KitchenStore(kitchenDatabase)
     val recipes: RecipeRepository = AssetRecipeRepository(context)
-    // Accounts are their own file so a broken or removed account never touches the recipe data.
-    val auth: AuthRepository = LocalAuthRepository(
-        DataStoreFactory.create(serializer = AuthStateSerializer) { context.dataStoreFile("account.json") },
-    )
-    val userData: UserDataRepository = LocalUserDataRepository(
+    private val guestUser: UserDataRepository = LocalUserDataRepository(
         DataStoreFactory.create(serializer = UserDataSerializer) { context.dataStoreFile("user_data.json") },
     )
-    val userRecipes: UserRecipeStore = LocalUserRecipeStore(
-        DataStoreFactory.create(serializer = UserRecipeBookSerializer) {
-            context.dataStoreFile("user_recipes.json")
-        },
+    private val guestRecipes: UserRecipeStore = LocalUserRecipeStore(
+        DataStoreFactory.create(serializer = UserRecipeBookSerializer) { context.dataStoreFile("user_recipes.json") },
+    )
+    private val guestCovers: CoverOverrides = LocalCoverOverrides(
+        DataStoreFactory.create(serializer = CoverOverrideSerializer) { context.dataStoreFile("cover_overrides.json") },
     )
     val covers = CoverStore(context)
     val avatars = AvatarStore(context)
-
-    /** Finished-dish photos the user set as a cover; shadows bundled pictures, never writes assets. */
-    val coverOverrides: CoverOverrides = LocalCoverOverrides(
-        DataStoreFactory.create(serializer = CoverOverrideSerializer) {
-            context.dataStoreFile("cover_overrides.json")
-        },
+    private val cloudMedia = cloudApi?.let { CloudMedia(context, it) }
+    val cloudKitchen = cloudApi?.let { CloudKitchen(it, File(context.filesDir, "cloud-kitchens"), cloudMedia!!) }
+    val kitchen: KitchenCommunity = if (cloudApi != null) CloudCommunity(cloudApi, cloudKitchen!!, localKitchen,
+        cloudMedia!!, File(context.filesDir, "cloud-community")) else localKitchen
+    val auth: AuthRepository = if (cloudApi != null) {
+        CloudAuthRepository(cloudApi, cloudKitchen!!, guestUser, guestRecipes, guestCovers, scope,
+            importSocial = { (kitchen as CloudCommunity).importLocalSocial() })
+    } else LocalAuthRepository(
+        DataStoreFactory.create(serializer = AuthStateSerializer) { context.dataStoreFile("account.json") },
     )
+    val userData: UserDataRepository = cloudKitchen?.let { CloudUserDataRepository(it, guestUser) } ?: guestUser
+    val userRecipes: UserRecipeStore = cloudKitchen?.let { CloudUserRecipeStore(it, guestRecipes) } ?: guestRecipes
+    val coverOverrides: CoverOverrides = cloudKitchen?.let { CloudCoverOverrides(it, guestCovers) } ?: guestCovers
+
+    fun refreshCloud() {
+        scope.launch { runCatching { cloudKitchen?.refresh() } }
+        kitchen.invalidate()
+    }
 
     /** Which dish is on the stove right now, plus its running timers. */
     val cookSessions: CookSessionStore = LocalCookSessionStore(

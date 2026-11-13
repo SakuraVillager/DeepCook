@@ -29,7 +29,7 @@ sealed interface AuthFailure {
     }
 
     data object WeakPassword : AuthFailure {
-        override val message = "密码需为 8–32 位，并同时包含字母和数字。"
+        override val message = "密码需为 6–128 个字符。"
     }
 
     data object PhoneTaken : AuthFailure {
@@ -57,6 +57,8 @@ sealed interface AuthFailure {
         override val message = "登录状态已失效，请重新登录。"
     }
 
+    data class Remote(override val message: String) : AuthFailure
+
     data object Storage : AuthFailure {
         override val message = "账号暂时无法保存，请重试。"
     }
@@ -81,10 +83,16 @@ sealed interface AuthResult {
  * they depend on this interface and on `session` / `account` flows only.
  */
 interface AuthRepository {
+    val cloudAccounts: Boolean get() = false
+    suspend fun authenticate(username: String, password: String, register: Boolean, mergeLocal: Boolean): AuthResult =
+        if (register) register(username, password) else login(username, password)
+
     /** Null when logged out. Emits a new value on login, logout and account changes. */
     val session: Flow<Session?>
 
     val account: Flow<Account?>
+
+    suspend fun importLocal(): AuthResult = AuthResult.Failure(AuthFailure.Remote("当前账号不支持合并本机资料。"))
 
     suspend fun current(): Session?
     suspend fun register(phone: String, password: String): AuthResult

@@ -38,7 +38,9 @@ fun AccountScreen(
     onBack: () -> Unit,
     changePassword: suspend (current: String, next: String) -> String?,
     signOut: suspend () -> String?,
+    importLocal: suspend () -> String? = { null },
 ) {
+    var merging by remember { mutableStateOf(false) }
     var passwordDialog by remember { mutableStateOf(false) }
     var confirmSignOut by remember { mutableStateOf(false) }
     var message by remember { mutableStateOf<String?>(null) }
@@ -55,11 +57,23 @@ fun AccountScreen(
             PreferenceGroupHeader("当前账号")
             PreferenceRow(
                 state.maskedPhone.ifBlank { "未登录" },
-                "登录手机号",
+                if (state.account?.cloud == true) "登录用户名 · 云端账号" else "登录手机号",
                 Icons.Rounded.PhoneAndroid,
             )
             PreferenceRow("注册时间", date(state.account?.createdAt), Icons.Rounded.EventAvailable)
             PreferenceRow("上次登录", date(state.account?.lastLoginAt), Icons.Rounded.History)
+            if (state.account?.cloud == true) PreferenceRow(
+                if (merging) "正在合并本机资料…" else "合并本机资料",
+                "原件保留，重复合并按标识去重",
+                Icons.Rounded.History,
+                onClick = {
+                    if (!merging) scope.launch {
+                        merging = true
+                        try { message = importLocal() ?: "本机资料已合并。" }
+                        finally { merging = false }
+                    }
+                },
+            )
             PreferenceGroupHeader("安全")
             PreferenceRow(
                 "修改密码",
@@ -69,7 +83,7 @@ fun AccountScreen(
             )
             PreferenceRow(
                 "退出登录",
-                "返回登录页，本机收藏与设置保留",
+                if (state.account?.cloud == true) "返回登录页，云端资料保留" else "返回登录页，本机收藏与设置保留",
                 Icons.AutoMirrored.Rounded.Logout,
                 onClick = { confirmSignOut = true },
             )
@@ -82,7 +96,7 @@ fun AccountScreen(
                 )
             }
             Text(
-                "账号、收藏和设置都保存在这台手机上。换手机、卸载或清除应用数据后无法找回。",
+                if (state.account?.cloud == true) "昵称、头像、收藏、菜谱和偏好随账号保存，与网页版共用。" else "账号、收藏和设置都保存在这台手机上。换手机、卸载或清除应用数据后无法找回。",
                 Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 16.dp),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -104,7 +118,7 @@ fun AccountScreen(
         AlertDialog(
             onDismissRequest = { confirmSignOut = false },
             title = { Text("退出登录？") },
-            text = { Text("需要手机号和密码才能再次进入。本机的收藏、我的菜谱和设置不会被删除。") },
+            text = { Text(if (state.account?.cloud == true) "需要用户名和密码才能再次进入。云端资料会保留，本机将退出当前厨房。" else "需要手机号和密码才能再次进入。本机的收藏、我的菜谱和设置不会被删除。") },
             confirmButton = {
                 TextButton(onClick = {
                     confirmSignOut = false

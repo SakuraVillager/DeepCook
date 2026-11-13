@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.deepcook.app.core.model.RecipeCommunity
 import com.deepcook.app.data.CoverStore
-import com.deepcook.app.data.KitchenStore
+import com.deepcook.app.data.KitchenCommunity
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,7 +27,7 @@ data class CommunityUiState(
 class CommunityViewModel(
     private val recipeId: String,
     private val saved: SavedStateHandle,
-    private val store: KitchenStore,
+    private val store: KitchenCommunity,
     private val covers: CoverStore,
 ) : ViewModel() {
     private val mutable = MutableStateFlow(
@@ -42,6 +42,8 @@ class CommunityViewModel(
     private var loadJob: Job? = null
 
     init {
+        if (saved.get<String>("composer") in listOf("comment", "submission") && saved.get<String>("postId") == null)
+            saved["postId"] = "post-${java.util.UUID.randomUUID()}"
         load()
     }
 
@@ -50,13 +52,16 @@ class CommunityViewModel(
         loadJob = viewModelScope.launch {
             store.observe(recipeId).catch { error ->
                 if (error is CancellationException) throw error
-                mutable.value = mutable.value.copy(loading = false, error = "本地互动数据无法读取，原数据未被清除。")
+                mutable.value = mutable.value.copy(loading = false, error = error.message ?: "互动数据无法读取，缓存已保留。")
             }.collect { mutable.value = mutable.value.copy(content = it, loading = false, error = null) }
         }
     }
 
     fun open(kind: String) {
         if (mutable.value.busy) return
+        if (kind == "comment" || kind == "submission") {
+            if (saved.get<String>("postId") == null) saved["postId"] = "post-${java.util.UUID.randomUUID()}"
+        }
         saved["composer"] = kind
         mutable.value = mutable.value.copy(composer = kind, score = mutable.value.content.ownRating ?: 8, error = null)
     }
@@ -74,11 +79,14 @@ class CommunityViewModel(
     fun dismiss() {
         if (mutable.value.busy) return
         val photo = mutable.value.photo
+        val postId = saved.get<String>("postId")
+        if (postId != null) viewModelScope.launch { runCatching { store.discard(recipeId, postId) } }
         clearDraft()
         if (photo != null) viewModelScope.launch { runCatching { covers.delete(photo) } }
     }
 
     private fun clearDraft() {
+        saved["postId"] = null
         saved["composer"] = null
         saved["text"] = ""
         saved["photo"] = null
@@ -98,7 +106,8 @@ class CommunityViewModel(
         if (draft.composer == "rating") {
             store.rate(recipeId, draft.score)
         } else {
-            store.post(recipeId, draft.composer == "submission", draft.text, draft.photo)
+            store.post(recipeId, draft.composer == "submission", draft.text, draft.photo, saved["postId"])
+            if (store.cloud && draft.photo != null) runCatching { covers.delete(draft.photo) }
         }
         clearDraft()
     }
@@ -108,15 +117,18 @@ class CommunityViewModel(
         if (photo != null) runCatching { covers.delete(photo) }
     }
 
+    fun more(submission: Boolean) = perform { store.more(recipeId, submission) }
+
     private fun perform(action: suspend () -> Unit) {
         if (mutable.value.busy) return
         mutable.value = mutable.value.copy(busy = true, error = null)
-        viewModelScope.launch {
+        val owner = if (store.cloud) com.deepcook.app.data.cloud.CloudAccountScope(store.accountId) else kotlin.coroutines.EmptyCoroutineContext
+        viewModelScope.launch(owner) {
             try {
                 action()
             } catch (error: Exception) {
                 if (error is CancellationException) throw error
-                mutable.value = mutable.value.copy(error = "操作未完成，请重试。文字和照片仍已保留。")
+                mutable.value = mutable.value.copy(error = error.message ?: "操作未完成，请重试。文字和照片仍已保留。")
             } finally {
                 mutable.value = mutable.value.copy(busy = false)
             }

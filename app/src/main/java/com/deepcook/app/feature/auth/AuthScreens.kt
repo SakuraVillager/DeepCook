@@ -80,7 +80,7 @@ fun AuthHost(auth: AuthViewModel, form: AuthFormState) {
                 AuthCard(form.page, form, auth)
                 Spacer(Modifier.height(16.dp))
                 Text(
-                    "账号只保存在这台手机上，不会上传。",
+                    if (auth.cloudAccounts) "与网页版共用账号，资料随账号同步。" else "账号只保存在这台手机上，不会上传。",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,
@@ -109,7 +109,7 @@ private fun AuthCard(page: AuthPage, form: AuthFormState, auth: AuthViewModel) {
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(page.title, style = MaterialTheme.typography.titleLarge)
                 Text(
-                    page.subtitle,
+                    if (auth.cloudAccounts) "使用用户名和密码，与网页版共用账号。" else page.subtitle,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -117,10 +117,10 @@ private fun AuthCard(page: AuthPage, form: AuthFormState, auth: AuthViewModel) {
             AuthTextField(
                 value = form.phone,
                 onValue = auth::phone,
-                label = "手机号",
+                label = if (auth.cloudAccounts) "用户名" else "手机号",
                 tag = "auth-phone",
                 error = form.phoneError,
-                keyboardType = KeyboardType.Phone,
+                keyboardType = if (auth.cloudAccounts) KeyboardType.Ascii else KeyboardType.Phone,
                 imeAction = ImeAction.Next,
                 onImeAction = { passwordFocus.requestFocus() },
             )
@@ -135,14 +135,15 @@ private fun AuthCard(page: AuthPage, form: AuthFormState, auth: AuthViewModel) {
                 focusRequester = passwordFocus,
                 onImeAction = { if (page == AuthPage.LOGIN) submit() else confirmFocus.requestFocus() },
             )
-            if (page == AuthPage.LOGIN) {
+            if (page == AuthPage.LOGIN && !auth.cloudAccounts) {
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                     TextButton(
                         onClick = { auth.show(AuthPage.RESET) },
                         modifier = Modifier.testTag("auth-forgot"),
                     ) { Text("忘记密码？") }
                 }
-            } else {
+            }
+            if (page != AuthPage.LOGIN) {
                 PasswordField(
                     value = form.confirm,
                     onValue = auth::confirm,
@@ -155,7 +156,7 @@ private fun AuthCard(page: AuthPage, form: AuthFormState, auth: AuthViewModel) {
                     onImeAction = { submit() },
                 )
             }
-            if (page == AuthPage.REGISTER) {
+            if (page == AuthPage.REGISTER || auth.cloudAccounts) {
                 Row(
                     Modifier.fillMaxWidth().toggleable(
                         value = form.accepted,
@@ -167,7 +168,7 @@ private fun AuthCard(page: AuthPage, form: AuthFormState, auth: AuthViewModel) {
                     Checkbox(checked = form.accepted, onCheckedChange = null)
                     Spacer(Modifier.width(4.dp))
                     Text(
-                        "我已了解：账号与收藏只保存在这台手机上。",
+                        if (auth.cloudAccounts) "合并本机资料、收藏、菜谱和已发布互动" else "我已了解：账号与收藏只保存在这台手机上。",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )

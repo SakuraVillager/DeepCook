@@ -8,14 +8,14 @@ import kotlinx.serialization.Serializable
  *
  * Tags are plain strings next to the favourites and settings in [UserData]; [sanitized] drops
  * anything this build does not offer, so a removed flavour disappears instead of lingering in the
- * multiselect. Nothing here is sent anywhere: the profile only leaves the phone when the user
- * exports their data.
+ * multiselect. Signed-in profiles synchronize through the account repository; the original guest data is
+ * retained locally until the user chooses to merge it.
  */
 @Serializable
 data class UserProfile(
     /** Blank means "no name chosen"; [name] then falls back to [DEFAULT_NAME]. */
     val displayName: String = "",
-    /** `file:` URI of the copy in the app's own storage, or null when no picture was chosen. */
+    /** Local `file:` URI before upload, or a private cloud image path after synchronization. */
     val avatar: String? = null,
     val likes: Set<String> = emptySet(),
     val avoids: Set<String> = emptySet(),

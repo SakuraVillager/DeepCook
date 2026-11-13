@@ -50,6 +50,7 @@ fun ProfileInfoScreen(
     onRemoveAvatar: () -> Unit,
     /** Null only while the saved session is being read; the page is not reachable before then. */
     phone: String?,
+    cloudAccount: Boolean = false,
     onAccount: () -> Unit,
 ) {
     var cropping by remember { mutableStateOf<Bitmap?>(null) }
@@ -124,14 +125,14 @@ fun ProfileInfoScreen(
             item {
                 PreferenceRow(
                     "账号与安全",
-                    phone?.let { PhoneNumber.masked(it) } ?: "未登录",
+                    phone?.let { if (cloudAccount) it else PhoneNumber.masked(it) } ?: "未登录",
                     Icons.Rounded.Lock,
                     onClick = onAccount,
                 )
             }
             item {
                 Text(
-                    "这些信息只保存在这台手机上。",
+                    "登录后，昵称、头像和偏好随账号同步到云端。",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -172,7 +173,7 @@ private fun NameField(profile: UserProfile, onName: (String) -> Unit) {
             onName(capped)
         },
         modifier = Modifier.fillMaxWidth(),
-        label = { Text("用户名") },
+        label = { Text("昵称") },
         placeholder = { Text("留空则显示「${UserProfile.DEFAULT_NAME}」") },
         supportingText = { Text("${UserProfile.nameLength(text)} / ${UserProfile.MAX_NAME_LENGTH}") },
         singleLine = true,

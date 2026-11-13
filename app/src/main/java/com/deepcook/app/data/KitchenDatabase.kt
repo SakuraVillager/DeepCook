@@ -132,16 +132,29 @@ private fun postValues(post: KitchenPost) = ContentValues().apply {
 
 private fun Cursor.text(name: String) = getString(getColumnIndexOrThrow(name))
 
-class KitchenStore(val database: KitchenDatabase) {
+interface KitchenCommunity {
+    val cloud: Boolean get() = false
+    val accountId: String? get() = null
+    val favoriteExamples: kotlinx.coroutines.flow.Flow<Map<String, Int>>
+    fun observe(recipeId: String): kotlinx.coroutines.flow.Flow<RecipeCommunity>
+    suspend fun rate(recipeId: String, score: Int)
+    suspend fun post(recipeId: String, submission: Boolean, text: String, photo: String?, draftId: String? = null): String
+    suspend fun deletePost(id: String): String?
+    suspend fun more(recipeId: String, submission: Boolean) {}
+    suspend fun discard(recipeId: String, draftId: String) {}
+    fun invalidate() {}
+}
+
+class KitchenStore(val database: KitchenDatabase) : KitchenCommunity {
     private val changes = MutableStateFlow(0L)
     private val mutex = Mutex()
-    val favoriteExamples = changes.map {
+    override val favoriteExamples = changes.map {
         database.readableDatabase.rawQuery("SELECT recipe_id,favorites FROM recipe_social", null).use { c ->
             buildMap { while (c.moveToNext()) put(c.getString(0), c.getInt(1)) }
         }
     }.distinctUntilChanged().flowOn(Dispatchers.IO)
 
-    fun observe(recipeId: String) = changes.map { readCommunity(recipeId) }.flowOn(Dispatchers.IO)
+    override fun observe(recipeId: String) = changes.map { readCommunity(recipeId) }.flowOn(Dispatchers.IO)
 
     private fun readCommunity(id: String): RecipeCommunity {
         val db = database.readableDatabase
@@ -186,7 +199,7 @@ class KitchenStore(val database: KitchenDatabase) {
         return RecipeCommunity(nutrition, favorites, ratings, own, posts)
     }
 
-    suspend fun rate(recipeId: String, score: Int) = mutate {
+    override suspend fun rate(recipeId: String, score: Int) = mutate {
         require(score in 1..10)
         database.writableDatabase.execSQL(
             "INSERT OR REPLACE INTO ratings VALUES(?,?,?)",
@@ -194,9 +207,9 @@ class KitchenStore(val database: KitchenDatabase) {
         )
     }
 
-    suspend fun post(recipeId: String, submission: Boolean, text: String, photo: String?): String {
+    override suspend fun post(recipeId: String, submission: Boolean, text: String, photo: String?, draftId: String?): String {
         require(text.isNotBlank() && text.length <= 2000)
-        val id = UUID.randomUUID().toString()
+        val id = draftId ?: UUID.randomUUID().toString()
         mutate {
             database.writableDatabase.insertOrThrow(
                 "posts",
@@ -218,7 +231,7 @@ class KitchenStore(val database: KitchenDatabase) {
         return id
     }
 
-    suspend fun deletePost(id: String): String? {
+    override suspend fun deletePost(id: String): String? {
         var photo: String? = null
         mutate {
             database.writableDatabase.beginTransaction()
@@ -239,6 +252,7 @@ class KitchenStore(val database: KitchenDatabase) {
         mutex.withLock {
             action()
             changes.value++
+            Unit
         }
     }
 }

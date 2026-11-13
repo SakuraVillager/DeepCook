@@ -33,6 +33,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
+import androidx.compose.ui.platform.LocalContext
+import com.deepcook.app.data.cloud.cloudImageModel
 import com.deepcook.app.R
 import com.deepcook.app.core.model.Recipe
 import com.deepcook.app.core.model.RecipeStep
@@ -59,7 +61,7 @@ fun ProfileAvatar(avatar: String?, modifier: Modifier = Modifier) {
         )
     } else {
         AsyncImage(
-            model = avatar,
+            model = cloudImageModel(LocalContext.current, avatar),
             contentDescription = "头像",
             placeholder = painterResource(R.drawable.ic_launcher),
             error = painterResource(R.drawable.ic_launcher),
@@ -76,11 +78,7 @@ fun ProfileAvatar(avatar: String?, modifier: Modifier = Modifier) {
  */
 @Composable
 fun RecipeImage(path: String?, modifier: Modifier = Modifier, description: String? = null) {
-    val model = when {
-        path == null -> null
-        path.startsWith("file:") || path.startsWith("content:") -> path
-        else -> "file:///android_asset/$path"
-    }
+    val model = cloudImageModel(LocalContext.current, path)
     AsyncImage(
         model = model,
         contentDescription = description,

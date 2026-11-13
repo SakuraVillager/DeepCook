@@ -64,7 +64,7 @@ private fun RatingBreakdown(content: RecipeCommunity) {
             softWrap = false,
         )
         Text(
-            "${content.ratings.size} 条评分",
+            "${content.ratingCount} 条评分",
             modifier = Modifier.testTag("rating-count"),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -77,7 +77,7 @@ private fun RatingBreakdown(content: RecipeCommunity) {
                 Text(name, Modifier.width(labelWidth), style = MaterialTheme.typography.bodySmall)
                 LinearProgressIndicator(
                     progress = {
-                        content.ratings.count { it in range }.toFloat() / content.ratings.size.coerceAtLeast(1)
+                        content.countScores(range).toFloat() / content.ratingCount.coerceAtLeast(1).toFloat()
                     },
                     modifier = Modifier.weight(1f).height(6.dp),
                     drawStopIndicator = {},
@@ -158,7 +158,10 @@ fun CommunitySection(state: CommunityUiState, viewModel: CommunityViewModel) {
     val cardColor = if (light) Color.White else MaterialTheme.colorScheme.surfaceContainerLow
     val borderColor = if (light) Color(0xFFDDDDDD) else MaterialTheme.colorScheme.outlineVariant
     Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        Text("厨房交流", style = MaterialTheme.typography.titleLarge)
+        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            Text("厨房交流", Modifier.weight(1f), style = MaterialTheme.typography.titleLarge)
+            TextButton(onClick = viewModel::load, enabled = !state.busy) { Text("刷新") }
+        }
         if (state.loading) CircularProgressIndicator(Modifier.size(24.dp))
         if (state.error != null) {
             Text(state.error, color = MaterialTheme.colorScheme.error)
@@ -174,7 +177,7 @@ fun CommunitySection(state: CommunityUiState, viewModel: CommunityViewModel) {
             ) {
                 Column(Modifier.fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
                     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                        Text("$name · ${posts.size}", Modifier.weight(1f), style = MaterialTheme.typography.titleMedium)
+                        Text("$name · ${if (submission) state.content.submissionCount ?: posts.size else state.content.commentCount ?: posts.size}", Modifier.weight(1f), style = MaterialTheme.typography.titleMedium)
                         TextButton(
                             onClick = { viewModel.open(if (submission) "submission" else "comment") },
                             modifier = Modifier.testTag(if (submission) "add-submission" else "add-comment"),
@@ -213,7 +216,7 @@ fun CommunitySection(state: CommunityUiState, viewModel: CommunityViewModel) {
                                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                                         )
                                     }
-                                    if (!post.sample) {
+                                    if (post.mine) {
                                         IconButton(onClick = { pendingDelete = post.id }) {
                                             Icon(Icons.Rounded.DeleteOutline, "删除这条${if (submission) "作业" else "评论"}")
                                         }
@@ -229,7 +232,11 @@ fun CommunitySection(state: CommunityUiState, viewModel: CommunityViewModel) {
                             }
                         }
                     }
-                    if (posts.size > limit) TextButton(onClick = { limit += 5 }) { Text("查看更多$name") }
+                    val cursor = if (submission) state.content.submissionCursor else state.content.commentCursor
+                    if (posts.size > limit || cursor != null) TextButton(enabled = !state.busy, onClick = {
+                        if (posts.size <= limit && cursor != null) viewModel.more(submission)
+                        limit += 5
+                    }) { Text("查看更多$name") }
                 }
             }
         }

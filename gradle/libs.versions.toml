@@ -35,6 +35,8 @@ serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", v
 coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 coil = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
+coil-network = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" }
+okhttp = { module = "com.squareup.okhttp3:okhttp", version = "4.12.0" }
 exifinterface = { module = "androidx.exifinterface:exifinterface", version.ref = "exifinterface" }
 material-motion = { module = "io.github.fornewid:material-motion-compose-core", version.ref = "material-motion" }
 sherpa-onnx = { module = "com.bihe0832.android:lib-sherpa-onnx", version.ref = "sherpa" }

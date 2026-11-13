@@ -18,6 +18,7 @@ data class Account(
     val iterations: Int,
     val createdAt: Long,
     val lastLoginAt: Long? = null,
+    val cloud: Boolean = false,
 )
 
 /** The signed-in state that survives a restart. A null session in [AuthState] means "logged out". */
@@ -49,23 +50,21 @@ object PhoneNumber {
 }
 
 /** Rules shared by registration, password reset and change-password. */
-object PasswordPolicy {
-    const val MIN_LENGTH = 8
-    const val MAX_LENGTH = 32
+object Username {
+    private val pattern = Regex("[A-Za-z0-9_]{3,24}")
+    fun isValid(value: String): Boolean = pattern.matches(value)
+}
 
-    /** One human-readable reason, or null when [password] is acceptable. */
+object PasswordPolicy {
+    const val MIN_LENGTH = 6
+    const val MAX_LENGTH = 128
     fun problemOf(password: String): String? = when {
-        password.length < MIN_LENGTH -> "至少 $MIN_LENGTH 位"
-        password.length > MAX_LENGTH -> "不超过 $MAX_LENGTH 位"
-        password.any { it.isWhitespace() } -> "不能包含空格"
-        password.none { it.isLetter() } -> "至少包含一个字母"
-        password.none { it.isDigit() } -> "至少包含一个数字"
+        password.codePointCount(0, password.length) < MIN_LENGTH -> "至少 $MIN_LENGTH 位"
+        password.codePointCount(0, password.length) > MAX_LENGTH -> "不超过 $MAX_LENGTH 位"
         else -> null
     }
-
     fun isValid(password: String): Boolean = problemOf(password) == null
-
-    const val HINT = "$MIN_LENGTH–$MAX_LENGTH 位，需同时包含字母和数字"
+    const val HINT = "6–128 个字符"
 }
 
 /** Limits a logged-out attacker guessing passwords on a stolen, unlocked phone. */

@@ -19,6 +19,9 @@ import com.deepcook.app.data.RecipeRepository
 import com.deepcook.app.data.UserDataRepository
 import com.deepcook.app.data.UserRecipeStore
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
+import com.deepcook.app.data.cloud.CloudAccountScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -45,6 +48,7 @@ data class AppUiState(
     val userRecipeError: String? = null,
     val favoriteExamples: Map<String, Int> = emptyMap(),
     val avatarSaving: Boolean = false,
+    val cloudError: String? = null,
 )
 
 data class AppMessage(val text: String, val undo: (suspend () -> Unit)? = null)
@@ -60,7 +64,9 @@ class AppViewModel(
     private val avatars: Avatars,
     private val aiOverlays: AiOverlayStore,
     private val coverOverrides: CoverOverrides,
-    private val kitchen: com.deepcook.app.data.KitchenStore? = null,
+    private val kitchen: com.deepcook.app.data.KitchenCommunity? = null,
+    cloudErrors: kotlinx.coroutines.flow.Flow<String?>? = null,
+    private val cloudAccount: kotlinx.coroutines.flow.StateFlow<String?>? = null,
 ) : ViewModel() {
     private val mutableState = MutableStateFlow(AppUiState())
     val state = mutableState.asStateFlow()
@@ -71,6 +77,7 @@ class AppViewModel(
     private var userRecipeJob: Job? = null
     private val favoriteMutex = Mutex()
     private val avatarMutex = Mutex()
+    private var nicknameJob: Job? = null
 
     /** Kept apart from the state so a change in either source can rebuild the merged list. */
     private var bundled: List<Recipe> = emptyList()
@@ -79,6 +86,7 @@ class AppViewModel(
     private var overrideJob: Job? = null
 
     init {
+        if (cloudErrors != null) viewModelScope.launch { cloudErrors.collect { error -> mutableState.value = mutableState.value.copy(cloudError = error) } }
         loadRecipes()
         observeUserData()
         observeUserRecipes()
@@ -173,6 +181,14 @@ class AppViewModel(
     fun visit(id: String) = mutate { userData.recordVisit(id) }
     fun removeVisit(id: String) = mutate { userData.removeVisit(id) }
     fun preferences(transform: (UserPreferences) -> UserPreferences) = mutate { userData.updatePreferences(transform) }
+    fun updateName(name: String) {
+        val owner = cloudAccount?.value
+        nicknameJob?.cancel()
+        nicknameJob = viewModelScope.launch {
+            delay(450)
+            if (cloudAccount?.value == owner) updateProfile { it.copy(displayName = name) }
+        }
+    }
     fun updateProfile(transform: (UserProfile) -> UserProfile) = mutate { userData.updateProfile(transform) }
 
     /**
@@ -242,7 +258,7 @@ class AppViewModel(
     suspend fun avatarSource(uri: String): Bitmap? = avatars.decode(uri)
 
     /** Stores the cropped square and points the profile at it, replacing the old file. */
-    fun saveAvatar(bitmap: Bitmap) = viewModelScope.launch {
+    fun saveAvatar(bitmap: Bitmap) = viewModelScope.launch(cloudAccount?.let { CloudAccountScope(it.value) } ?: kotlin.coroutines.EmptyCoroutineContext) {
         avatarMutex.withLock {
             mutableState.value = mutableState.value.copy(avatarSaving = true)
             try {
@@ -332,12 +348,13 @@ class AppViewModel(
     }
 
     private fun mutate(action: suspend () -> Unit) {
+        val owner = cloudAccount?.value
         viewModelScope.launch {
             try {
-                action()
+                if (cloudAccount != null) withContext(CloudAccountScope(owner)) { action() } else action()
             } catch (error: Exception) {
                 if (error is CancellationException) throw error
-                messageChannel.send(AppMessage("操作未完成，请重试。"))
+                messageChannel.send(AppMessage(if (error is com.deepcook.app.data.cloud.CloudException) error.message else "操作未完成，请重试。"))
             }
         }
     }

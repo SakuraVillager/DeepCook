@@ -21,6 +21,7 @@ data class KitchenPost(
     val author: String,
     val sample: Boolean,
     val createdAt: Long,
+    val mine: Boolean = !sample,
 )
 
 data class RecipeCommunity(
@@ -29,8 +30,19 @@ data class RecipeCommunity(
     val ratings: List<Int> = emptyList(),
     val ownRating: Int? = null,
     val posts: List<KitchenPost> = emptyList(),
+    val ratingCounts: List<Int>? = null,
+    val commentCount: Int? = null,
+    val submissionCount: Int? = null,
+    val commentCursor: String? = null,
+    val submissionCursor: String? = null,
+    val cloud: Boolean = false,
 ) {
-    val average: Double? get() = ratings.takeIf { it.isNotEmpty() }?.average()
+    val ratingCount: Long get() = ratingCounts?.sumOf { it.toLong() } ?: ratings.size.toLong()
+    fun countScores(range: IntRange): Long = ratingCounts?.let { counts -> range.sumOf { counts.getOrElse(it - 1) { 0 }.toLong() } }
+        ?: ratings.count { it in range }.toLong()
+    val average: Double? get() = if (ratingCounts != null) {
+        if (ratingCount == 0L) null else ratingCounts.mapIndexed { index, count -> (index + 1).toDouble() * count }.sum() / ratingCount
+    } else ratings.takeIf { it.isNotEmpty() }?.average()
 }
 
 fun compactCount(count: Int): String = when {

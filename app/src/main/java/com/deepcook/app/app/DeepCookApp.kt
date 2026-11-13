@@ -181,13 +181,14 @@ fun DeepCookApp(
         },
     ) { padding ->
         Column(Modifier.fillMaxSize().padding(padding).consumeWindowInsets(padding)) {
-            val storageError = state.userError ?: state.userRecipeError
+            val storageError = state.userError ?: state.userRecipeError ?: state.cloudError
             if (storageError != null) {
                 Surface(color = MaterialTheme.colorScheme.errorContainer) {
                     Row(Modifier.statusBarsPadding().padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
                         Text(storageError, Modifier.weight(1f), color = MaterialTheme.colorScheme.onErrorContainer)
                         TextButton(onClick = {
-                            if (state.userError !=
+                            if (state.cloudError != null) container.refreshCloud()
+                            else if (state.userError !=
                                 null
                             ) {
                                 vm.observeUserData()
@@ -243,7 +244,7 @@ fun DeepCookApp(
                         ProfileInfoScreen(
                             profile = state.user.profile,
                             onBack = { nav.popBackStack() },
-                            onName = { name -> vm.updateProfile { it.copy(displayName = name) } },
+                            onName = vm::updateName,
                             foodProfile = state.user.foodSetup.profile,
                             onFoodPreferences = { openPage(FoodPreferences) },
                             savingAvatar = state.avatarSaving,
@@ -251,6 +252,7 @@ fun DeepCookApp(
                             onSaveAvatar = vm::saveAvatar,
                             onRemoveAvatar = vm::removeAvatar,
                             phone = authSession.session?.phone,
+                            cloudAccount = authSession.account?.cloud == true,
                             onAccount = { openPage(AccountSecurity) },
                         )
                     }
@@ -260,6 +262,7 @@ fun DeepCookApp(
                             onBack = { nav.popBackStack() },
                             changePassword = auth::changePassword,
                             signOut = auth::signOut,
+                            importLocal = auth::importLocal,
                         )
                     }
                     composable<Recent> {

@@ -31,13 +31,14 @@ class AuthRulesTest {
         assertEquals("未登录", PhoneNumber.masked("未登录"))
     }
 
-    @Test fun passwordNeedsEightToThirtyTwoCharactersWithLettersAndDigits() {
-        assertEquals("至少 8 位", PasswordPolicy.problemOf("cook123"))
-        assertEquals("至少包含一个字母", PasswordPolicy.problemOf("12345678"))
-        assertEquals("至少包含一个数字", PasswordPolicy.problemOf("abcdefgh"))
-        assertEquals("不能包含空格", PasswordPolicy.problemOf("cook 1234"))
-        assertEquals("不超过 32 位", PasswordPolicy.problemOf("a1".repeat(17)))
-        assertNull(PasswordPolicy.problemOf("cook1234"))
+    @Test fun passwordsMatchTheCloudSixTo128CodePointContract() {
+        assertEquals("至少 6 位", PasswordPolicy.problemOf("12345"))
+        assertEquals("不超过 128 位", PasswordPolicy.problemOf("a".repeat(129)))
+        assertNull(PasswordPolicy.problemOf("123456"))
+        assertNull(PasswordPolicy.problemOf("abcdef"))
+        assertNull(PasswordPolicy.problemOf("a b c d"))
+        assertNull(PasswordPolicy.problemOf("😀".repeat(6)))
+        assertEquals("至少 6 位", PasswordPolicy.problemOf("😀".repeat(3)))
     }
 
     @Test fun hashIsSaltedAndOnlyTheRightPasswordVerifies() {

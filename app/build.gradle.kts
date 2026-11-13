@@ -23,7 +23,7 @@ android {
         targetSdk = 36
         versionCode = 23
         versionName = "0.6.0"
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.deepcook.app.LocalDataTestRunner"
         buildConfigField("String", "DEEPCOOK_AI_KEY", "\"" + aiKey.replace("\\", "\\\\").replace("\"", "\\\"") + "\"")
         // The keyword spotter ships native libs; phones are all arm64 or armv7.
         ndk { abiFilters += listOf("arm64-v8a", "armeabi-v7a") }
@@ -75,6 +75,8 @@ dependencies {
     implementation(libs.serialization)
     implementation(libs.coroutines)
     implementation(libs.coil)
+    implementation(libs.coil.network)
+    implementation(libs.okhttp)
     implementation(libs.exifinterface)
     implementation(libs.material.motion)
     implementation(libs.sherpa.onnx)

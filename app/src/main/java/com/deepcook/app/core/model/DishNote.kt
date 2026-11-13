@@ -10,7 +10,7 @@ enum class NoteSource(val label: String) { USER("手动"), AI("AI 整理") }
  * A correction for one dish, remembered for the next time it is cooked.
  *
  * [text] is the short, actionable form shown and spoken ("下次少放盐"); [raw] keeps what the user
- * actually said so a bad rewrite can be traced. These live only on this device.
+ * actually said so a bad rewrite can be traced. These follow the signed-in account, with a separate local cache for each account.
  */
 @Serializable
 data class DishNote(

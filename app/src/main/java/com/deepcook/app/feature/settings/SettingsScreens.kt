@@ -424,7 +424,7 @@ private fun DataPreferences(
     PreferenceRow("恢复默认设置", "重置外观和阅读偏好，保留收藏与浏览记录。", Icons.Rounded.RestartAlt, onClick = {
         confirmation = "preferences"
     })
-    PreferenceRow("本地保存", "账号、收藏与本机设置没有云端同步。卸载或清除应用数据后无法恢复。", Icons.Rounded.PhoneAndroid)
+    PreferenceRow("云端同步", "登录后同步昵称、头像、收藏、菜谱、偏好和备注。内置菜谱仍可离线翻阅。", Icons.Rounded.PhoneAndroid)
     if (confirmation != null) {
         val title = when (confirmation) {
             "recent" -> "清除最近浏览？"
