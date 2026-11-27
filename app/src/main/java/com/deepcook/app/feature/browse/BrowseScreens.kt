@@ -42,9 +42,9 @@ fun DiscoverScreen(
     onFavorite: (String) -> Unit,
 ) {
     val wide = LocalWindowInfo.current.containerSize.width / LocalDensity.current.density >= 600f
-    val foodProfile = state.user.foodSetup.profile
+    val foodProfile = state.user.recommendationProfile()
     val personalized = foodProfile.hasAnswers
-    val recommendations = remember(state.recipes, foodProfile) { state.recipes.forFoodProfile(foodProfile) }
+    val recommendations = remember(state.recipes, foodProfile) { state.recipes.rankedRecommendations(foodProfile) }
     Scaffold(topBar = {
         TopAppBar(
             title = {
@@ -91,16 +91,25 @@ fun DiscoverScreen(
                     EmptyState("暂时没有合适的推荐", "试试搜索其他菜谱，或在饮食偏好中调整选择。", "去搜索", { onSearch("全部") })
                 }
             }
-            gridItems(recommendations, key = { it.id }) { recipe ->
-                RecipeCard(
-                    recipe,
-                    state.user.favorites.any {
-                        it.recipeId == recipe.id
-                    },
-                    { onOpen(recipe.id) },
-                    { onFavorite(recipe.id) },
-                    favoriteCount = state.favoriteCount(recipe.id),
-                )
+            gridItems(recommendations, key = { it.recipe.id }) { recommendation ->
+                val recipe = recommendation.recipe
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    RecipeCard(
+                        recipe,
+                        state.user.favorites.any {
+                            it.recipeId == recipe.id
+                        },
+                        { onOpen(recipe.id) },
+                        { onFavorite(recipe.id) },
+                        favoriteCount = state.favoriteCount(recipe.id),
+                    )
+                    Text(
+                        recommendation.reasons.take(2).joinToString(" · "),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.padding(horizontal = 4.dp),
+                    )
+                }
             }
         }
     }

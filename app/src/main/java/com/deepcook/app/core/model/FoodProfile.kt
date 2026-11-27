@@ -41,99 +41,76 @@ object FoodChoices {
     val goalNotes = listOf("多一点日常做饭灵感", "从清晰的步骤开始", "优先发现省时的做法", "探索各地和世界料理", "整理、保存自己的做法")
 }
 
-private val ingredientAliases = mapOf(
-    "牛奶及乳制品" to listOf("奶", "乳", "黄油", "芝士", "奶酪"),
-    "鸡蛋" to listOf("蛋"),
-    "花生" to listOf("花生"),
-    "坚果" to listOf("核桃", "杏仁", "腰果", "榛子", "松子", "开心果", "碧根果", "坚果"),
-    "大豆" to listOf("大豆", "黄豆", "豆腐", "豆浆", "豆皮", "腐竹", "豆瓣", "豆豉", "酱油", "生抽", "老抽", "味噌"),
-    "小麦" to listOf("小麦", "面粉", "面包", "面条", "意面", "意大利面", "通心粉", "酱油", "生抽", "老抽", "面筋"),
-    "鱼类" to listOf("鱼", "鳝", "鳗"),
-    "虾蟹" to listOf("虾", "蟹"),
-    "贝类" to listOf("贝", "蛤", "蚝", "牡蛎", "蛏", "蚌", "贻", "鲍"),
-    "芝麻" to listOf("芝麻", "香油", "麻油"),
-    "蘑菇" to listOf("蘑菇", "香菇", "口蘑", "金针菇", "杏鲍菇", "菌菇"),
-    "动物内脏" to listOf("肝", "腰子", "猪肚", "牛肚", "肥肠", "鸡胗", "鸭胗", "内脏"),
-    "牛肉" to listOf("牛肉", "牛腩", "牛排", "肥牛", "牛筋"),
-    "羊肉" to listOf("羊肉", "羊排", "羊腿"),
-    "猪肉" to listOf("猪肉", "五花", "里脊", "排骨", "培根", "火腿", "猪油", "肉末", "肉馅"),
-    "海鲜" to listOf("鱼", "虾", "蟹", "贝", "蛤", "蚝", "蛏", "蚌", "贻", "鲍", "鳗", "鳝"),
-    "内脏" to listOf("肝", "腰子", "猪肚", "牛肚", "肥肠", "鸡胗", "鸭胗", "内脏"),
-    "辣" to listOf("辣", "小米椒", "朝天椒"),
-)
+/** Both generations of profile tags participate; exclusions take priority over tastes. */
+fun UserData.recommendationProfile(): FoodProfile {
+    val avoided = foodSetup.profile.avoided + profile.avoids
+    return foodSetup.profile.copy(avoided = avoided, tastes = (foodSetup.profile.tastes + profile.likes) - avoided)
+}
 
 private fun String.containsAny(terms: List<String>): Boolean = terms.any { contains(it, ignoreCase = true) }
 
-/** Ingredient matching is a convenience filter, never a certification of allergen absence. */
-fun Recipe.matchesFoodExclusions(profile: FoodProfile): Boolean {
-    val names = ingredients.map { it.name.trim() }
-    val restricted =
-        !profile.allergens.isNullOrEmpty() || profile.avoided.isNotEmpty() || profile.diet in listOf("蛋奶素", "纯素")
-    if (restricted && (names.isEmpty() || names.any { it.isBlank() || it == NO_CONTENT })) return false
-    val excluded = profile.allergens.orEmpty() + profile.avoided
-    if (excluded.any { term -> names.any { it.containsAny(ingredientAliases[term] ?: listOf(term)) } }) return false
-    if (profile.spice == "不吃辣" && names.any { it.containsAny(listOf("辣椒", "小米椒", "干辣椒", "辣酱", "豆瓣酱")) }) return false
-    if (profile.diet in listOf("蛋奶素", "纯素")) {
-        val animal = listOf(
-            "肉", "猪", "牛腩", "牛排", "肥牛", "羊", "鸡", "鸭", "鹅", "鱼", "虾", "蟹", "贝", "蚝", "蛤", "蛏", "鲍",
-            "排骨", "培根", "火腿", "明胶", "猪油",
-        )
-        if (names.any { name ->
-                name.replace("鸡蛋", "").replace("鸭蛋", "").replace("鹌鹑蛋", "").replace("鸡腿菇", "").containsAny(animal)
-            }
-        ) {
-            return false
-        }
-    }
-    if (profile.diet == "纯素" &&
-        names.any { it.containsAny(listOf("蛋", "奶", "乳", "黄油", "芝士", "奶酪", "蜂蜜")) }
-    ) {
-        return false
-    }
-    return true
+val FoodProfile.hasRestrictions: Boolean get() = !allergens.isNullOrEmpty() || avoided.isNotEmpty() ||
+    spice == "不吃辣" || diet in listOf("蛋奶素", "纯素")
+
+data class FoodConflict(val kind: String, val label: String, val ingredients: List<String>)
+data class FoodAssessment(val conflicts: List<FoodConflict>, val incomplete: Boolean) {
+    val eligible: Boolean get() = conflicts.isEmpty() && !incomplete
 }
 
-/** Stable sort: preferences only reorder the home feed; explicit search remains available. */
-fun List<Recipe>.forFoodProfile(profile: FoodProfile): List<Recipe> {
-    if (!profile.hasAnswers) return filter { it.featured }.take(6)
-    fun Recipe.score(): Int {
-        val text = (listOf(title, description) + ingredients.map { it.name }).joinToString(" ")
-        val cuisineTerms = mapOf(
-            "中式家常" to listOf("中式"),
-            "川湘风味" to listOf("川", "湘", "麻婆", "宫保", "回锅", "辣子"),
-            "粤式风味" to listOf("粤", "广式", "白切", "清蒸", "煲"),
-            "江浙风味" to listOf("江浙", "杭", "浙", "苏式", "糖醋"),
-            "日韩料理" to listOf("日式", "韩式"),
-            "东南亚菜" to listOf("东南亚"),
-            "西式料理" to listOf("美式", "欧式"),
-            "其他风味" to listOf("其他"),
-        )
-        var points = if (featured) 1 else 0
-        if (profile.cuisines.any { ("$region $text").containsAny(cuisineTerms[it].orEmpty()) }) points += 6
-        if (profile.minutes != null && minutes != null && minutes <= profile.minutes) points += 4
-        if (profile.experience == "刚开始学" && difficulty != null && difficulty <= 2) points += 4
-        if ("快手解决一餐" in profile.goals && minutes != null && minutes <= 30) points += 4
-        if ("学会做新菜" in profile.goals && difficulty != null && difficulty <= 2) points += 2
-        if ("尝试不同风味" in profile.goals && region !in listOf("中式", NO_CONTENT)) points += 2
-        val spicy = ingredients.any { it.name.containsAny(listOf("辣椒", "小米椒", "干辣椒", "辣酱", "豆瓣酱")) }
-        if (profile.spice == "不吃辣" && spicy) points -= 12
-        if (profile.spice in listOf("中辣", "重辣") && spicy) points += 3
-        val tasteTerms = mapOf(
-            "清淡" to listOf("清蒸", "水煮", "清汤", "凉拌"),
-            "鲜香" to listOf("鲜", "菌菇", "香菇"),
-            "酸甜" to listOf("糖醋", "酸甜", "番茄", "柠檬"),
-            "浓郁" to listOf("红烧", "咖喱", "奶油", "浓"),
-            "甜" to listOf("甜", "糖"), "咸" to listOf("咸"), "酸" to listOf("酸", "醋", "柠檬"),
-            "麻" to listOf("麻", "花椒"), "辣" to listOf("辣", "小米椒"), "鲜" to listOf("鲜"),
-            "油炸" to listOf("炸"), "汤羹" to listOf("汤", "羹"), "下饭" to listOf("下饭"),
-        )
-        if (profile.tastes.any { text.containsAny(tasteTerms[it].orEmpty()) }) points += 3
-        return points
+val foodRestrictionNotice: String get() = FoodRules.notice
+
+/** Conservative text matching, including ingredients mentioned only in preparation/steps. */
+fun Recipe.foodAssessment(profile: FoodProfile): FoodAssessment {
+    val names = ingredients.map { it.name.trim() }
+    val instructions = preparation + steps.map { it.text }
+    val conflicts = mutableListOf<FoodConflict>()
+    fun add(kind: String, label: String, terms: List<String>, clean: (String) -> String = { it }) {
+        val matched = names.filter { clean(it).containsAny(terms) }.toMutableList()
+        if (instructions.any { clean(it).containsAny(terms) }) matched += "步骤或准备中提及相关食材"
+        if (matched.isNotEmpty()) conflicts += FoodConflict(kind, label, matched.distinct())
     }
-    // Score each recipe once rather than repeating ingredient/text matching in every comparison.
-    return filter { it.matchesFoodExclusions(profile) }
-        .map { it to it.score() }
-        .sortedByDescending { it.second }
-        .take(6)
-        .map { it.first }
+    fun plantFree(text: String) = FoodRules.plantNames.fold(text) { value, term -> value.replace(term, "") }
+    fun aliasClean(term: String): (String) -> String = if (term in listOf("牛奶及乳制品", "鱼类", "贝类", "海鲜", "动物内脏", "内脏")) ::plantFree else { text -> text }
+    profile.allergens.orEmpty().forEach { add("allergen", it, FoodRules.aliases[it] ?: listOf(it), aliasClean(it)) }
+    profile.avoided.forEach { add("avoid", it, FoodRules.aliases[it] ?: listOf(it), aliasClean(it)) }
+    if (profile.spice == "不吃辣") add("spice", "不吃辣", FoodRules.aliases.getValue("辣"))
+    if (profile.diet in listOf("蛋奶素", "纯素")) {
+        add("diet", profile.diet!!, FoodRules.animal) {
+            plantFree(it).replace("鸡蛋", "").replace("鸭蛋", "").replace("鹌鹑蛋", "")
+        }
+    }
+    if (profile.diet == "纯素") add("diet", "纯素（蛋奶及蜂蜜）", FoodRules.nonVegan, ::plantFree)
+    val incomplete = profile.hasRestrictions && (names.isEmpty() || names.any { it.isBlank() || it == NO_CONTENT })
+    return FoodAssessment(conflicts, incomplete)
 }
+
+fun Recipe.matchesFoodExclusions(profile: FoodProfile): Boolean = foodAssessment(profile).eligible
+
+data class FoodRecommendation(val recipe: Recipe, val score: Int, val reasons: List<String>)
+
+/** Filter first, score once, preserve input order for equal scores. Never backfill excluded dishes. */
+fun List<Recipe>.rankedRecommendations(profile: FoodProfile): List<FoodRecommendation> {
+    val unique = distinctBy { it.id }
+    if (!profile.hasAnswers) return unique.filter { it.featured }.take(6).map { FoodRecommendation(it, 1, listOf("精选菜谱")) }
+    return unique.filter { it.matchesFoodExclusions(profile) }.map { recipe ->
+        val text = (listOf(recipe.title, recipe.description, recipe.region) + recipe.categories + recipe.ingredients.map { it.name }).joinToString(" ")
+        val reasons = mutableListOf<String>()
+        var points = if (recipe.featured) FoodRules.weights.getValue("featured") else 0
+        fun reward(condition: Boolean, weight: String, reason: String, multiplier: Int = 1) {
+            if (condition) { points += FoodRules.weights.getValue(weight) * multiplier; reasons += reason }
+        }
+        val cuisines = profile.cuisines.filter { text.containsAny(FoodRules.cuisines[it].orEmpty()) }
+        reward(cuisines.isNotEmpty(), "cuisine", cuisines.joinToString("、"))
+        val tastes = profile.tastes.filter { it != "都喜欢" && text.containsAny(FoodRules.tastes[it] ?: listOf(it)) }
+        reward(tastes.isNotEmpty(), "taste", "口味：${tastes.joinToString("、")}", tastes.size.coerceAtMost(3))
+        reward(profile.minutes != null && profile.minutes > 0 && recipe.minutes != null && recipe.minutes <= profile.minutes, "time", "符合用时偏好")
+        reward(profile.experience == "刚开始学" && recipe.difficulty != null && recipe.difficulty <= 2, "beginner", "新手易上手")
+        reward("快手解决一餐" in profile.goals && recipe.minutes != null && recipe.minutes <= 30, "quick", "快手一餐")
+        reward("学会做新菜" in profile.goals && recipe.difficulty != null && recipe.difficulty <= 2, "learn", "适合学做新菜")
+        reward("尝试不同风味" in profile.goals && recipe.region !in listOf("中式", NO_CONTENT), "explore", "探索不同风味")
+        reward(profile.spice in listOf("中辣", "重辣") && recipe.ingredients.any { it.name.containsAny(FoodRules.aliases.getValue("辣")) }, "spicy", "偏爱的辣味")
+        FoodRecommendation(recipe, points, reasons.ifEmpty { listOf("换一道日常灵感") })
+    }.sortedByDescending { it.score }.take(6)
+}
+
+fun List<Recipe>.forFoodProfile(profile: FoodProfile): List<Recipe> = rankedRecommendations(profile).map { it.recipe }

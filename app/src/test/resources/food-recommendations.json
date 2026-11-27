@@ -1,0 +1,471 @@
+{
+  "recipes": [
+    {
+      "id": "pork",
+      "version": 1,
+      "title": "红烧肉",
+      "region": "中式",
+      "description": "",
+      "categories": [
+        "家常菜"
+      ],
+      "minutes": 60,
+      "difficulty": 1,
+      "servings": "2 人",
+      "ingredients": [
+        {
+          "id": "i0",
+          "name": "五花肉",
+          "amount": "适量"
+        },
+        {
+          "id": "i1",
+          "name": "生抽",
+          "amount": "适量"
+        }
+      ],
+      "preparation": [],
+      "steps": [
+        {
+          "id": "s",
+          "order": 1,
+          "title": "做菜",
+          "text": "处理食材"
+        }
+      ],
+      "notes": [],
+      "source": {
+        "author": "厨师",
+        "license": "自编"
+      },
+      "featured": true
+    },
+    {
+      "id": "tomato",
+      "version": 1,
+      "title": "番茄炒蛋",
+      "region": "中式",
+      "description": "",
+      "categories": [
+        "家常菜"
+      ],
+      "minutes": 15,
+      "difficulty": 1,
+      "servings": "2 人",
+      "ingredients": [
+        {
+          "id": "i0",
+          "name": "番茄",
+          "amount": "适量"
+        },
+        {
+          "id": "i1",
+          "name": "鸡蛋",
+          "amount": "适量"
+        }
+      ],
+      "preparation": [],
+      "steps": [
+        {
+          "id": "s",
+          "order": 1,
+          "title": "做菜",
+          "text": "处理食材"
+        }
+      ],
+      "notes": [],
+      "source": {
+        "author": "厨师",
+        "license": "自编"
+      },
+      "featured": false
+    },
+    {
+      "id": "peanut",
+      "version": 1,
+      "title": "花生炒菜",
+      "region": "中式",
+      "description": "",
+      "categories": [
+        "家常菜"
+      ],
+      "minutes": 10,
+      "difficulty": 1,
+      "servings": "2 人",
+      "ingredients": [
+        {
+          "id": "i0",
+          "name": "花生",
+          "amount": "适量"
+        },
+        {
+          "id": "i1",
+          "name": "辣椒",
+          "amount": "适量"
+        }
+      ],
+      "preparation": [],
+      "steps": [
+        {
+          "id": "s",
+          "order": 1,
+          "title": "做菜",
+          "text": "处理食材"
+        }
+      ],
+      "notes": [],
+      "source": {
+        "author": "厨师",
+        "license": "自编"
+      },
+      "featured": false
+    },
+    {
+      "id": "mushroom",
+      "version": 1,
+      "title": "清蒸杏鲍菇",
+      "region": "中式",
+      "description": "",
+      "categories": [
+        "家常菜"
+      ],
+      "minutes": 20,
+      "difficulty": 1,
+      "servings": "2 人",
+      "ingredients": [
+        {
+          "id": "i0",
+          "name": "杏鲍菇",
+          "amount": "适量"
+        },
+        {
+          "id": "i1",
+          "name": "盐",
+          "amount": "适量"
+        }
+      ],
+      "preparation": [],
+      "steps": [
+        {
+          "id": "s",
+          "order": 1,
+          "title": "做菜",
+          "text": "处理食材"
+        }
+      ],
+      "notes": [],
+      "source": {
+        "author": "厨师",
+        "license": "自编"
+      },
+      "featured": false
+    },
+    {
+      "id": "soup",
+      "version": 1,
+      "title": "清汤豆腐",
+      "region": "中式",
+      "description": "",
+      "categories": [
+        "家常菜"
+      ],
+      "minutes": 15,
+      "difficulty": 1,
+      "servings": "2 人",
+      "ingredients": [
+        {
+          "id": "i0",
+          "name": "豆腐",
+          "amount": "适量"
+        },
+        {
+          "id": "i1",
+          "name": "水",
+          "amount": "适量"
+        }
+      ],
+      "preparation": [],
+      "steps": [
+        {
+          "id": "s",
+          "order": 1,
+          "title": "做菜",
+          "text": "出锅前加一勺花生油"
+        }
+      ],
+      "notes": [],
+      "source": {
+        "author": "厨师",
+        "license": "自编"
+      },
+      "featured": false
+    },
+    {
+      "id": "unknown",
+      "version": 1,
+      "title": "家常汤",
+      "region": "中式",
+      "description": "",
+      "categories": [
+        "家常菜"
+      ],
+      "minutes": 10,
+      "difficulty": 1,
+      "servings": "2 人",
+      "ingredients": [
+        {
+          "id": "i0",
+          "name": "无",
+          "amount": "适量"
+        }
+      ],
+      "preparation": [],
+      "steps": [
+        {
+          "id": "s",
+          "order": 1,
+          "title": "做菜",
+          "text": "处理食材"
+        }
+      ],
+      "notes": [],
+      "source": {
+        "author": "厨师",
+        "license": "自编"
+      },
+      "featured": false
+    },
+    {
+      "id": "milk",
+      "version": 1,
+      "title": "椰奶甜汤",
+      "region": "中式",
+      "description": "",
+      "categories": [
+        "家常菜"
+      ],
+      "minutes": 20,
+      "difficulty": 1,
+      "servings": "2 人",
+      "ingredients": [
+        {
+          "id": "i0",
+          "name": "椰奶",
+          "amount": "适量"
+        },
+        {
+          "id": "i1",
+          "name": "糖",
+          "amount": "适量"
+        }
+      ],
+      "preparation": [],
+      "steps": [
+        {
+          "id": "s",
+          "order": 1,
+          "title": "做菜",
+          "text": "处理食材"
+        }
+      ],
+      "notes": [],
+      "source": {
+        "author": "厨师",
+        "license": "自编"
+      },
+      "featured": false
+    }
+  ],
+  "cases": [
+    {
+      "name": "default",
+      "profile": {
+        "cuisines": [],
+        "spice": null,
+        "tastes": [],
+        "diet": null,
+        "allergens": null,
+        "avoided": [],
+        "experience": null,
+        "minutes": null,
+        "servings": null,
+        "goals": []
+      },
+      "ids": [
+        "pork"
+      ]
+    },
+    {
+      "name": "legacy tastes and avoids",
+      "profile": {
+        "cuisines": [],
+        "spice": null,
+        "tastes": [],
+        "diet": null,
+        "allergens": null,
+        "avoided": [],
+        "experience": null,
+        "minutes": null,
+        "servings": null,
+        "goals": []
+      },
+      "userProfile": {
+        "likes": [
+          "酸甜"
+        ],
+        "avoids": [
+          "猪肉",
+          "辣"
+        ]
+      },
+      "ids": [
+        "tomato",
+        "mushroom",
+        "soup",
+        "milk"
+      ]
+    },
+    {
+      "name": "allergy includes step seasoning",
+      "profile": {
+        "cuisines": [],
+        "spice": null,
+        "tastes": [],
+        "diet": null,
+        "allergens": [
+          "花生"
+        ],
+        "avoided": [],
+        "experience": null,
+        "minutes": null,
+        "servings": null,
+        "goals": []
+      },
+      "ids": [
+        "pork",
+        "tomato",
+        "mushroom",
+        "milk"
+      ]
+    },
+    {
+      "name": "vegan preserves mushroom and plant milk",
+      "profile": {
+        "cuisines": [],
+        "spice": null,
+        "tastes": [],
+        "diet": "纯素",
+        "allergens": null,
+        "avoided": [],
+        "experience": null,
+        "minutes": null,
+        "servings": null,
+        "goals": []
+      },
+      "ids": [
+        "peanut",
+        "mushroom",
+        "soup",
+        "milk"
+      ]
+    },
+    {
+      "name": "soy condiment",
+      "profile": {
+        "cuisines": [],
+        "spice": null,
+        "tastes": [],
+        "diet": null,
+        "allergens": [
+          "大豆"
+        ],
+        "avoided": [],
+        "experience": null,
+        "minutes": null,
+        "servings": null,
+        "goals": []
+      },
+      "ids": [
+        "tomato",
+        "peanut",
+        "mushroom",
+        "milk"
+      ]
+    },
+    {
+      "name": "cuisine taste and time",
+      "profile": {
+        "cuisines": [],
+        "spice": null,
+        "tastes": [
+          "酸甜"
+        ],
+        "diet": null,
+        "allergens": null,
+        "avoided": [],
+        "experience": null,
+        "minutes": 15,
+        "servings": null,
+        "goals": []
+      },
+      "ids": [
+        "tomato",
+        "peanut",
+        "soup",
+        "unknown",
+        "pork",
+        "mushroom"
+      ]
+    },
+    {
+      "name": "no safe backfill",
+      "profile": {
+        "cuisines": [],
+        "spice": null,
+        "tastes": [],
+        "diet": null,
+        "allergens": null,
+        "avoided": [
+          "肉",
+          "番茄",
+          "花生",
+          "杏鲍菇",
+          "豆腐",
+          "椰奶"
+        ],
+        "experience": null,
+        "minutes": null,
+        "servings": null,
+        "goals": []
+      },
+      "ids": []
+    },
+    {
+      "name": "fish and shellfish do not match plant names",
+      "profile": {
+        "cuisines": [],
+        "spice": null,
+        "tastes": [],
+        "diet": null,
+        "allergens": [
+          "鱼类",
+          "贝类",
+          "牛奶及乳制品"
+        ],
+        "avoided": [],
+        "experience": null,
+        "minutes": null,
+        "servings": null,
+        "goals": []
+      },
+      "ids": [
+        "pork",
+        "tomato",
+        "peanut",
+        "mushroom",
+        "soup",
+        "milk"
+      ]
+    }
+  ]
+}

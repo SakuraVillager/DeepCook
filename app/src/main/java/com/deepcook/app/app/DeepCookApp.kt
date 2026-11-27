@@ -31,6 +31,7 @@ import androidx.navigation.toRoute
 import com.deepcook.app.R
 import com.deepcook.app.core.designsystem.*
 import com.deepcook.app.core.model.USER_RECIPE_ID_PREFIX
+import com.deepcook.app.core.model.recommendationProfile
 import com.deepcook.app.data.AppContainer
 import com.deepcook.app.feature.authoring.MyRecipesScreen
 import com.deepcook.app.feature.authoring.RecipeEditorScreen
@@ -312,6 +313,7 @@ fun DeepCookApp(
                                 recipe = recipe,
                                 favorite = state.user.favorites.any { it.recipeId == recipe.id },
                                 preferences = state.user.preferences,
+                                foodProfile = state.user.recommendationProfile(),
                                 restoredStep = restored,
                                 dishAi = dishAi,
                                 onFavorite = { vm.favorite(recipe.id) },

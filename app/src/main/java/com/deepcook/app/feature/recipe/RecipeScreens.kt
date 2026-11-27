@@ -61,6 +61,7 @@ fun DetailScreen(
     onCook: () -> Unit,
     onVisit: () -> Unit,
     onPhotoVisibilityChange: (Boolean) -> Unit,
+    foodProfile: FoodProfile = FoodProfile(),
     favoriteCount: Int = 0,
     ratingContent: @Composable () -> Unit = {},
     nutritionContent: @Composable () -> Unit = {},
@@ -226,6 +227,7 @@ fun DetailScreen(
                         verticalArrangement = Arrangement.spacedBy(12.dp),
                     ) {
                         Text(recipe.title, style = MaterialTheme.typography.headlineLarge)
+                        FoodRestrictionWarning(recipe, foodProfile)
                         RecipeMetadata(recipe)
                         Text(
                             recipe.servings.ifBlank { NO_CONTENT },
@@ -658,3 +660,33 @@ fun ReaderScreen(
     }
 }
 
+
+@Composable
+private fun FoodRestrictionWarning(recipe: Recipe, profile: FoodProfile) {
+    if (!profile.hasRestrictions) return
+    val assessment = remember(recipe, profile) { recipe.foodAssessment(profile) }
+    val conflict = assessment.conflicts.isNotEmpty() || assessment.incomplete
+    Surface(
+        color = if (conflict) MaterialTheme.colorScheme.errorContainer else MaterialTheme.colorScheme.secondaryContainer,
+        shape = MaterialTheme.shapes.medium,
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text(when {
+                assessment.conflicts.isNotEmpty() -> "这道菜与你的饮食限制有冲突"
+                assessment.incomplete -> "食材信息不完整，请先核对"
+                else -> "下厨前，请核对你的饮食限制"
+            }, style = MaterialTheme.typography.titleSmall)
+            assessment.conflicts.forEach { item ->
+                val kind = when (item.kind) { "allergen" -> "过敏 / 不耐受"; "avoid" -> "忌口"; "diet" -> "饮食方式"; else -> "辣度" }
+                Text("$kind：${item.label} · ${item.ingredients.joinToString("、")}", style = MaterialTheme.typography.bodySmall)
+            }
+            if (assessment.conflicts.isEmpty()) {
+                val recorded = profile.allergens.orEmpty() + profile.avoided +
+                    listOfNotNull(profile.diet?.takeIf { it in listOf("蛋奶素", "纯素") }, profile.spice?.takeIf { it == "不吃辣" })
+                Text("已记录：${recorded.joinToString("、")}。", style = MaterialTheme.typography.bodySmall)
+            }
+            Text(foodRestrictionNotice, style = MaterialTheme.typography.bodySmall)
+        }
+    }
+}
