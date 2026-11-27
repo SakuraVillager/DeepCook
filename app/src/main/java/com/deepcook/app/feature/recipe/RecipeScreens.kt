@@ -230,7 +230,7 @@ fun DetailScreen(
                         FoodRestrictionWarning(recipe, foodProfile)
                         RecipeMetadata(recipe)
                         Text(
-                            recipe.servings.ifBlank { NO_CONTENT },
+                            dishState.targetServings?.let { "$it 人份" } ?: recipe.servings.ifBlank { NO_CONTENT },
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             style = MaterialTheme.typography.bodyMedium,
                         )
@@ -292,9 +292,8 @@ fun DetailScreen(
                         action = { ServingsPicker(dishState, dishAi::selectServings) },
                     ) {
                         Column {
-                            // A range like "2—3 人份" scales from its smaller number, so picking
-                            // that same number changes nothing and needs no notice.
-                            if (dishState.targetServings != null && dishState.factor != 1.0) {
+                            // Show the active serving choice, including per-person quantity formulas.
+                            if (dishState.targetServings != null) {
                                 Row(
                                     Modifier.fillMaxWidth(),
                                     verticalAlignment = Alignment.CenterVertically,
@@ -302,7 +301,7 @@ fun DetailScreen(
                                 ) {
                                     Text(
                                         "已按 ${dishState.targetServings} 人份换算，调味请按口味调整；" +
-                                            "步骤文字里的用量仍是原文。",
+                                            "材料、备菜与步骤中的明确用量已同步；时间、温度和模糊用量保留原文。",
                                         Modifier.weight(1f),
                                         style = MaterialTheme.typography.labelSmall,
                                         color = MaterialTheme.colorScheme.primary,
@@ -347,7 +346,7 @@ fun DetailScreen(
                 if (recipe.preparationItems.isNotEmpty()) {
                     item(key = "准备") {
                         DetailSection("准备事项") {
-                            recipe.preparationItems.forEach { Text("•  $it", style = textStyle) }
+                            recipe.preparationItems.forEach { Text("•  ${dishAi.textOf(it)}", style = textStyle) }
                         }
                     }
                 }
@@ -399,15 +398,15 @@ fun DetailScreen(
                                     ).clip(RoundedCornerShape(16.dp)),
                                 )
                             }
-                            Text(step.text, style = textStyle)
-                            step.visibleCue?.let { InfoCard("观察提示", it) }
+                            Text(dishAi.textOf(step.text), style = textStyle)
+                            step.visibleCue?.let { InfoCard("观察提示", dishAi.textOf(it)) }
                         }
                     }
                     if (index < recipe.steps.lastIndex) HorizontalDivider(Modifier.padding(vertical = 12.dp))
                 }
                 if (recipe.noteItems.isNotEmpty()) {
                     item(key = "注意") {
-                        DetailSection("注意事项") { recipe.noteItems.forEach { Text("•  $it", style = textStyle) } }
+                        DetailSection("注意事项") { recipe.noteItems.forEach { Text("•  ${dishAi.textOf(it)}", style = textStyle) } }
                     }
                 }
                 item(key = "来源") {

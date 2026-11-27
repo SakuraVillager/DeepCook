@@ -32,6 +32,7 @@ import com.deepcook.app.R
 import com.deepcook.app.core.designsystem.*
 import com.deepcook.app.core.model.USER_RECIPE_ID_PREFIX
 import com.deepcook.app.core.model.recommendationProfile
+import com.deepcook.app.data.ai.ServingScale
 import com.deepcook.app.data.AppContainer
 import com.deepcook.app.feature.authoring.MyRecipesScreen
 import com.deepcook.app.feature.authoring.RecipeEditorScreen
@@ -72,10 +73,10 @@ import java.util.UUID
 @Serializable data class RecipeDetail(val recipeId: String)
 
 @Serializable
-data class Reader(val recipeId: String, val initialStepId: String? = null, val showTimers: Boolean = false)
+data class Reader(val recipeId: String, val initialStepId: String? = null, val showTimers: Boolean = false, val servingsBase: Double? = null, val targetServings: Int? = null)
 
 /** The cooking view: one step at a time, with the timer and (later) the assistant. */
-@Serializable data class Cooking(val recipeId: String)
+@Serializable data class Cooking(val recipeId: String, val servingsBase: Double? = null, val targetServings: Int? = null)
 
 /** One sentence of feedback right after cooking, stored as a dish note. */
 @Serializable data class Feedback(val recipeId: String)
@@ -318,8 +319,8 @@ fun DeepCookApp(
                                 dishAi = dishAi,
                                 onFavorite = { vm.favorite(recipe.id) },
                                 onBack = { nav.popBackStack() },
-                                onRead = { openPage(Reader(recipe.id, it)) },
-                                onCook = { openPage(Cooking(recipe.id)) },
+                                onRead = { openPage(Reader(recipe.id, it, servingsBase = dishAi.state.value.servingsBase, targetServings = dishAi.state.value.targetServings)) },
+                                onCook = { openPage(Cooking(recipe.id, dishAi.state.value.servingsBase, dishAi.state.value.targetServings)) },
                                 onVisit = { vm.visit(recipe.id) },
                                 onPhotoVisibilityChange = { detailPhotoVisible = it },
                                 favoriteCount =
@@ -334,7 +335,7 @@ fun DeepCookApp(
                     }
                     composable<Reader> { readerEntry ->
                         val args = readerEntry.toRoute<Reader>()
-                        val recipe = state.recipes.find { it.id == args.recipeId }
+                        val recipe = state.recipes.find { it.id == args.recipeId }?.let { ServingScale.recipe(it, args.servingsBase, args.targetServings) }
                         if (recipe != null) {
                             ReaderScreen(
                                 recipe,
@@ -352,7 +353,7 @@ fun DeepCookApp(
                     }
                     composable<Cooking> { cookingEntry ->
                         val args = cookingEntry.toRoute<Cooking>()
-                        val recipe = state.recipes.find { it.id == args.recipeId }
+                        val recipe = state.recipes.find { it.id == args.recipeId }?.let { ServingScale.recipe(it, args.servingsBase, args.targetServings) }
                         if (recipe == null) {
                             EmptyState("没有找到这道菜", "内容可能已更新，请返回重新选择。", "返回", { nav.popBackStack() })
                         } else {

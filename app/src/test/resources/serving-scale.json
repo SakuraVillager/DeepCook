@@ -1,0 +1,15 @@
+[
+  {"text":"500 克","factor":0.5,"amount":true,"expected":"250 克"},
+  {"text":"1 个（约 80g）","factor":2,"amount":true,"expected":"2 个（约 160g）"},
+  {"text":"半个","factor":2,"amount":true,"expected":"1个"},
+  {"text":"1/2 茶匙","factor":0.5,"amount":true,"expected":"1/4 茶匙"},
+  {"text":"约 3~4 斤","factor":0.5,"amount":true,"expected":"约 1.5~2 斤"},
+  {"text":"适量","factor":2,"amount":true,"expected":"适量"},
+  {"text":"200 克 * 份数","factor":0.5,"amount":true,"expected":"200 克 * 份数"},
+  {"text":"放入鸡蛋2个、牛奶30ml，搅拌后蒸15分钟。","factor":2,"names":["鸡蛋","牛奶"],"expected":"放入鸡蛋4个、牛奶60ml，搅拌后蒸15分钟。"},
+  {"text":"猪肉切成2块，厚2厘米，放入200克土豆，180度烤20分钟。","factor":2,"names":["猪肉","土豆"],"expected":"猪肉切成2块，厚2厘米，放入400克土豆，180度烤20分钟。"},
+  {"text":"鸡蛋煮2个小时，分3次加入100ml水。","factor":2,"names":["鸡蛋","水"],"expected":"鸡蛋煮2个小时，分3次加入200ml水。"},
+  {"text":"取2片姜、3瓣蒜，加入10-15g糖。","factor":2,"names":["姜","蒜","糖"],"expected":"取4片姜、6瓣蒜，加入20-30g糖。"},
+  {"text":"锅中加入两勺油，再放半个洋葱。","factor":2,"names":["油","洋葱"],"expected":"锅中加入4勺油，再放1个洋葱。"},
+  {"text":"按水与米2:1，使用2%的盐水煮30分钟。","factor":2,"names":["水","米","盐"],"expected":"按水与米2:1，使用2%的盐水煮30分钟。"}
+]

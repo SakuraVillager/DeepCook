@@ -75,7 +75,7 @@ fun DishAiSection(
             }
             Text(
                 if (state.servingsBase == null) {
-                    "缺料、失手都可以问。这道菜没标份量，暂时不能自动换算。回答仅供参考。"
+                    "缺料、失手都可以问。这道菜没标人数，可在人份入口补充原配方人数后换算。回答仅供参考。"
                 } else {
                     "缺料、失手、份量都可以问。回答来自 AI 或菜谱原文，仅供参考。"
                 },
@@ -148,13 +148,16 @@ fun DishAiSection(
 
 /** The serving picker that sits in the 材料 section header; null restores the printed amounts. */
 @Composable
-fun ServingsPicker(state: DishAiViewModel.UiState, onSelect: (Int?) -> Unit) {
-    val base = state.servingsBase ?: return
+fun ServingsPicker(state: DishAiViewModel.UiState, onSelect: (Int?, Double?) -> Unit) {
+    val base = state.servingsBase
+    var custom by remember { mutableStateOf(false) }
+    var customBase by remember(state.servingsBase) { mutableStateOf(state.servingsBase?.toString().orEmpty()) }
+    var customTarget by remember(state.targetServings) { mutableStateOf(state.targetServings?.toString().orEmpty()) }
     var expanded by remember { mutableStateOf(false) }
     Box {
         TextButton(onClick = { expanded = true }) {
             Text(
-                state.targetServings?.let { "$it 人份" } ?: state.servingsLabel,
+                state.targetServings?.let { "$it 人份" } ?: state.servingsLabel.takeIf { base != null }.orEmpty().ifBlank { "人数换算" },
                 style = MaterialTheme.typography.labelLarge,
             )
             Icon(Icons.Rounded.ArrowDropDown, "换算份量")
@@ -164,20 +167,40 @@ fun ServingsPicker(state: DishAiViewModel.UiState, onSelect: (Int?) -> Unit) {
                 text = { Text("原始份量（${state.servingsLabel}）") },
                 onClick = {
                     expanded = false
-                    onSelect(null)
+                    onSelect(null, null)
                 },
             )
-            ServingScale.options(base).forEach { count ->
+            (base?.let(ServingScale::options) ?: emptyList()).forEach { count ->
                 DropdownMenuItem(
                     text = { Text("$count 人份") },
                     onClick = {
                         expanded = false
-                        onSelect(count)
+                        onSelect(count, null)
                     },
                 )
             }
+            DropdownMenuItem(text = { Text("自定义人数…") }, onClick = { expanded = false; custom = true })
         }
     }
+    if (custom) {
+        val baseNumber = customBase.toDoubleOrNull()
+        val targetNumber = customTarget.toIntOrNull()
+        AlertDialog(
+            onDismissRequest = { custom = false },
+            title = { Text("按用餐人数换算") },
+            text = { Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                Text("先确认原配方对应几人份，再填写用餐人数。范围份量按较小值预填，可自行调整。")
+                OutlinedTextField(value = customBase, onValueChange = { customBase = it }, label = { Text("原配方人数") }, singleLine = true,
+                    keyboardOptions = KeyboardOptions(keyboardType = androidx.compose.ui.text.input.KeyboardType.Decimal))
+                OutlinedTextField(value = customTarget, onValueChange = { customTarget = it }, label = { Text("自定义人数（1–100）") }, singleLine = true,
+                    keyboardOptions = KeyboardOptions(keyboardType = androidx.compose.ui.text.input.KeyboardType.Number))
+            } },
+            confirmButton = { TextButton(enabled = baseNumber != null && baseNumber in 0.5..100.0 && targetNumber != null && targetNumber in 1..100,
+                onClick = { onSelect(targetNumber, baseNumber); custom = false }) { Text("换算") } },
+            dismissButton = { TextButton(onClick = { custom = false }) { Text("取消") } },
+        )
+    }
+
 }
 
 @Composable

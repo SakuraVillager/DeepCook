@@ -62,6 +62,7 @@ class DishAiViewModel(
         val servingsLabel: String = "",
         /** null keeps the printed amounts. */
         val targetServings: Int? = null,
+        val customServingsBase: Double? = null,
         val answer: Answer? = null,
     ) {
         val factor: Double
@@ -109,21 +110,21 @@ class DishAiViewModel(
         val base = ServingScale.parse(servings)
         _state.update { current ->
             current.copy(
-                servingsBase = base,
+                servingsBase = current.customServingsBase ?: base,
                 servingsLabel = ServingScale.label(servings),
-                targetServings = current.targetServings?.takeIf { base != null },
+                targetServings = current.targetServings?.takeIf { current.customServingsBase != null || base != null },
             )
         }
     }
 
     /** null restores the printed amounts. */
-    fun selectServings(target: Int?) {
+    fun selectServings(target: Int?, baseOverride: Double? = null) {
         _state.update { current ->
             when {
                 target == null -> current.copy(targetServings = null)
-                current.servingsBase == null -> current
-                target <= 0 -> current
-                else -> current.copy(targetServings = target)
+                current.servingsBase == null && baseOverride == null -> current
+                target !in 1..100 || (baseOverride != null && baseOverride !in 0.5..100.0) -> current
+                else -> current.copy(targetServings = target, servingsBase = baseOverride ?: current.servingsBase, customServingsBase = baseOverride ?: current.customServingsBase)
             }
         }
     }
@@ -134,8 +135,10 @@ class DishAiViewModel(
         val state = _state.value
         val base = state.servingsBase ?: return printed
         val target = state.targetServings ?: return printed
-        return ServingScale.scale(printed, ServingScale.factor(base, target))
+        return ServingScale.scale(printed, ServingScale.factor(base, target), target)
     }
+
+    fun textOf(text: String): String = ServingScale.scaleText(text, _state.value.factor, recipe.ingredients.map { it.name })
 
     /** What the recipe (or its cached enrichment) actually says, before any serving scaling. */
     private fun printedAmount(ingredient: Ingredient): String =

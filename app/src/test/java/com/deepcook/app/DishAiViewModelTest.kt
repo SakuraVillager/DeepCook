@@ -196,4 +196,17 @@ class DishAiViewModelTest {
         override suspend fun put(overlay: AiOverlay) = Unit
         override suspend fun clear() = Unit
     }
+
+    @Test fun customBaselineEnablesUnknownServingCountAndUpdatesStepAmounts() = runTest {
+        Dispatchers.setMain(UnconfinedTestDispatcher(testScheduler))
+        val vm = viewModel(FakeGateway(), recipe = dish(servings = "无"))
+        testScheduler.advanceUntilIdle()
+        vm.selectServings(3, 2.0)
+        assertEquals("750 克", vm.amountOf(Ingredient("i0", "五花肉", "500 克")))
+        assertEquals("加入15g糖，煮20分钟", vm.textOf("加入10g糖，煮20分钟"))
+        vm.selectServings(0, 2.0)
+        assertEquals(3, vm.state.value.targetServings)
+        vm.selectServings(null)
+        assertEquals("加入10g糖，煮20分钟", vm.textOf("加入10g糖，煮20分钟"))
+    }
 }
