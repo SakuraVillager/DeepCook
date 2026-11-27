@@ -29,8 +29,8 @@ android {
         applicationId = "com.deepcook.app"
         minSdk = 26
         targetSdk = 36
-        versionCode = 24
-        versionName = "0.6.1"
+        versionCode = 25
+        versionName = "0.6.2"
         testInstrumentationRunner = "com.deepcook.app.LocalDataTestRunner"
         buildConfigField("String", "DEEPCOOK_AI_KEY", "\"" + aiKey.replace("\\", "\\\\").replace("\"", "\\\"") + "\"")
         // The keyword spotter ships native libs; phones are all arm64 or armv7.

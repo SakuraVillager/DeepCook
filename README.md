@@ -1,5 +1,7 @@
 # DeepCook
 
+正式安装包：**0.6.2 / Android 8.0+ / 137.9 MB**。[服务器直接下载](https://deepcook-backend.jijiz.cn/deepcook-api/v1/downloads/DeepCook-0.6.2.apk) · [GitHub 下载](https://github.com/SakuraVillager/DeepCook/releases/download/v0.6.2/DeepCook-0.6.2.apk)。沿用 0.6.1 正式签名，可覆盖升级。
+
 Kotlin 原生 Android 菜谱应用：暖黄 Material 3 主题，云端账号登录、离线找菜、组合搜索、收藏、烹饪模式、个人菜谱编辑、资料补全与本地设置。
 
 ## 构建与运行
